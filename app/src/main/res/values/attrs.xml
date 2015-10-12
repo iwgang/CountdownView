@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CountdownView">
+        <attr name="timeTextSize" format="dimension" />
+        <attr name="divisionTextSize" format="dimension" />
+        <attr name="timeTextColor" format="color" />
+        <attr name="divisionTextColor" format="color" />
+        <attr name="isHideTimeBackground" format="boolean" />
+        <attr name="isShowHour" format="boolean" />
+        <attr name="isShowMillisecond" format="boolean" />
+        <attr name="division" format="string" />
+        <attr name="divisionDay" format="string" />
+        <attr name="divisionHour" format="string" />
+        <attr name="divisionMinute" format="string" />
+        <attr name="divisionSecond" format="string" />
+        <attr name="divisionMillisecond" format="string" />
+    </declare-styleable>
+
+</resources>
