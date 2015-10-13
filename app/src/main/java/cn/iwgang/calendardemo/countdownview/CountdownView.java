@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -21,12 +22,13 @@ public class CountdownView extends View {
     private OnCountdownEndListener mOnCountdownEndListener;
     private CountDownTimer mCountDownTimer;
 
+    private boolean isShowDay;
     private boolean isShowHour;
     private boolean isShowMillisecond;
     private boolean isHideTimeBackground;
 
     private Paint mTimeTextPaint;
-    private Paint mDecollatorPaint;
+    private Paint mSuffixPaint;
     private Paint mTimeTextBgPaint;
     private Paint mTimeTextBgDivisionLinePaint;
 
@@ -37,15 +39,25 @@ public class CountdownView extends View {
 
     private float mTimeTextWidth;
     private float mTimeTextHeight;
-    private float mDecollatorTextWidth;
-    private float mDecollatorWidth;
-    private float mDivisionTextSize;
     private float mTimeTextSize;
     private float mTimeBgSize;
     private int mTimeTextColor;
-    private int mDivisionTextColor;
-
     private int mTimeBgCircularSize;
+
+    // 后缀
+    private String mSuffix;
+    private String mSuffixDay;
+    private String mSuffixHour;
+    private String mSuffixMinute;
+    private String mSuffixSecond;
+    private String mSuffixMillisecond;
+    private int mSuffixTextColor;
+    private float mSuffixTextSize;
+    private float mSuffixDayTextWidth;
+    private float mSuffixHourTextWidth;
+    private float mSuffixMinuteTextWidth;
+    private float mSuffixSecondTextWidth;
+    private float mSuffixMillisecondTextWidth;
 
     public CountdownView(Context context) {
         this(context, null);
@@ -62,18 +74,29 @@ public class CountdownView extends View {
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CountdownView);
         mTimeTextSize = ta.getDimension(R.styleable.CountdownView_timeTextSize, sp2px(12));
-        mDivisionTextSize = ta.getDimension(R.styleable.CountdownView_divisionTextSize, sp2px(12));
         mTimeTextColor = ta.getColor(R.styleable.CountdownView_timeTextColor, Color.WHITE);
-        mDivisionTextColor = ta.getColor(R.styleable.CountdownView_divisionTextColor, Color.BLACK);
         isHideTimeBackground = ta.getBoolean(R.styleable.CountdownView_isHideTimeBackground, false);
+        isShowDay = ta.getBoolean(R.styleable.CountdownView_isShowDay, false);
         isShowHour = ta.getBoolean(R.styleable.CountdownView_isShowHour, true);
         isShowMillisecond = ta.getBoolean(R.styleable.CountdownView_isShowMillisecond, false);
+
+        mSuffixTextSize = ta.getDimension(R.styleable.CountdownView_suffixTextSize, sp2px(12));
+        mSuffixTextColor = ta.getColor(R.styleable.CountdownView_suffixTextColor, Color.BLACK);
+        mSuffix = ta.getString(R.styleable.CountdownView_suffix);
+        mSuffixDay = ta.getString(R.styleable.CountdownView_suffixDay);
+        mSuffixHour = ta.getString(R.styleable.CountdownView_suffixHour);
+        mSuffixMinute = ta.getString(R.styleable.CountdownView_suffixMinute);
+        mSuffixSecond = ta.getString(R.styleable.CountdownView_suffixSecond);
+        mSuffixMillisecond = ta.getString(R.styleable.CountdownView_suffixMillisecond);
         ta.recycle();
 
         mTimeBgCircularSize = dp2px(2);
 
         // 初始化画笔
-        initPaint(context);
+        initPaint();
+
+        // 初始化后缀
+        initSuffix();
 
         // 测量时间文字高度
         Rect rect = new Rect();
@@ -81,8 +104,6 @@ public class CountdownView extends View {
         mTimeTextWidth = rect.width();
         mTimeTextHeight = rect.height();
 
-        mDecollatorTextWidth = mDecollatorPaint.measureText(":");
-        mDecollatorWidth = mDecollatorTextWidth + (dp2px(2) * 2);
         mTimeBgSize = mTimeTextWidth + (dp2px(2) * 4);
 
         // 初始化时间背景的RectF对象
@@ -91,9 +112,8 @@ public class CountdownView extends View {
 
     /**
      * 初始化画笔
-     * @param context context
      */
-    private void initPaint(Context context) {
+    private void initPaint() {
         // 初始化时间文字画笔
         mTimeTextPaint = new Paint();
         mTimeTextPaint.setAntiAlias(true);
@@ -101,11 +121,11 @@ public class CountdownView extends View {
         mTimeTextPaint.setTextSize(mTimeTextSize);
 
         // 初始化分割文字画笔
-        mDecollatorPaint = new Paint();
-        mDecollatorPaint.setAntiAlias(true);
-        mDecollatorPaint.setColor(mDivisionTextColor);
-//        mDecollatorPaint.setTextAlign(Paint.Align.CENTER);
-        mDecollatorPaint.setTextSize(mDivisionTextSize);
+        mSuffixPaint = new Paint();
+        mSuffixPaint.setAntiAlias(true);
+        mSuffixPaint.setColor(mSuffixTextColor);
+//        mSuffixPaint.setTextAlign(Paint.Align.CENTER);
+        mSuffixPaint.setTextSize(mSuffixTextSize);
 
         // 初始化时间背景画笔
         mTimeTextBgPaint = new Paint();
@@ -120,45 +140,98 @@ public class CountdownView extends View {
         mTimeTextBgDivisionLinePaint.setStrokeWidth(dp2px(0.5f));
     }
 
+    private void initSuffix() {
+        boolean isSuffixNull = true;
+        float mSuffixTextWidth = 0;
+        if (!TextUtils.isEmpty(mSuffix)) {
+            isSuffixNull = false;
+            mSuffixTextWidth = mSuffixPaint.measureText(mSuffix);
+        }
+
+        if (isShowDay) {
+            if (!TextUtils.isEmpty(mSuffixDay)) {
+                mSuffixDayTextWidth = mSuffixPaint.measureText(mSuffixDay);
+            } else {
+                if (!isSuffixNull) {
+                    mSuffixDay = mSuffix;
+                    mSuffixDayTextWidth = mSuffixTextWidth;
+                }
+            }
+        }
+
+        if (isShowHour) {
+            if (!TextUtils.isEmpty(mSuffixHour)) {
+                mSuffixHourTextWidth = mSuffixPaint.measureText(mSuffixHour);
+            } else {
+                if (!isSuffixNull) {
+                    mSuffixHour = mSuffix;
+                    mSuffixHourTextWidth = mSuffixTextWidth;
+                }
+            }
+        }
+
+        if (!TextUtils.isEmpty(mSuffixMinute)) {
+            mSuffixMinuteTextWidth = mSuffixPaint.measureText(mSuffixMinute);
+        } else {
+            if (!isSuffixNull) {
+                mSuffixMinute = mSuffix;
+                mSuffixMinuteTextWidth = mSuffixTextWidth;
+            }
+        }
+
+        if (!TextUtils.isEmpty(mSuffixSecond)) {
+            mSuffixSecondTextWidth = mSuffixPaint.measureText(mSuffixSecond);
+        } else {
+            if (!isSuffixNull) {
+                mSuffixSecond = mSuffix;
+                mSuffixSecondTextWidth = mSuffixTextWidth;
+            }
+        }
+
+        if (!TextUtils.isEmpty(mSuffixMillisecond)) {
+            mSuffixMillisecondTextWidth = mSuffixPaint.measureText(mSuffixMillisecond);
+        }
+    }
+
     /**
      * 初始化时间背景的RectF对象
      */
     private void initTimeBgRect() {
         if (!isHideTimeBackground) {
-            float mLeftSize3;
+            float mSecondLeft;
 
             if (isShowHour) {
                 // 显示小时
 
                 // 计算分钟x轴
-                float mLeftSize2 = mTimeBgSize + mDecollatorWidth;
+                float mMinuteLeft = mTimeBgSize + mSuffixHourTextWidth;
                 // 计算秒钟x轴
-                mLeftSize3 = mLeftSize2 * 2;
+                mSecondLeft = mMinuteLeft + mTimeBgSize + mSuffixMinuteTextWidth;
 
                 // 初始化小时背景RectF
                 mHourBgRectF = new RectF(0, 0, mTimeBgSize, mTimeBgSize);
                 // 初始化分钟背景RectF
-                mMinuteBgRectF = new RectF(mLeftSize2, 0, mTimeBgSize + mLeftSize2, mTimeBgSize);
+                mMinuteBgRectF = new RectF(mMinuteLeft, 0, mTimeBgSize + mMinuteLeft, mTimeBgSize);
                 // 初始化秒钟背景RectF
-                mSecondBgRectF = new RectF(mLeftSize3, 0, mTimeBgSize + mLeftSize3, mTimeBgSize);
+                mSecondBgRectF = new RectF(mSecondLeft, 0, mTimeBgSize + mSecondLeft, mTimeBgSize);
             } else {
                 // 不显示小时
 
                 // 计算秒钟x轴
-                mLeftSize3 = mTimeBgSize + mDecollatorWidth;
+                mSecondLeft = mTimeBgSize + mSuffixMinuteTextWidth;
 
                 // 初始化分钟背景RectF
                 mMinuteBgRectF = new RectF(0, 0, mTimeBgSize, mTimeBgSize);
                 // 初始化秒钟背景RectF
-                mSecondBgRectF = new RectF(mLeftSize3, 0, mTimeBgSize + mLeftSize3, mTimeBgSize);
+                mSecondBgRectF = new RectF(mSecondLeft, 0, mTimeBgSize + mSecondLeft, mTimeBgSize);
             }
 
             if (isShowMillisecond) {
                 // 计算毫秒x轴
-                float mLeftSize4 = mTimeBgSize + mDecollatorWidth + mLeftSize3;
+                float mMillisecondLeft = mTimeBgSize + mSuffixSecondTextWidth + mSecondLeft;
 
                 // 初始化毫秒背景RectF
-                mMillisecondBgRectF = new RectF(mLeftSize4, 0, mTimeBgSize + mLeftSize4, mTimeBgSize);
+                mMillisecondBgRectF = new RectF(mMillisecondLeft, 0, mTimeBgSize + mMillisecondLeft, mTimeBgSize);
             }
         }
     }
@@ -167,44 +240,34 @@ public class CountdownView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if (isHideTimeBackground) {
-            float width = mTimeTextWidth * 2;
-            width += mDecollatorWidth;
+        float timeWidth = isHideTimeBackground ? mTimeTextWidth : mTimeBgSize;
+        float width = timeWidth * 2;
+        width += mSuffixMinuteTextWidth;
 
-            if (isShowMillisecond) {
-                width += mTimeTextWidth;
-                width += mDecollatorWidth;
-            }
-
-            if (isShowHour) {
-                width += mTimeTextWidth;
-                width += mDecollatorWidth;
-            }
-
-            setMeasuredDimension((int)width + 5, (int)mTimeTextHeight);
-        } else {
-            float width = mTimeBgSize * 2;
-            width += mDecollatorWidth;
-
-            if (isShowMillisecond) {
-                width += mTimeBgSize;
-                width += mDecollatorWidth;
-            }
-
-            if (isShowHour) {
-                width += mTimeBgSize;
-                width += mDecollatorWidth;
-            }
-
-            setMeasuredDimension((int)width, (int)mTimeBgSize);
+        if (isShowDay) {
+            width += timeWidth;
+            width += mSuffixDayTextWidth;
         }
+
+        if (isShowHour) {
+            width += timeWidth;
+            width += mSuffixHourTextWidth;
+        }
+
+        if (isShowMillisecond) {
+            width += timeWidth;
+            width += mSuffixSecondTextWidth;
+            width += mSuffixMillisecondTextWidth;
+        }
+
+        setMeasuredDimension((int)width, isHideTimeBackground ? (int)mTimeTextHeight : (int)mTimeBgSize);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        float mLeftSize3;
+        float mSecondLeft;
         float mTextYPos;
 
         if (isHideTimeBackground) {
@@ -215,31 +278,37 @@ public class CountdownView extends View {
                 // 显示小时
                 // 画小时文字
                 canvas.drawText(formatNum(mHour), 0, mTextYPos, mTimeTextPaint);
-                // 画小时后面的分割线
-                canvas.drawText(":", mTimeTextWidth + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                if (mSuffixHourTextWidth > 0) {
+                    // 画小时后缀
+                    canvas.drawText(mSuffixHour, mTimeTextWidth, mTextYPos, mSuffixPaint);
+                }
 
                 // 计算分钟x轴
-                float mLeftSize2 = mTimeTextWidth + mDecollatorWidth;
+                float mMinuteLeft = mTimeTextWidth + mSuffixHourTextWidth;
                 // 画分钟文字
-                canvas.drawText(formatNum(mMinute), mLeftSize2, mTextYPos, mTimeTextPaint);
-                // 画分钟后面的分割线
-                canvas.drawText(":", mLeftSize2 + mTimeTextWidth + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                canvas.drawText(formatNum(mMinute), mMinuteLeft, mTextYPos, mTimeTextPaint);
+                if (mSuffixMinuteTextWidth > 0) {
+                    // 画分钟后缀
+                    canvas.drawText(mSuffixMinute, mMinuteLeft + mTimeTextWidth, mTextYPos, mSuffixPaint);
+                }
 
                 // 计算秒钟x轴
-                mLeftSize3 = mTimeTextWidth + mDecollatorWidth + mLeftSize2;
+                mSecondLeft = mTimeTextWidth + mSuffixMinuteTextWidth + mMinuteLeft;
                 // 画秒钟文字
-                canvas.drawText(formatNum(mSecond), mLeftSize3 + (mTimeTextWidth / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
+                canvas.drawText(formatNum(mSecond), mSecondLeft + (mTimeTextWidth / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
             } else {
                 // 不显示小时
                 // 画分钟文字
                 canvas.drawText(formatNum(mMinute), 0, mTextYPos, mTimeTextPaint);
-                // 画分钟后面的分割线
-                canvas.drawText(":", mTimeTextWidth + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                if (mSuffixMinuteTextWidth > 0) {
+                    // 画分钟后缀
+                    canvas.drawText(mSuffixMinute, mTimeTextWidth, mTextYPos, mSuffixPaint);
+                }
 
                 // 计算秒钟x轴
-                mLeftSize3 = mTimeTextWidth + mDecollatorWidth;
+                mSecondLeft = mTimeTextWidth + mSuffixMinuteTextWidth;
                 // 画秒钟文字
-                canvas.drawText(formatNum(mSecond), mLeftSize3, mTextYPos, mTimeTextPaint);
+                canvas.drawText(formatNum(mSecond), mSecondLeft, mTextYPos, mTimeTextPaint);
             }
         } else {
             // 有背景
@@ -253,28 +322,32 @@ public class CountdownView extends View {
                 canvas.drawLine(0, mTimeBgSize / 2, mTimeBgSize, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
                 // 画小时文字
                 canvas.drawText(formatNum(mHour), mTimeBgSize / 2 - mTimeTextWidth / 2, mTextYPos, mTimeTextPaint);
-                // 画小时后面的分割线
-                canvas.drawText(":", mTimeBgSize + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                if (mSuffixHourTextWidth > 0) {
+                    // 画小时后缀
+                    canvas.drawText(mSuffixHour, mTimeBgSize, mTextYPos, mSuffixPaint);
+                }
 
                 // 计算分钟x轴
-                float mLeftSize2 = mTimeBgSize + mDecollatorWidth;
+                float mMinuteLeft = mTimeBgSize + mSuffixHourTextWidth;
                 // 画分钟背景
                 canvas.drawRoundRect(mMinuteBgRectF, mTimeBgCircularSize, mTimeBgCircularSize, mTimeTextBgPaint);
                 // 画分钟背景中间的横线
-                canvas.drawLine(mLeftSize2, mTimeBgSize / 2, mTimeBgSize + mLeftSize2, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
+                canvas.drawLine(mMinuteLeft, mTimeBgSize / 2, mTimeBgSize + mMinuteLeft, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
                 // 画分钟文字
-                canvas.drawText(formatNum(mMinute), mLeftSize2 + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
-                // 画分钟后面的分割线
-                canvas.drawText(":", mLeftSize2 + mTimeBgSize + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                canvas.drawText(formatNum(mMinute), mMinuteLeft + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
+                if (mSuffixMinuteTextWidth > 0) {
+                    // 画分钟后缀
+                    canvas.drawText(mSuffixMinute, mMinuteLeft + mTimeBgSize, mTextYPos, mSuffixPaint);
+                }
 
                 // 计算秒钟x轴
-                mLeftSize3 = mLeftSize2 * 2;
+                mSecondLeft = mMinuteLeft + mTimeBgSize + mSuffixMinuteTextWidth;
                 // 画秒钟背景
                 canvas.drawRoundRect(mSecondBgRectF, mTimeBgCircularSize, mTimeBgCircularSize, mTimeTextBgPaint);
                 // 画秒钟背景中间的横线
-                canvas.drawLine(mLeftSize3, mTimeBgSize / 2, mTimeBgSize + mLeftSize3, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
+                canvas.drawLine(mSecondLeft, mTimeBgSize / 2, mTimeBgSize + mSecondLeft, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
                 // 画秒钟文字
-                canvas.drawText(formatNum(mSecond), mLeftSize3 + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
+                canvas.drawText(formatNum(mSecond), mSecondLeft + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
             } else {
                 // 不显示小时
                 // 画分钟背景
@@ -283,17 +356,19 @@ public class CountdownView extends View {
                 canvas.drawLine(0, mTimeBgSize / 2, mTimeBgSize, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
                 // 画分钟文字
                 canvas.drawText(formatNum(mMinute), mTimeBgSize / 2 - mTimeTextWidth / 2, mTextYPos, mTimeTextPaint);
-                // 画分钟后面的分割线
-                canvas.drawText(":", mTimeBgSize + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                if (mSuffixMinuteTextWidth > 0) {
+                    // 画分钟后缀
+                    canvas.drawText(mSuffixMinute, mTimeBgSize, mTextYPos, mSuffixPaint);
+                }
 
                 // 计算秒钟x轴
-                mLeftSize3 = mTimeBgSize + mDecollatorWidth;
+                mSecondLeft = mTimeBgSize + mSuffixMinuteTextWidth;
                 // 画秒钟背景
                 canvas.drawRoundRect(mSecondBgRectF, mTimeBgCircularSize, mTimeBgCircularSize, mTimeTextBgPaint);
                 // 画秒钟背景中间的横线
-                canvas.drawLine(mLeftSize3, mTimeBgSize / 2, mTimeBgSize + mLeftSize3, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
+                canvas.drawLine(mSecondLeft, mTimeBgSize / 2, mTimeBgSize + mSecondLeft, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
                 // 画秒钟文字
-                canvas.drawText(formatNum(mSecond), mLeftSize3 + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
+                canvas.drawText(formatNum(mSecond), mSecondLeft + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
             }
         }
 
@@ -302,24 +377,36 @@ public class CountdownView extends View {
             // 计算毫秒x轴
             if (isHideTimeBackground) {
                 // 无背景
-                // 画秒钟后面的分割线
-                canvas.drawText(":", mLeftSize3 + mTimeTextWidth + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                if (mSuffixSecondTextWidth > 0) {
+                    // 画秒钟后缀
+                    canvas.drawText(mSuffixSecond, mSecondLeft + mTimeTextWidth, mTextYPos, mSuffixPaint);
+                }
 
-                float mLeftSize4 = mTimeTextWidth + mDecollatorWidth + mLeftSize3;
+                float mMillisecondLeft = mTimeTextWidth + mSuffixSecondTextWidth + mSecondLeft;
                 // 画毫秒文字
-                canvas.drawText(formatMillisecond(), mLeftSize4, mTextYPos, mTimeTextPaint);
+                canvas.drawText(formatMillisecond(), mMillisecondLeft, mTextYPos, mTimeTextPaint);
+                if (mSuffixMillisecondTextWidth > 0) {
+                    // 画毫秒后缀
+                    canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeTextWidth, mTextYPos, mSuffixPaint);
+                }
             } else {
                 // 有背景
-                // 画秒钟后面的分割线
-                canvas.drawText(":", mLeftSize3 + mTimeBgSize + (mDecollatorTextWidth / 2), mTextYPos, mDecollatorPaint);
+                if (mSuffixSecondTextWidth > 0) {
+                    // 画秒钟后缀
+                    canvas.drawText(mSuffixSecond, mSecondLeft + mTimeBgSize, mTextYPos, mSuffixPaint);
+                }
 
-                float mLeftSize4 = mTimeBgSize + mDecollatorWidth + mLeftSize3;
+                float mMillisecondLeft = mTimeBgSize + mSuffixSecondTextWidth + mSecondLeft;
                 // 画毫秒背景
                 canvas.drawRoundRect(mMillisecondBgRectF, mTimeBgCircularSize, mTimeBgCircularSize, mTimeTextBgPaint);
                 // 画毫秒背景中间的横线
-                canvas.drawLine(mLeftSize4, mTimeBgSize / 2, mTimeBgSize + mLeftSize4, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
+                canvas.drawLine(mMillisecondLeft, mTimeBgSize / 2, mTimeBgSize + mMillisecondLeft, mTimeBgSize / 2, mTimeTextBgDivisionLinePaint);
                 // 画毫秒文字
-                canvas.drawText(formatMillisecond(), mLeftSize4 + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
+                canvas.drawText(formatMillisecond(), mMillisecondLeft + (mTimeBgSize / 2) - (mTimeTextWidth / 2), mTextYPos, mTimeTextPaint);
+                if (mSuffixMillisecondTextWidth > 0) {
+                    // 画毫秒后缀
+                    canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeBgSize, mTextYPos, mSuffixPaint);
+                }
             }
         }
     }

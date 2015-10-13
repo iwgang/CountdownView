@@ -3,18 +3,19 @@
 
     <declare-styleable name="CountdownView">
         <attr name="timeTextSize" format="dimension" />
-        <attr name="divisionTextSize" format="dimension" />
+        <attr name="suffixTextSize" format="dimension" />
         <attr name="timeTextColor" format="color" />
-        <attr name="divisionTextColor" format="color" />
+        <attr name="suffixTextColor" format="color" />
         <attr name="isHideTimeBackground" format="boolean" />
+        <attr name="isShowDay" format="boolean" />
         <attr name="isShowHour" format="boolean" />
         <attr name="isShowMillisecond" format="boolean" />
-        <attr name="division" format="string" />
-        <attr name="divisionDay" format="string" />
-        <attr name="divisionHour" format="string" />
-        <attr name="divisionMinute" format="string" />
-        <attr name="divisionSecond" format="string" />
-        <attr name="divisionMillisecond" format="string" />
+        <attr name="suffix" format="string" />
+        <attr name="suffixDay" format="string" />
+        <attr name="suffixHour" format="string" />
+        <attr name="suffixMinute" format="string" />
+        <attr name="suffixSecond" format="string" />
+        <attr name="suffixMillisecond" format="string" />
     </declare-styleable>
 
 </resources>
