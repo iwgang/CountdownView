@@ -22,6 +22,12 @@ public class MainActivity extends ActionBarActivity {
 
         CountdownView mCvCountdownViewTest4 = (CountdownView)findViewById(R.id.cv_countdownViewTest4);
         mCvCountdownViewTest4.start(995550000);
+
+        CountdownView mCvCountdownViewTest5 = (CountdownView)findViewById(R.id.cv_countdownViewTest5);
+        mCvCountdownViewTest5.start(995550000);
+
+        CountdownView mCvCountdownViewTest6 = (CountdownView)findViewById(R.id.cv_countdownViewTest6);
+        mCvCountdownViewTest6.start(995550000);
     }
 
 }
