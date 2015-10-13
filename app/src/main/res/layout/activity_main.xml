@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
+        app:isShowMillisecond="true"
         app:timeTextSize="20sp"
         app:suffixTextSize="20sp"
         app:timeBgColor="#444444"
