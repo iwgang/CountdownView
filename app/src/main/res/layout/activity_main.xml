@@ -10,10 +10,25 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
+        app:timeBgColor="#FF5000"
+        app:isShowTimeBgDivisionLine="false"
         app:suffix=" : " />
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        app:timeTextSize="20sp"
+        app:suffixTextSize="20sp"
+        app:timeBgColor="#444444"
+        app:timeBgRadius="2dp"
+        app:timeBgDivisionLineColor="#30FFFFFF"
+        app:suffix=" : " />
+
+    <cn.iwgang.calendardemo.countdownview.CountdownView
+        android:id="@+id/cv_countdownViewTest3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -28,7 +43,7 @@
         app:suffix=" : " />
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
-        android:id="@+id/cv_countdownViewTest3"
+        android:id="@+id/cv_countdownViewTest4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

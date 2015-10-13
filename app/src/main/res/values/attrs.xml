@@ -2,6 +2,10 @@
 <resources>
 
     <declare-styleable name="CountdownView">
+        <attr name="timeBgColor" format="color" />
+        <attr name="timeBgRadius" format="dimension" />
+        <attr name="isShowTimeBgDivisionLine" format="boolean" />
+        <attr name="timeBgDivisionLineColor" format="color" />
         <attr name="timeTextSize" format="dimension" />
         <attr name="suffixTextSize" format="dimension" />
         <attr name="timeTextColor" format="color" />
