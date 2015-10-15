@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
@@ -10,9 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        app:timeBgColor="#FF5000"
         app:isShowTimeBgDivisionLine="false"
-        app:suffix=" : " />
+        app:suffix=" : "
+        app:timeBgColor="#FF5000" />
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest2"
@@ -21,12 +21,12 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         app:isShowMillisecond="true"
-        app:timeTextSize="20sp"
+        app:suffix=" : "
         app:suffixTextSize="20sp"
         app:timeBgColor="#444444"
-        app:timeBgRadius="2dp"
         app:timeBgDivisionLineColor="#30FFFFFF"
-        app:suffix=" : " />
+        app:timeBgRadius="2dp"
+        app:timeTextSize="20sp" />
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest3"
@@ -37,11 +37,11 @@
         app:isHideTimeBackground="true"
         app:isShowHour="false"
         app:isShowMillisecond="true"
-        app:timeTextColor="#000000"
-        app:timeTextSize="25sp"
+        app:suffix=" : "
         app:suffixTextColor="#000000"
         app:suffixTextSize="25sp"
-        app:suffix=" : " />
+        app:timeTextColor="#000000"
+        app:timeTextSize="25sp" />
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest4"
@@ -50,17 +50,18 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         app:isHideTimeBackground="true"
+        app:isShowDay="true"
         app:isShowHour="true"
-        app:isShowMillisecond="true"
-        app:timeTextColor="#000000"
-        app:timeTextSize="25sp"
-        app:suffixTextColor="#000000"
-        app:suffixTextSize="12sp"
+        app:isShowMillisecond="false"
+        app:suffixDay=" 天 "
         app:suffixGravity="top"
         app:suffixHour=" 时 "
+        app:suffixMillisecond=" 毫秒"
         app:suffixMinute=" 分 "
-        app:suffixSecond=" 秒 "
-        app:suffixMillisecond=" 毫秒" />
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="12sp"
+        app:timeTextColor="#000000"
+        app:timeTextSize="25sp" />
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest5"
@@ -69,17 +70,19 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         app:isHideTimeBackground="true"
+        app:isShowDay="true"
         app:isShowHour="true"
         app:isShowMillisecond="true"
-        app:timeTextColor="#000000"
-        app:timeTextSize="25sp"
+        app:suffixDay=" 天 "
+        app:suffixGravity="top"
+        app:suffixHour=" 时 "
+        app:suffixMillisecond=" 毫秒"
+        app:suffixMinute=" 分 "
+        app:suffixSecond=" 秒 "
         app:suffixTextColor="#000000"
         app:suffixTextSize="12sp"
-        app:suffixGravity="center"
-        app:suffixHour="  时  "
-        app:suffixMinute="  分  "
-        app:suffixSecond="  秒  "
-        app:suffixMillisecond="  毫秒" />
+        app:timeTextColor="#000000"
+        app:timeTextSize="25sp" />
 
     <cn.iwgang.calendardemo.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest6"
@@ -88,16 +91,39 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         app:isHideTimeBackground="true"
+        app:isShowDay="true"
         app:isShowHour="true"
         app:isShowMillisecond="true"
-        app:timeTextColor="#000000"
-        app:timeTextSize="25sp"
-        app:suffixTextColor="#000000"
-        app:suffixTextSize="12sp"
-        app:suffixGravity="bottom"
+        app:suffixDay=" 天 "
+        app:suffixGravity="center"
         app:suffixHour=" 时 "
+        app:suffixMillisecond=" 毫秒"
         app:suffixMinute=" 分 "
         app:suffixSecond=" 秒 "
-        app:suffixMillisecond=" 毫秒" />
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="12sp"
+        app:timeTextColor="#000000"
+        app:timeTextSize="25sp" />
+
+    <cn.iwgang.calendardemo.countdownview.CountdownView
+        android:id="@+id/cv_countdownViewTest7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        app:isHideTimeBackground="true"
+        app:isShowDay="true"
+        app:isShowHour="true"
+        app:isShowMillisecond="true"
+        app:suffixDay=" 天 "
+        app:suffixGravity="bottom"
+        app:suffixHour=" 时 "
+        app:suffixMillisecond=" 毫秒"
+        app:suffixMinute=" 分 "
+        app:suffixSecond=" 秒 "
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="12sp"
+        app:timeTextColor="#000000"
+        app:timeTextSize="25sp" />
 
 </LinearLayout>

@@ -13,6 +13,7 @@
         <attr name="isHideTimeBackground" format="boolean" />
         <attr name="isShowDay" format="boolean" />
         <attr name="isShowHour" format="boolean" />
+        <attr name="isShowMinute" format="boolean" />
         <attr name="isShowMillisecond" format="boolean" />
         <attr name="suffix" format="string" />
         <attr name="suffixDay" format="string" />
