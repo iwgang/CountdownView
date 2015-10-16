@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <cn.iwgang.calendardemo.countdownview.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         app:suffix=" : "
         app:timeBgColor="#FF5000" />
 
-    <cn.iwgang.calendardemo.countdownview.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         app:timeBgRadius="2dp"
         app:timeTextSize="20sp" />
 
-    <cn.iwgang.calendardemo.countdownview.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         app:timeTextColor="#000000"
         app:timeTextSize="25sp" />
 
-    <cn.iwgang.calendardemo.countdownview.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         app:timeTextColor="#000000"
         app:timeTextSize="25sp" />
 
-    <cn.iwgang.calendardemo.countdownview.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         app:timeTextColor="#000000"
         app:timeTextSize="25sp" />
 
-    <cn.iwgang.calendardemo.countdownview.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
         app:timeTextColor="#000000"
         app:timeTextSize="25sp" />
 
-    <cn.iwgang.calendardemo.countdownview.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

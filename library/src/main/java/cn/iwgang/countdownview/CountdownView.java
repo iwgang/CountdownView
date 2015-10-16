@@ -1,4 +1,4 @@
-package cn.iwgang.calendardemo.countdownview;
+package cn.iwgang.countdownview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

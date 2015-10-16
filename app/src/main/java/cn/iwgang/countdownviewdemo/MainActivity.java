@@ -1,7 +1,9 @@
-package cn.iwgang.calendardemo.countdownview;
+package cn.iwgang.countdownview;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+
+import cn.iwgang.countdownviewdemo.R;
 
 
 public class MainActivity extends ActionBarActivity {
