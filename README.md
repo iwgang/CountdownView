@@ -1,5 +1,5 @@
 # CountdownView
-Android 倒计时控件
+Android 倒计时控件，全部使用canvas绘制，支持多种显示风格
 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s1.gif)  
 
