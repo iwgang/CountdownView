@@ -562,7 +562,7 @@ public class CountdownView extends View {
         String retMillisecondStr;
 
         if (mMillisecond > 99) {
-            retMillisecondStr = String.valueOf(mMillisecond).substring(0, 2);
+            retMillisecondStr = String.valueOf(mMillisecond / 10);
         } else if (mMillisecond <= 9) {
             retMillisecondStr = "0" + mMillisecond;
         } else {
