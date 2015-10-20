@@ -5,3 +5,7 @@
 .DS_Store
 /build
 /captures
+
+# Android Studio generated files
+.idea
+
