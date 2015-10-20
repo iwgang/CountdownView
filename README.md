@@ -34,12 +34,12 @@ mCvCountdownViewTest1.start(995550000); // Millisecond
     app:suffixMillisecond=" 毫秒" />
 ```
 
-# Customization
+# customization
     app:isHideTimeBackground [boolean default:false] "is hide background"
     ↓↓ Need isHideTimeBackground = false 
     app:timeBgColor [color default:#444444] "time background color"
     app:timeBgRadius [dimension default:0dp] "time background radius"
-    app:isShowTimeBgDivisionLine [boolean default:true] "time background middle dividing line"
+    app:isShowTimeBgDivisionLine [boolean default:true] "is show time background middle dividing line"
     app:timeBgDivisionLineColor [color default:#30FFFFFF] "time background middle dividing line color"
     
     app:timeTextSize [dimension default:12sp] "time text size"
