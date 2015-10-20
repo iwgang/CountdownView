@@ -3,9 +3,12 @@ Android 倒计时控件，全部使用canvas绘制，支持多种显示风格
 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s1.gif)  
 
-# 代码使用
+# gradle
+    compile 'com.github.iwgang:countdownview:1.0'
+
+# code
     CountdownView mCvCountdownViewTest1 = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
-    mCvCountdownViewTest1.start(995550000); // 毫秒
+    mCvCountdownViewTest1.start(995550000); // Millisecond
 
 # xml (时间后缀增加空格可以控制两边间距)
     <cn.iwgang.calendardemo.countdownview.CountdownView
