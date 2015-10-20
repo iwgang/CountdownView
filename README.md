@@ -7,11 +7,14 @@ Android 倒计时控件，全部使用canvas绘制，支持多种显示风格
     compile 'com.github.iwgang:countdownview:1.0'
 
 # code
+```
     CountdownView mCvCountdownViewTest1 = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
     mCvCountdownViewTest1.start(995550000); // Millisecond
+```
 
-# xml
+# layout
     注：时间后缀增加空格可以控制两边间距
+``` xml
     <cn.iwgang.calendardemo.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest4"
         android:layout_width="wrap_content"
@@ -29,7 +32,8 @@ Android 倒计时控件，全部使用canvas绘制，支持多种显示风格
         app:suffixMinute=" 分 "
         app:suffixSecond=" 秒 "
         app:suffixMillisecond=" 毫秒" />
-        
+```
+
 # Customization
     app:isHideTimeBackground [boolean default:false] "is hide background"
     ↓↓ Need isHideTimeBackground = false 
