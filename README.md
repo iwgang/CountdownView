@@ -31,7 +31,7 @@ Android 倒计时控件，全部使用canvas绘制，支持多种显示风格
         app:suffixMillisecond=" 毫秒" />
         
 # Customization
-    **app:isHideTimeBackground** [boolean default:false] "is hide background"
+    app:isHideTimeBackground [boolean default:false] "is hide background"
     ↓↓ Need isHideTimeBackground = false 
     app:timeBgColor [color default:#444444] "time background color"
     app:timeBgRadius [dimension default:0dp] "time background radius"
