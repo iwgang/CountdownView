@@ -21,11 +21,21 @@
         <attr name="suffixMinute" format="string" />
         <attr name="suffixSecond" format="string" />
         <attr name="suffixMillisecond" format="string" />
-        <attr name="suffixGravity" >
+        <attr name="suffixGravity">
             <enum name="top" value="0" />
             <enum name="center" value="1" />
             <enum name="bottom" value="2" />
         </attr>
+        <attr name="suffixLRMargin" format="dimension" />
+        <attr name="suffixDayLeftMargin" format="dimension" />
+        <attr name="suffixDayRightMargin" format="dimension" />
+        <attr name="suffixHourLeftMargin" format="dimension" />
+        <attr name="suffixHourRightMargin" format="dimension" />
+        <attr name="suffixMinuteLeftMargin" format="dimension" />
+        <attr name="suffixMinuteRightMargin" format="dimension" />
+        <attr name="suffixSecondLeftMargin" format="dimension" />
+        <attr name="suffixSecondRightMargin" format="dimension" />
+        <attr name="suffixMillisecondLeftMargin" format="dimension" />
     </declare-styleable>
 
 </resources>

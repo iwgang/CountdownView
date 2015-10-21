@@ -2,11 +2,12 @@ package cn.iwgang.countdownviewdemo;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import cn.iwgang.countdownview.CountdownView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements CountdownView.OnCountdownEndListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,10 +15,14 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         CountdownView mCvCountdownViewTest1 = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
-        mCvCountdownViewTest1.start(995550000);
+        mCvCountdownViewTest1.setTag("test1");
+        mCvCountdownViewTest1.setOnCountdownEndListener(this);
+        mCvCountdownViewTest1.start(6000);
 
         CountdownView mCvCountdownViewTest2 = (CountdownView)findViewById(R.id.cv_countdownViewTest2);
-        mCvCountdownViewTest2.start(995550000);
+        mCvCountdownViewTest2.setTag("test2");
+        mCvCountdownViewTest2.setOnCountdownEndListener(this);
+        mCvCountdownViewTest2.start(10000);
 
         CountdownView mCvCountdownViewTest3 = (CountdownView)findViewById(R.id.cv_countdownViewTest3);
         mCvCountdownViewTest3.start(995550000);
@@ -35,4 +40,11 @@ public class MainActivity extends ActionBarActivity {
         mCvCountdownViewTest7.start(995550000);
     }
 
+    @Override
+    public void onEnd(CountdownView cv) {
+        Object tag = cv.getTag();
+        if (null != tag) {
+            Log.i("wg", "tag = " + tag.toString());
+        }
+    }
 }
