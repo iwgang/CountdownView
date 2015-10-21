@@ -492,14 +492,20 @@ public class CountdownView extends View {
             return ;
         }
 
-        updateShow(millisecond);
-
         if (null != mCountDownTimer) {
             mCountDownTimer.cancel();
             mCountDownTimer = null;
         }
 
-        mCountDownTimer = new CountDownTimer(millisecond, 10) {
+        long countDownInterval;
+        if (isShowMillisecond) {
+            countDownInterval = 10;
+            updateShow(millisecond);
+        } else {
+            countDownInterval = 1000;
+        }
+
+        mCountDownTimer = new CountDownTimer(millisecond, countDownInterval) {
             @Override
             public void onFinish() {
                 // 倒计时结束
