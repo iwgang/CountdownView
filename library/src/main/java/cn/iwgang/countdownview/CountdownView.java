@@ -10,7 +10,6 @@ import android.graphics.RectF;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -143,12 +142,6 @@ public class CountdownView extends View {
         mTimeTextPaint.getTextBounds("00", 0, 2, rect);
         mTimeTextWidth = rect.width();
         mTimeTextHeight = rect.height();
-
-
-        Paint.FontMetrics suffixFontMetrics = mTimeTextPaint.getFontMetrics();
-//        float mTimeTextHeight2 = suffixFontMetrics.descent - suffixFontMetrics.ascent;
-        float mTimeTextHeight2 = suffixFontMetrics.bottom - suffixFontMetrics.top;
-        Log.i("wg", "mTimeTextHeight 1 = " + mTimeTextHeight + " _ mTimeTextHeight2 = " + mTimeTextHeight2);
 
         mTimeBgSize = mTimeTextWidth + (dp2px(2) * 4);
 
@@ -399,7 +392,7 @@ public class CountdownView extends View {
             switch (mSuffixGravity) {
                 case 0:
                     // top
-                    mSuffixTextBaseY = suffixFontHeight - 12; // TODO 待优化
+                    mSuffixTextBaseY = suffixFontMetrics.descent - suffixFontMetrics.ascent - suffixFontMetrics.descent;
                     break;
                 case 1:
                     // center
