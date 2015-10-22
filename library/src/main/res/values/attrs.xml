@@ -2,19 +2,23 @@
 <resources>
 
     <declare-styleable name="CountdownView">
-        <attr name="timeBgColor" format="color" />
-        <attr name="timeBgRadius" format="dimension" />
+        <attr name="isHideTimeBackground" format="boolean" />
         <attr name="isShowTimeBgDivisionLine" format="boolean" />
         <attr name="timeBgDivisionLineColor" format="color" />
+        <attr name="timeBgColor" format="color" />
+        <attr name="timeBgRadius" format="dimension" />
+
+        <attr name="isTimeTextBold" format="boolean" />
         <attr name="timeTextSize" format="dimension" />
-        <attr name="suffixTextSize" format="dimension" />
         <attr name="timeTextColor" format="color" />
-        <attr name="suffixTextColor" format="color" />
-        <attr name="isHideTimeBackground" format="boolean" />
         <attr name="isShowDay" format="boolean" />
         <attr name="isShowHour" format="boolean" />
         <attr name="isShowMinute" format="boolean" />
         <attr name="isShowMillisecond" format="boolean" />
+
+        <attr name="isSuffixTextBold" format="boolean" />
+        <attr name="suffixTextSize" format="dimension" />
+        <attr name="suffixTextColor" format="color" />
         <attr name="suffix" format="string" />
         <attr name="suffixDay" format="string" />
         <attr name="suffixHour" format="string" />

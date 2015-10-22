@@ -10,6 +10,7 @@ import android.graphics.RectF;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -28,6 +29,8 @@ public class CountdownView extends View {
     private boolean isShowMillisecond;
     private boolean isHideTimeBackground;
     private boolean isShowTimeBgDivisionLine;
+    private boolean isTimeTextBold;
+    private boolean isSuffixTextBold;
 
     private Paint mTimeTextPaint;
     private Paint mSuffixTextPaint;
@@ -53,7 +56,6 @@ public class CountdownView extends View {
     private int mTimeBgDivisionLineSize;
 
     // 后缀
-    private boolean isHideLastSuffix;
     private String mSuffix;
     private String mSuffixDay;
     private String mSuffixHour;
@@ -98,6 +100,7 @@ public class CountdownView extends View {
         isShowTimeBgDivisionLine = ta.getBoolean(R.styleable.CountdownView_isShowTimeBgDivisionLine, true);
         mTimeBgDivisionLineColor = ta.getColor(R.styleable.CountdownView_timeBgDivisionLineColor, Color.parseColor("#30FFFFFF"));
 
+        isTimeTextBold = ta.getBoolean(R.styleable.CountdownView_isTimeTextBold, false);
         mTimeTextSize = ta.getDimension(R.styleable.CountdownView_timeTextSize, sp2px(12));
         mTimeTextColor = ta.getColor(R.styleable.CountdownView_timeTextColor, 0xFFFFFFFF);
         isHideTimeBackground = ta.getBoolean(R.styleable.CountdownView_isHideTimeBackground, false);
@@ -106,6 +109,7 @@ public class CountdownView extends View {
         isShowMinute = ta.getBoolean(R.styleable.CountdownView_isShowMinute, true);
         isShowMillisecond = ta.getBoolean(R.styleable.CountdownView_isShowMillisecond, false);
 
+        isSuffixTextBold = ta.getBoolean(R.styleable.CountdownView_isSuffixTextBold, false);
         mSuffixTextSize = ta.getDimension(R.styleable.CountdownView_suffixTextSize, sp2px(12));
         mSuffixTextColor = ta.getColor(R.styleable.CountdownView_suffixTextColor, 0xFF000000);
         mSuffix = ta.getString(R.styleable.CountdownView_suffix);
@@ -140,6 +144,12 @@ public class CountdownView extends View {
         mTimeTextWidth = rect.width();
         mTimeTextHeight = rect.height();
 
+
+        Paint.FontMetrics suffixFontMetrics = mTimeTextPaint.getFontMetrics();
+//        float mTimeTextHeight2 = suffixFontMetrics.descent - suffixFontMetrics.ascent;
+        float mTimeTextHeight2 = suffixFontMetrics.bottom - suffixFontMetrics.top;
+        Log.i("wg", "mTimeTextHeight 1 = " + mTimeTextHeight + " _ mTimeTextHeight2 = " + mTimeTextHeight2);
+
         mTimeBgSize = mTimeTextWidth + (dp2px(2) * 4);
 
         // 初始化时间背景的RectF对象
@@ -155,11 +165,17 @@ public class CountdownView extends View {
         mTimeTextPaint.setColor(mTimeTextColor);
         mTimeTextPaint.setTextAlign(Paint.Align.CENTER);
         mTimeTextPaint.setTextSize(mTimeTextSize);
+        if (isTimeTextBold) {
+            mTimeTextPaint.setFakeBoldText(true);
+        }
 
-        // 初始化分割文字画笔
+        // 初始化时间后缀文字画笔
         mSuffixTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSuffixTextPaint.setColor(mSuffixTextColor);
         mSuffixTextPaint.setTextSize(mSuffixTextSize);
+        if (isSuffixTextBold) {
+            mSuffixTextPaint.setFakeBoldText(true);
+        }
 
         // 初始化时间背景画笔
         mTimeTextBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -179,7 +195,6 @@ public class CountdownView extends View {
 
         if (!TextUtils.isEmpty(mSuffix)) {
             isSuffixNull = false;
-            isHideLastSuffix = true;
             mSuffixTextWidth = mSuffixTextPaint.measureText(mSuffix);
         }
 
