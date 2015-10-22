@@ -599,7 +599,7 @@ public class CountdownView extends View {
 
     @Override
     protected void onDetachedFromWindow() {
-            super.onDetachedFromWindow();
+        super.onDetachedFromWindow();
         stop();
     }
 
@@ -629,6 +629,7 @@ public class CountdownView extends View {
             @Override
             public void onFinish() {
                 // 倒计时结束
+                allShowZero();
                 // 回调
                 if (null != mOnCountdownEndListener) {
                     mOnCountdownEndListener.onEnd(CountdownView.this);
