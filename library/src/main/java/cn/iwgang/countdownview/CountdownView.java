@@ -331,7 +331,7 @@ public class CountdownView extends View {
 
         if (isShowMillisecond) {
             if (mSuffixMillisecondLeftMargin < 0) {
-                if (!isSuffixLRMarginNull) {
+                if (!isSuffixLRMarginNull && mSuffixMillisecondTextWidth > 0) {
                     mSuffixMillisecondLeftMargin = mSuffixLRMargin;
                 } else {
                     mSuffixMillisecondLeftMargin = 0;
@@ -508,6 +508,7 @@ public class CountdownView extends View {
         width += (mSuffixDayTextWidth + mSuffixHourTextWidth + mSuffixMinuteTextWidth + mSuffixSecondTextWidth + mSuffixMillisecondTextWidth);
         width += (mSuffixDayLeftMargin + mSuffixDayRightMargin + mSuffixHourLeftMargin + mSuffixHourRightMargin
                 + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin + mSuffixSecondLeftMargin + mSuffixSecondRightMargin + mSuffixMillisecondLeftMargin);
+
         if (isShowDay) {
             width += timeWidth;
         }
