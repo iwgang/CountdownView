@@ -24,10 +24,8 @@ public class CountdownView extends View {
     private OnCountdownEndListener mOnCountdownEndListener;
     private CountDownTimer mCountDownTimer;
 
-    private boolean isShowDay;
-    private boolean isShowHour;
-    private boolean isShowMinute;
-    private boolean isShowMillisecond;
+    private boolean isShowDay, isShowHour,isShowMinute, isShowMillisecond;
+    private boolean mHasSetIsShowDay, mHasSetIsShowHour;
     private boolean isHideTimeBackground;
     private boolean isShowTimeBgDivisionLine;
     private boolean isTimeTextBold;
@@ -38,11 +36,7 @@ public class CountdownView extends View {
     private Paint mTimeTextBgPaint;
     private Paint mTimeTextBgDivisionLinePaint;
 
-    private RectF mDayBgRectF;
-    private RectF mHourBgRectF;
-    private RectF mMinuteBgRectF;
-    private RectF mSecondBgRectF;
-    private RectF mMillisecondBgRectF;
+    private RectF mDayBgRectF, mHourBgRectF, mMinuteBgRectF, mSecondBgRectF, mMillisecondBgRectF;
 
     private float mTimeTextWidth;
     private float mTimeTextHeight;
@@ -56,12 +50,7 @@ public class CountdownView extends View {
     private float mTimeBgDivisionLineYPos;
     private int mTimeBgDivisionLineSize;
 
-    private String mSuffix;
-    private String mSuffixDay;
-    private String mSuffixHour;
-    private String mSuffixMinute;
-    private String mSuffixSecond;
-    private String mSuffixMillisecond;
+    private String mSuffix, mSuffixDay, mSuffixHour, mSuffixMinute, mSuffixSecond, mSuffixMillisecond;
     private int mSuffixTextColor;
     private float mSuffixTextSize;
     private float mSuffixDayTextWidth;
@@ -80,12 +69,7 @@ public class CountdownView extends View {
     private float mSuffixSecondLeftMargin;
     private float mSuffixSecondRightMargin;
     private float mSuffixMillisecondLeftMargin;
-
-    private float mSuffixDayTextBaseline;
-    private float mSuffixHourTextBaseline;
-    private float mSuffixMinuteTextBaseline;
-    private float mSuffixSecondTextBaseline;
-    private float mSuffixMillisecondTextBaseline;
+    private float mSuffixDayTextBaseline, mSuffixHourTextBaseline, mSuffixMinuteTextBaseline, mSuffixSecondTextBaseline, mSuffixMillisecondTextBaseline;
 
     private float mTimeTextBaseline;
     private float mLeftPaddingSize;
@@ -97,8 +81,7 @@ public class CountdownView extends View {
 
     private float mDayTimeTextWidth;
     private float mDayTimeBgWidth;
-    private int oldDay;
-    private boolean isDayLargeTwoDigit;
+    private boolean isDayLargeNinetyNine;
     private String mTempSuffixSecond;
     private float mTempSuffixSecondLeftMargin, mTempSuffixSecondRightMargin;
 
@@ -125,9 +108,12 @@ public class CountdownView extends View {
         mTimeTextColor = ta.getColor(R.styleable.CountdownView_timeTextColor, 0xFFFFFFFF);
         isHideTimeBackground = ta.getBoolean(R.styleable.CountdownView_isHideTimeBackground, false);
         isShowDay = ta.getBoolean(R.styleable.CountdownView_isShowDay, false);
-        isShowHour = ta.getBoolean(R.styleable.CountdownView_isShowHour, true);
+        isShowHour = ta.getBoolean(R.styleable.CountdownView_isShowHour, false);
         isShowMinute = ta.getBoolean(R.styleable.CountdownView_isShowMinute, true);
         isShowMillisecond = ta.getBoolean(R.styleable.CountdownView_isShowMillisecond, false);
+
+        mHasSetIsShowDay = ta.hasValue(R.styleable.CountdownView_isShowDay);
+        mHasSetIsShowHour = ta.hasValue(R.styleable.CountdownView_isShowHour);
 
         isSuffixTextBold = ta.getBoolean(R.styleable.CountdownView_isSuffixTextBold, false);
         mSuffixTextSize = ta.getDimension(R.styleable.CountdownView_suffixTextSize, sp2px(12));
@@ -570,7 +556,7 @@ public class CountdownView extends View {
                 + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin + mSuffixSecondLeftMargin + mSuffixSecondRightMargin + mSuffixMillisecondLeftMargin);
 
         if (isShowDay) {
-            if (isDayLargeTwoDigit) {
+            if (isDayLargeNinetyNine) {
                 Rect rect = new Rect();
                 String tempDay = String.valueOf(mDay);
                 mTimeTextPaint.getTextBounds(tempDay, 0, tempDay.length(), rect);
@@ -602,6 +588,73 @@ public class CountdownView extends View {
         }
 
         return (int)Math.ceil(width);
+    }
+
+    private void refTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowMillisecond) {
+        boolean isRef = false;
+
+        if (this.isShowDay != isShowDay) {
+            // reset
+            if (isShowDay) {
+                mSuffixDayLeftMargin = -1;
+                mSuffixDayRightMargin = -1;
+            }
+            this.isShowDay = isShowDay;
+            isRef = true;
+        }
+
+        if (this.isShowHour != isShowHour) {
+            // reset
+            if (isShowHour) {
+                mSuffixHourLeftMargin = -1;
+                mSuffixHourRightMargin = -1;
+            }
+            this.isShowHour = isShowHour;
+            isRef = true;
+        }
+
+        if (this.isShowMinute != isShowMinute) {
+            // reset
+            if (isShowMinute) {
+                mSuffixMinuteLeftMargin = -1;
+                mSuffixMinuteRightMargin = -1;
+            }
+            this.isShowMinute = isShowMinute;
+            isRef = true;
+        }
+
+        if (this.isShowMillisecond != isShowMillisecond) {
+            // reset
+            if (isShowMillisecond) {
+                mSuffixMillisecondLeftMargin = -1;
+
+                if (!TextUtils.isEmpty(mSuffix)) {
+                    // reset temp value
+                    mSuffixSecond = mTempSuffixSecond;
+                    mSuffixSecondLeftMargin = mTempSuffixSecondLeftMargin;
+                    mSuffixSecondRightMargin = mTempSuffixSecondRightMargin;
+                }
+            } else {
+                if (!TextUtils.isEmpty(mSuffix)) {
+                    // temp save
+                    mTempSuffixSecond = mSuffixSecond;
+                    mTempSuffixSecondLeftMargin = mSuffixSecondLeftMargin;
+                    mTempSuffixSecondRightMargin = mSuffixSecondRightMargin;
+
+                    mSuffixSecond = null;
+                    mSuffixSecondLeftMargin = 0;
+                    mSuffixSecondRightMargin = 0;
+                }
+            }
+            this.isShowMillisecond = isShowMillisecond;
+            isRef = true;
+        }
+
+        if (isRef) {
+            initSuffix();
+            initSuffixMargin();
+            requestLayout();
+        }
     }
 
     @Override
@@ -809,8 +862,7 @@ public class CountdownView extends View {
                 // countdown end
                 allShowZero();
                 // callback
-                if (null != mOnCountdownEndListener) {
-                    mOnCountdownEndListener.onEnd(CountdownView.this);
+                if (null != mOnCountdownEndListener) {                   mOnCountdownEndListener.onEnd(CountdownView.this);
                 }
             }
 
@@ -837,70 +889,9 @@ public class CountdownView extends View {
      * @param isShowMillisecond isShowMillisecd
      */
     public void customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowMillisecond) {
-        boolean isRef = false;
-
-        if (this.isShowDay != isShowDay) {
-            // reset
-            if (isShowDay) {
-                mSuffixDayLeftMargin = -1;
-                mSuffixDayRightMargin = -1;
-            }
-            this.isShowDay = isShowDay;
-            isRef = true;
-        }
-
-        if (this.isShowHour != isShowHour) {
-            // reset
-            if (isShowHour) {
-                mSuffixHourLeftMargin = -1;
-                mSuffixHourRightMargin = -1;
-            }
-            this.isShowHour = isShowHour;
-            isRef = true;
-        }
-
-        if (this.isShowMinute != isShowMinute) {
-            // reset
-            if (isShowMinute) {
-                mSuffixMinuteLeftMargin = -1;
-                mSuffixMinuteRightMargin = -1;
-            }
-            this.isShowMinute = isShowMinute;
-            isRef = true;
-        }
-
-        if (this.isShowMillisecond != isShowMillisecond) {
-            // reset
-            if (isShowMillisecond) {
-                mSuffixMillisecondLeftMargin = -1;
-
-                if (!TextUtils.isEmpty(mSuffix)) {
-                    // reset temp value
-                    mSuffixSecond = mTempSuffixSecond;
-                    mSuffixSecondLeftMargin = mTempSuffixSecondLeftMargin;
-                    mSuffixSecondRightMargin = mTempSuffixSecondRightMargin;
-                }
-            } else {
-                if (!TextUtils.isEmpty(mSuffix)) {
-                    // temp save
-                    mTempSuffixSecond = mSuffixSecond;
-                    mTempSuffixSecondLeftMargin = mSuffixSecondLeftMargin;
-                    mTempSuffixSecondRightMargin = mSuffixSecondRightMargin;
-
-                    mSuffixSecond = null;
-                    mSuffixSecondLeftMargin = 0;
-                    mSuffixSecondRightMargin = 0;
-                }
-            }
-            this.isShowMillisecond = isShowMillisecond;
-            isRef = true;
-        }
-
-        if (isRef) {
-            initSuffix();
-            initSuffixMargin();
-            requestLayout();
-        }
+        mHasSetIsShowDay = true;
+        mHasSetIsShowHour = true;
+        refTimeShow(isShowDay, isShowHour, isShowMinute, isShowMillisecond);
     }
 
     /**
@@ -971,19 +962,57 @@ public class CountdownView extends View {
         mSecond = (int)((ms % (1000 * 60)) / 1000);
         mMillisecond = (int)(ms % 1000);
 
-        if (isShowDay) {
-            if (!isDayLargeTwoDigit && oldDay <= 99 && mDay > 99) {
-                oldDay = mDay;
-                isDayLargeTwoDigit = true;
-                requestLayout();
-            } else if (isDayLargeTwoDigit && oldDay > 99 && mDay <= 99) {
-                oldDay = mDay;
-                isDayLargeTwoDigit = false;
-                requestLayout();
+        handlerAutoShowTimeAndDayLargeNinetyNine();
+
+        invalidate();
+    }
+
+    private void handlerAutoShowTimeAndDayLargeNinetyNine() {
+        if (!mHasSetIsShowDay) {
+            if (!isShowDay && mDay > 0) {
+                // auto show day
+                // judge auto show hour
+                if (!mHasSetIsShowHour) {
+                    refTimeShow(true, true, isShowMinute, isShowMillisecond);
+                } else {
+                    refTimeShow(true, isShowHour, isShowMinute, isShowMillisecond);
+                }
+            } else if (isShowDay && mDay == 0) {
+                // auto hide day
+                refTimeShow(false, isShowHour, isShowMinute, isShowMillisecond);
+            } else {
+                if (!mHasSetIsShowHour) {
+                    if (!isShowHour && (mDay > 0 || mHour > 0)) {
+                        // auto show hour
+                        refTimeShow(isShowDay, true, isShowMinute, isShowMillisecond);
+                    } else if (isShowHour && mDay == 0 && mHour == 0) {
+                        // auto hide hour
+                        refTimeShow(false, false, isShowMinute, isShowMillisecond);
+                    }
+                }
+            }
+        } else {
+            if (!mHasSetIsShowHour) {
+                if (!isShowHour && (mDay > 0 || mHour > 0)) {
+                    // auto show hour
+                    refTimeShow(isShowDay, true, isShowMinute, isShowMillisecond);
+                } else if (isShowHour && mDay == 0 && mHour == 0) {
+                    // auto hide hour
+                    refTimeShow(isShowDay, false, isShowMinute, isShowMillisecond);
+                }
             }
         }
 
-        invalidate();
+        if (isShowDay) {
+            // handler large ninety nine
+            if (!isDayLargeNinetyNine && mDay > 99) {
+                isDayLargeNinetyNine = true;
+                requestLayout();
+            } else if (isDayLargeNinetyNine && mDay <= 99) {
+                isDayLargeNinetyNine = false;
+                requestLayout();
+            }
+        }
     }
 
     private String formatNum(int time) {
