@@ -14,7 +14,7 @@ import android.view.View;
 
 /**
  * 倒计时View
- * Created by iWgang on 15/9/16.
+ * Created by iWgang DOn 15/9/16.
  * https://github.com/iwgang/CountdownView
  */
 public class CountdownView extends View {
@@ -56,7 +56,6 @@ public class CountdownView extends View {
     private int mTimeBgDivisionLineSize;
 
     // 后缀
-    private float mSuffixTextHeight;
     private String mSuffix;
     private String mSuffixDay;
     private String mSuffixHour;
@@ -507,7 +506,7 @@ public class CountdownView extends View {
      * @param specType    1 width 2 height
      * @param contentSize all content view size
      * @param measureSpec spec
-     * @return
+     * @return measureSize
      */
     private int measureSize(int specType, int contentSize, int measureSpec) {
         int result;
@@ -533,7 +532,7 @@ public class CountdownView extends View {
 
     /**
      * get all view width
-     * @return
+     * @return all view width
      */
     private int getAllContentWidth() {
         float timeWidth = isHideTimeBackground ? mTimeTextWidth : mTimeBgSize;
