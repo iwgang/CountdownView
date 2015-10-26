@@ -18,6 +18,9 @@ import android.view.View;
  * https://github.com/iwgang/CountdownView
  */
 public class CountdownView extends View {
+    private static final String DEFAULT_SUFFIX = ":";
+    private static final float DEFAULT_SUFFIX_LR_MARGIN = 3; // dp
+
     private Context mContext;
     private int mDay, mHour, mMinute, mSecond, mMillisecond;
     private long mRemainTime;
@@ -25,7 +28,7 @@ public class CountdownView extends View {
     private OnCountdownIntervalListener mOnCountdownIntervalListener;
     private CountDownTimer mCountDownTimer;
 
-    private boolean isShowDay, isShowHour,isShowMinute, isShowMillisecond;
+    private boolean isShowDay, isShowHour,isShowMinute, isShowSecond, isShowMillisecond;
     private boolean mHasSetIsShowDay, mHasSetIsShowHour;
     private boolean isHideTimeBackground;
     private boolean isShowTimeBgDivisionLine;
@@ -83,8 +86,8 @@ public class CountdownView extends View {
     private float mDayTimeTextWidth;
     private float mDayTimeBgWidth;
     private boolean isDayLargeNinetyNine;
-    private String mTempSuffixSecond;
-    private float mTempSuffixSecondLeftMargin, mTempSuffixSecondRightMargin;
+    private String mTempSuffixMinute, mTempSuffixSecond;
+    private float mTempSuffixMinuteLeftMargin, mTempSuffixMinuteRightMargin, mTempSuffixSecondLeftMargin, mTempSuffixSecondRightMargin;
 
     private long mInterval;
     private long mPreviouIntervalCallbackTime;
@@ -109,11 +112,12 @@ public class CountdownView extends View {
 
         isTimeTextBold = ta.getBoolean(R.styleable.CountdownView_isTimeTextBold, false);
         mTimeTextSize = ta.getDimension(R.styleable.CountdownView_timeTextSize, sp2px(12));
-        mTimeTextColor = ta.getColor(R.styleable.CountdownView_timeTextColor, 0xFFFFFFFF);
-        isHideTimeBackground = ta.getBoolean(R.styleable.CountdownView_isHideTimeBackground, false);
+        mTimeTextColor = ta.getColor(R.styleable.CountdownView_timeTextColor, 0xFF000000);
+        isHideTimeBackground = ta.getBoolean(R.styleable.CountdownView_isHideTimeBackground, true);
         isShowDay = ta.getBoolean(R.styleable.CountdownView_isShowDay, false);
         isShowHour = ta.getBoolean(R.styleable.CountdownView_isShowHour, false);
         isShowMinute = ta.getBoolean(R.styleable.CountdownView_isShowMinute, true);
+        isShowSecond = ta.getBoolean(R.styleable.CountdownView_isShowSecond, true);
         isShowMillisecond = ta.getBoolean(R.styleable.CountdownView_isShowMillisecond, false);
 
         mHasSetIsShowDay = ta.hasValue(R.styleable.CountdownView_isShowDay);
@@ -144,6 +148,15 @@ public class CountdownView extends View {
         initPaint();
         initSuffix();
         initSuffixMargin();
+
+        // regular time data
+        // pick one of two (minute and second)
+        if (!isShowMinute && !isShowSecond) {
+            isShowSecond = true;
+        }
+        if (!isShowSecond) {
+            isShowMillisecond = false;
+        }
 
         // initialize time text width and height
         Rect rect = new Rect();
@@ -195,19 +208,37 @@ public class CountdownView extends View {
     private void initSuffix() {
         boolean isSuffixNull = true;
         float mSuffixTextWidth = 0;
+        float mDefSuffixTextWidth = mSuffixTextPaint.measureText(DEFAULT_SUFFIX);
 
         if (!TextUtils.isEmpty(mSuffix)) {
             isSuffixNull = false;
             mSuffixTextWidth = mSuffixTextPaint.measureText(mSuffix);
         }
 
+        boolean isSetSuffixDay = !TextUtils.isEmpty(mSuffixDay);
+        boolean isSetSuffixHour = !TextUtils.isEmpty(mSuffixHour);
+        boolean isSetSuffixMinute = !TextUtils.isEmpty(mSuffixMinute);
+        boolean isSetSuffixSecond = !TextUtils.isEmpty(mSuffixSecond);
+        boolean isSetSuffixMillisecond = !TextUtils.isEmpty(mSuffixMillisecond);
+        boolean hasCustomSomeSuffix = false;
+        if ((isShowDay && isSetSuffixDay)
+                || (isShowHour && isSetSuffixHour)
+                || (isShowMinute && isSetSuffixMinute)
+                || (isShowSecond && isSetSuffixSecond)
+                || (isShowMillisecond && isSetSuffixMillisecond)) {
+            hasCustomSomeSuffix = true;
+        }
+
         if (isShowDay) {
-            if (!TextUtils.isEmpty(mSuffixDay)) {
+            if (isSetSuffixDay) {
                 mSuffixDayTextWidth = mSuffixTextPaint.measureText(mSuffixDay);
             } else {
                 if (!isSuffixNull) {
                     mSuffixDay = mSuffix;
                     mSuffixDayTextWidth = mSuffixTextWidth;
+                } else if (!hasCustomSomeSuffix) {
+                    mSuffixDay = DEFAULT_SUFFIX;
+                    mSuffixDayTextWidth = mDefSuffixTextWidth;
                 }
             }
         } else {
@@ -215,12 +246,15 @@ public class CountdownView extends View {
         }
 
         if (isShowHour) {
-            if (!TextUtils.isEmpty(mSuffixHour)) {
+            if (isSetSuffixHour) {
                 mSuffixHourTextWidth = mSuffixTextPaint.measureText(mSuffixHour);
             } else {
                 if (!isSuffixNull) {
                     mSuffixHour = mSuffix;
                     mSuffixHourTextWidth = mSuffixTextWidth;
+                } else if (!hasCustomSomeSuffix) {
+                    mSuffixHour = DEFAULT_SUFFIX;
+                    mSuffixHourTextWidth = mDefSuffixTextWidth;
                 }
             }
         } else {
@@ -228,26 +262,42 @@ public class CountdownView extends View {
         }
 
         if (isShowMinute) {
-            if (!TextUtils.isEmpty(mSuffixMinute)) {
+            if (isSetSuffixMinute) {
                 mSuffixMinuteTextWidth = mSuffixTextPaint.measureText(mSuffixMinute);
-            } else if (!isSuffixNull) {
-                mSuffixMinute = mSuffix;
-                mSuffixMinuteTextWidth = mSuffixTextWidth;
+            } else if (isShowSecond) {
+                if (!isSuffixNull) {
+                    mSuffixMinute = mSuffix;
+                    mSuffixMinuteTextWidth = mSuffixTextWidth;
+                } else if (!hasCustomSomeSuffix) {
+                    mSuffixMinute = DEFAULT_SUFFIX;
+                    mSuffixMinuteTextWidth = mDefSuffixTextWidth;
+                }
+            } else {
+                mSuffixMinuteTextWidth = 0;
             }
         } else {
             mSuffixMinuteTextWidth = 0;
         }
 
-        if (!TextUtils.isEmpty(mSuffixSecond)) {
-            mSuffixSecondTextWidth = mSuffixTextPaint.measureText(mSuffixSecond);
-        } else if (isShowMillisecond && !isSuffixNull) {
-            mSuffixSecond = mSuffix;
-            mSuffixSecondTextWidth = mSuffixTextWidth;
+        if (isShowSecond) {
+            if (isSetSuffixSecond) {
+                mSuffixSecondTextWidth = mSuffixTextPaint.measureText(mSuffixSecond);
+            } else if (isShowMillisecond) {
+                if (!isSuffixNull) {
+                    mSuffixSecond = mSuffix;
+                    mSuffixSecondTextWidth = mSuffixTextWidth;
+                } else if (!hasCustomSomeSuffix) {
+                    mSuffixSecond = DEFAULT_SUFFIX;
+                    mSuffixSecondTextWidth = mDefSuffixTextWidth;
+                }
+            } else {
+                mSuffixSecondTextWidth = 0;
+            }
         } else {
             mSuffixSecondTextWidth = 0;
         }
 
-        if (isShowMillisecond && isSuffixNull && !TextUtils.isEmpty(mSuffixMillisecond)) {
+        if (isShowMillisecond && isSuffixNull && isSetSuffixMillisecond) {
             mSuffixMillisecondTextWidth = mSuffixTextPaint.measureText(mSuffixMillisecond);
         } else {
             mSuffixMillisecondTextWidth = 0;
@@ -258,18 +308,19 @@ public class CountdownView extends View {
      * initialize suffix margin
      */
     private void initSuffixMargin() {
+        int defSuffixLRMargin = dp2px(DEFAULT_SUFFIX_LR_MARGIN);
         boolean isSuffixLRMarginNull = true;
 
-        if (mSuffixLRMargin > 0) {
+        if (mSuffixLRMargin >= 0) {
             isSuffixLRMarginNull = false;
         }
 
-        if (isShowDay) {
+        if (isShowDay && !TextUtils.isEmpty(mSuffixDay)) {
             if (mSuffixDayLeftMargin < 0) {
                 if (!isSuffixLRMarginNull) {
                     mSuffixDayLeftMargin = mSuffixLRMargin;
                 } else {
-                    mSuffixDayLeftMargin = 0;
+                    mSuffixDayLeftMargin = defSuffixLRMargin;
                 }
             }
 
@@ -277,7 +328,7 @@ public class CountdownView extends View {
                 if (!isSuffixLRMarginNull) {
                     mSuffixDayRightMargin = mSuffixLRMargin;
                 } else {
-                    mSuffixDayRightMargin = 0;
+                    mSuffixDayRightMargin = defSuffixLRMargin;
                 }
             }
         } else {
@@ -285,12 +336,12 @@ public class CountdownView extends View {
             mSuffixDayRightMargin = 0;
         }
 
-        if (isShowHour) {
+        if (isShowHour && !TextUtils.isEmpty(mSuffixHour)) {
             if (mSuffixHourLeftMargin < 0) {
                 if (!isSuffixLRMarginNull) {
                     mSuffixHourLeftMargin = mSuffixLRMargin;
                 } else {
-                    mSuffixHourLeftMargin = 0;
+                    mSuffixHourLeftMargin = defSuffixLRMargin;
                 }
             }
 
@@ -298,7 +349,7 @@ public class CountdownView extends View {
                 if (!isSuffixLRMarginNull) {
                     mSuffixHourRightMargin = mSuffixLRMargin;
                 } else {
-                    mSuffixHourRightMargin = 0;
+                    mSuffixHourRightMargin = defSuffixLRMargin;
                 }
             }
         } else {
@@ -306,12 +357,12 @@ public class CountdownView extends View {
             mSuffixHourRightMargin = 0;
         }
 
-        if (isShowMinute) {
+        if (isShowMinute && !TextUtils.isEmpty(mSuffixMinute)) {
             if (mSuffixMinuteLeftMargin < 0) {
                 if (!isSuffixLRMarginNull) {
                     mSuffixMinuteLeftMargin = mSuffixLRMargin;
                 } else {
-                    mSuffixMinuteLeftMargin = 0;
+                    mSuffixMinuteLeftMargin = defSuffixLRMargin;
                 }
             }
 
@@ -319,7 +370,7 @@ public class CountdownView extends View {
                 if (!isSuffixLRMarginNull) {
                     mSuffixMinuteRightMargin = mSuffixLRMargin;
                 } else {
-                    mSuffixMinuteRightMargin = 0;
+                    mSuffixMinuteRightMargin = defSuffixLRMargin;
                 }
             }
         } else {
@@ -327,33 +378,46 @@ public class CountdownView extends View {
             mSuffixMinuteRightMargin = 0;
         }
 
-        if (mSuffixSecondLeftMargin < 0) {
-            if (!isSuffixLRMarginNull) {
-                mSuffixSecondLeftMargin = mSuffixLRMargin;
+        if (isShowSecond) {
+            if (!TextUtils.isEmpty(mSuffixSecond)) {
+                if (mSuffixSecondLeftMargin < 0) {
+                    if (!isSuffixLRMarginNull) {
+                        mSuffixSecondLeftMargin = mSuffixLRMargin;
+                    } else {
+                        mSuffixSecondLeftMargin = defSuffixLRMargin;
+                    }
+                }
+
+                if (mSuffixSecondRightMargin < 0) {
+                    if (!isSuffixLRMarginNull) {
+                        mSuffixSecondRightMargin = mSuffixLRMargin;
+                    } else {
+                        mSuffixSecondRightMargin = defSuffixLRMargin;
+                    }
+                }
             } else {
                 mSuffixSecondLeftMargin = 0;
-            }
-        }
-        if (isShowMillisecond) {
-            if (mSuffixSecondRightMargin < 0) {
-                if (!isSuffixLRMarginNull) {
-                    mSuffixSecondRightMargin = mSuffixLRMargin;
-                } else {
-                    mSuffixSecondRightMargin = 0;
-                }
+                mSuffixSecondRightMargin = 0;
             }
 
-            if (mSuffixMillisecondLeftMargin < 0) {
-                if (!isSuffixLRMarginNull && mSuffixMillisecondTextWidth > 0) {
-                    mSuffixMillisecondLeftMargin = mSuffixLRMargin;
-                } else {
-                    mSuffixMillisecondLeftMargin = 0;
+            if (isShowMillisecond  && !TextUtils.isEmpty(mSuffixMillisecond)) {
+                if (mSuffixMillisecondLeftMargin < 0) {
+                    if (!isSuffixLRMarginNull && mSuffixMillisecondTextWidth > 0) {
+                        mSuffixMillisecondLeftMargin = mSuffixLRMargin;
+                    } else {
+                        mSuffixMillisecondLeftMargin = defSuffixLRMargin;
+                    }
                 }
+            } else {
+                mSuffixMillisecondLeftMargin = 0;
             }
         } else {
+            mSuffixSecondLeftMargin = 0;
             mSuffixSecondRightMargin = 0;
             mSuffixMillisecondLeftMargin = 0;
         }
+
+
     }
 
     /**
@@ -395,17 +459,20 @@ public class CountdownView extends View {
                 mSecondLeft = mMinuteLeft;
             }
 
-            // initialize second background rectF
-            mSecondBgRectF = new RectF(mSecondLeft, mTopPaddingSize, mSecondLeft + mTimeBgSize, mTopPaddingSize + mTimeBgSize);
+            if (isShowSecond) {
+                // initialize second background rectF
+                mSecondBgRectF = new RectF(mSecondLeft, mTopPaddingSize, mSecondLeft + mTimeBgSize, mTopPaddingSize + mTimeBgSize);
 
-            if (isShowMillisecond) {
-                // millisecond left point
-                float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
+                if (isShowMillisecond) {
+                    // millisecond left point
+                    float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
 
-                // initialize millisecond background rectF
-                mMillisecondBgRectF = new RectF(mMillisecondLeft, mTopPaddingSize, mMillisecondLeft + mTimeBgSize, mTopPaddingSize + mTimeBgSize);
+                    // initialize millisecond background rectF
+                    mMillisecondBgRectF = new RectF(mMillisecondLeft, mTopPaddingSize, mMillisecondLeft + mTimeBgSize, mTopPaddingSize + mTimeBgSize);
+                }
             }
 
+            // time text baseline
             Paint.FontMetrics timeFontMetrics = mTimeTextPaint.getFontMetrics();
             mTimeTextBaseY = mSecondBgRectF.top + (mSecondBgRectF.bottom - mSecondBgRectF.top - timeFontMetrics.bottom + timeFontMetrics.top) / 2 - timeFontMetrics.top;
 
@@ -554,8 +621,7 @@ public class CountdownView extends View {
      */
     private int getAllContentWidth() {
         float timeWidth = isHideTimeBackground ? mTimeTextWidth : mTimeBgSize;
-        float width = timeWidth;
-        width += (mSuffixDayTextWidth + mSuffixHourTextWidth + mSuffixMinuteTextWidth + mSuffixSecondTextWidth + mSuffixMillisecondTextWidth);
+        float width = (mSuffixDayTextWidth + mSuffixHourTextWidth + mSuffixMinuteTextWidth + mSuffixSecondTextWidth + mSuffixMillisecondTextWidth);
         width += (mSuffixDayLeftMargin + mSuffixDayRightMargin + mSuffixHourLeftMargin + mSuffixHourRightMargin
                 + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin + mSuffixSecondLeftMargin + mSuffixSecondRightMargin + mSuffixMillisecondLeftMargin);
 
@@ -587,6 +653,10 @@ public class CountdownView extends View {
             width += timeWidth;
         }
 
+        if (isShowSecond) {
+            width += timeWidth;
+        }
+
         if (isShowMillisecond) {
             width += timeWidth;
         }
@@ -594,7 +664,7 @@ public class CountdownView extends View {
         return (int)Math.ceil(width);
     }
 
-    private void refTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowMillisecond) {
+    private void refTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond) {
         boolean isRef = false;
 
         if (this.isShowDay != isShowDay) {
@@ -624,6 +694,34 @@ public class CountdownView extends View {
                 mSuffixMinuteRightMargin = -1;
             }
             this.isShowMinute = isShowMinute;
+            isRef = true;
+        }
+
+        if (this.isShowSecond != isShowSecond) {
+            // reset
+            if (isShowSecond) {
+                mSuffixSecondLeftMargin = -1;
+                mSuffixSecondRightMargin = -1;
+
+                if (!TextUtils.isEmpty(mSuffix)) {
+                    // reset temp value
+                    mSuffixMinute = mTempSuffixMinute;
+                    mSuffixMinuteLeftMargin = mTempSuffixMinuteLeftMargin;
+                    mSuffixMinuteRightMargin = mTempSuffixMinuteRightMargin;
+                }
+            } else {
+                if (!TextUtils.isEmpty(mSuffix)) {
+                    // temp save
+                    mTempSuffixMinute = mSuffixMinute;
+                    mTempSuffixMinuteLeftMargin = mSuffixMinuteLeftMargin;
+                    mTempSuffixMinuteRightMargin = mSuffixMinuteRightMargin;
+
+                    mSuffixMinute = null;
+                    mSuffixMinuteLeftMargin = 0;
+                    mSuffixMinuteRightMargin = 0;
+                }
+            }
+            this.isShowSecond = isShowSecond;
             isRef = true;
         }
 
@@ -717,21 +815,23 @@ public class CountdownView extends View {
                 mSecondLeft = mMinuteLeft;
             }
 
-            // draw second text
-            canvas.drawText(formatNum(mSecond), mSecondLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
-            if (mSuffixSecondTextWidth > 0) {
-                // draw second suffix
-                canvas.drawText(mSuffixSecond, mSecondLeft + mTimeTextWidth + mSuffixSecondLeftMargin, mSuffixSecondTextBaseline, mSuffixTextPaint);
-            }
+            if (isShowSecond) {
+                // draw second text
+                canvas.drawText(formatNum(mSecond), mSecondLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
+                if (mSuffixSecondTextWidth > 0) {
+                    // draw second suffix
+                    canvas.drawText(mSuffixSecond, mSecondLeft + mTimeTextWidth + mSuffixSecondLeftMargin, mSuffixSecondTextBaseline, mSuffixTextPaint);
+                }
 
-            if (isShowMillisecond) {
-                // millisecond left point
-                float mMillisecondLeft = mSecondLeft + mTimeTextWidth + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
-                // draw millisecond text
-                canvas.drawText(formatMillisecond(), mMillisecondLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
-                if (mSuffixMillisecondTextWidth > 0) {
-                    // draw millisecond suffix
-                    canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeTextWidth + mSuffixMillisecondLeftMargin, mSuffixMillisecondTextBaseline, mSuffixTextPaint);
+                if (isShowMillisecond) {
+                    // millisecond left point
+                    float mMillisecondLeft = mSecondLeft + mTimeTextWidth + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
+                    // draw millisecond text
+                    canvas.drawText(formatMillisecond(), mMillisecondLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
+                    if (mSuffixMillisecondTextWidth > 0) {
+                        // draw millisecond suffix
+                        canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeTextWidth + mSuffixMillisecondLeftMargin, mSuffixMillisecondTextBaseline, mSuffixTextPaint);
+                    }
                 }
             }
         } else {
@@ -800,33 +900,35 @@ public class CountdownView extends View {
                 mSecondLeft = mMinuteLeft;
             }
 
-            // draw second background
-            canvas.drawRoundRect(mSecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
-            if (isShowTimeBgDivisionLine) {
-                // draw second background division line
-                canvas.drawLine(mSecondLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mSecondLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
-            }
-            // draw second text
-            canvas.drawText(formatNum(mSecond), mSecondBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
-            if (mSuffixSecondTextWidth > 0) {
-                // draw second suffix
-                canvas.drawText(mSuffixSecond, mSecondLeft + mTimeBgSize + mSuffixSecondLeftMargin, mSuffixSecondTextBaseline, mSuffixTextPaint);
-            }
-
-            if (isShowMillisecond) {
-                // millisecond left point
-                float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
-                // draw millisecond background
-                canvas.drawRoundRect(mMillisecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
+            if (isShowSecond) {
+                // draw second background
+                canvas.drawRoundRect(mSecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
                 if (isShowTimeBgDivisionLine) {
-                    // draw millisecond background division line
-                    canvas.drawLine(mMillisecondLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mMillisecondLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
+                    // draw second background division line
+                    canvas.drawLine(mSecondLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mSecondLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
                 }
-                // draw millisecond text
-                canvas.drawText(formatMillisecond(), mMillisecondBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
-                if (mSuffixMillisecondTextWidth > 0) {
-                    // draw millisecond suffix
-                    canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeBgSize + mSuffixMillisecondLeftMargin, mSuffixMillisecondTextBaseline, mSuffixTextPaint);
+                // draw second text
+                canvas.drawText(formatNum(mSecond), mSecondBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
+                if (mSuffixSecondTextWidth > 0) {
+                    // draw second suffix
+                    canvas.drawText(mSuffixSecond, mSecondLeft + mTimeBgSize + mSuffixSecondLeftMargin, mSuffixSecondTextBaseline, mSuffixTextPaint);
+                }
+
+                if (isShowMillisecond) {
+                    // millisecond left point
+                    float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
+                    // draw millisecond background
+                    canvas.drawRoundRect(mMillisecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
+                    if (isShowTimeBgDivisionLine) {
+                        // draw millisecond background division line
+                        canvas.drawLine(mMillisecondLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mMillisecondLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
+                    }
+                    // draw millisecond text
+                    canvas.drawText(formatMillisecond(), mMillisecondBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
+                    if (mSuffixMillisecondTextWidth > 0) {
+                        // draw millisecond suffix
+                        canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeBgSize + mSuffixMillisecondLeftMargin, mSuffixMillisecondTextBaseline, mSuffixTextPaint);
+                    }
                 }
             }
         }
@@ -891,12 +993,23 @@ public class CountdownView extends View {
      * @param isShowDay isShowDay
      * @param isShowHour isShowHour
      * @param isShowMinute isShowMinute
-     * @param isShowMillisecond isShowMillisecd
+     * @param isShowSecond isShowSecond
+     * @param isShowMillisecond isShowMillisecond
      */
-    public void customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowMillisecond) {
+    public void customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond) {
         mHasSetIsShowDay = true;
         mHasSetIsShowHour = true;
-        refTimeShow(isShowDay, isShowHour, isShowMinute, isShowMillisecond);
+
+        // regular time data
+        // pick one of two (minute and second)
+        if (!isShowMinute && !isShowSecond) {
+            isShowSecond = true;
+        }
+        if (!isShowSecond) {
+            isShowMillisecond = false;
+        }
+
+        refTimeShow(isShowDay, isShowHour, isShowMinute, isShowSecond, isShowMillisecond);
     }
 
     /**
@@ -920,8 +1033,8 @@ public class CountdownView extends View {
 
     /**
      * set interval callback listener
-     * @param interval
-     * @param onCountdownIntervalListener
+     * @param interval interval time
+     * @param onCountdownIntervalListener OnCountdownIntervalListener
      */
     public void setOnCountdownIntervalListener(long interval, OnCountdownIntervalListener onCountdownIntervalListener) {
         this.mInterval = interval;
@@ -998,21 +1111,21 @@ public class CountdownView extends View {
                 // auto show day
                 // judge auto show hour
                 if (!mHasSetIsShowHour) {
-                    refTimeShow(true, true, isShowMinute, isShowMillisecond);
+                    refTimeShow(true, true, isShowMinute, isShowSecond, isShowMillisecond);
                 } else {
-                    refTimeShow(true, isShowHour, isShowMinute, isShowMillisecond);
+                    refTimeShow(true, isShowHour, isShowMinute, isShowSecond, isShowMillisecond);
                 }
             } else if (isShowDay && mDay == 0) {
                 // auto hide day
-                refTimeShow(false, isShowHour, isShowMinute, isShowMillisecond);
+                refTimeShow(false, isShowHour, isShowMinute, isShowSecond, isShowMillisecond);
             } else {
                 if (!mHasSetIsShowHour) {
                     if (!isShowHour && (mDay > 0 || mHour > 0)) {
                         // auto show hour
-                        refTimeShow(isShowDay, true, isShowMinute, isShowMillisecond);
+                        refTimeShow(isShowDay, true, isShowMinute, isShowSecond, isShowMillisecond);
                     } else if (isShowHour && mDay == 0 && mHour == 0) {
                         // auto hide hour
-                        refTimeShow(false, false, isShowMinute, isShowMillisecond);
+                        refTimeShow(false, false, isShowMinute, isShowSecond, isShowMillisecond);
                     }
                 }
             }
@@ -1020,10 +1133,10 @@ public class CountdownView extends View {
             if (!mHasSetIsShowHour) {
                 if (!isShowHour && (mDay > 0 || mHour > 0)) {
                     // auto show hour
-                    refTimeShow(isShowDay, true, isShowMinute, isShowMillisecond);
+                    refTimeShow(isShowDay, true, isShowMinute, isShowSecond, isShowMillisecond);
                 } else if (isShowHour && mDay == 0 && mHour == 0) {
                     // auto hide hour
-                    refTimeShow(isShowDay, false, isShowMinute, isShowMillisecond);
+                    refTimeShow(isShowDay, false, isShowMinute, isShowSecond, isShowMillisecond);
                 }
             }
         }
