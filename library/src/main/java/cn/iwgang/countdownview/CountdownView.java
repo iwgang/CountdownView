@@ -22,6 +22,7 @@ public class CountdownView extends View {
     private int mDay, mHour, mMinute, mSecond, mMillisecond;
     private long mRemainTime;
     private OnCountdownEndListener mOnCountdownEndListener;
+    private OnCountdownIntervalListener mOnCountdownIntervalListener;
     private CountDownTimer mCountDownTimer;
 
     private boolean isShowDay, isShowHour,isShowMinute, isShowMillisecond;
@@ -84,6 +85,9 @@ public class CountdownView extends View {
     private boolean isDayLargeNinetyNine;
     private String mTempSuffixSecond;
     private float mTempSuffixSecondLeftMargin, mTempSuffixSecondRightMargin;
+
+    private long mInterval;
+    private long mPreviouIntervalCallbackTime;
 
     public CountdownView(Context context) {
         this(context, null);
@@ -862,7 +866,8 @@ public class CountdownView extends View {
                 // countdown end
                 allShowZero();
                 // callback
-                if (null != mOnCountdownEndListener) {                   mOnCountdownEndListener.onEnd(CountdownView.this);
+                if (null != mOnCountdownEndListener) {
+                    mOnCountdownEndListener.onEnd(CountdownView.this);
                 }
             }
 
@@ -914,10 +919,20 @@ public class CountdownView extends View {
     }
 
     /**
+     * set interval callback listener
+     * @param interval
+     * @param onCountdownIntervalListener
+     */
+    public void setOnCountdownIntervalListener(long interval, OnCountdownIntervalListener onCountdownIntervalListener) {
+        this.mInterval = interval;
+        this.mOnCountdownIntervalListener = onCountdownIntervalListener;
+    }
+
+    /**
      * get day
      * @return current day
      */
-    private int getDay() {
+    public int getDay() {
         return mDay;
     }
 
@@ -925,7 +940,7 @@ public class CountdownView extends View {
      * get hour
      * @return current hour
      */
-    private int getHour() {
+    public int getHour() {
         return mHour;
     }
 
@@ -933,7 +948,7 @@ public class CountdownView extends View {
      * get minute
      * @return current minute
      */
-    private int getMinute() {
+    public int getMinute() {
         return mMinute;
     }
 
@@ -941,7 +956,7 @@ public class CountdownView extends View {
      * get second
      * @return current second
      */
-    private int getSecond() {
+    public int getSecond() {
         return mSecond;
     }
 
@@ -949,7 +964,7 @@ public class CountdownView extends View {
      * get remain time
      * @return remain time ( millisecond )
      */
-    private long getRemainTime() {
+    public long getRemainTime() {
         return mRemainTime;
     }
 
@@ -961,6 +976,16 @@ public class CountdownView extends View {
         mMinute = (int)((ms % (1000 * 60 * 60)) / (1000 * 60));
         mSecond = (int)((ms % (1000 * 60)) / 1000);
         mMillisecond = (int)(ms % 1000);
+
+        // interval callback
+        if (mInterval > 0 && null != mOnCountdownIntervalListener) {
+            if (mPreviouIntervalCallbackTime == 0) {
+                mPreviouIntervalCallbackTime = ms;
+            } else if (ms + mInterval <= mPreviouIntervalCallbackTime) {
+                mPreviouIntervalCallbackTime = ms;
+                mOnCountdownIntervalListener.onInterval(this, mRemainTime);
+            }
+        }
 
         handlerAutoShowTimeAndDayLargeNinetyNine();
 
@@ -1035,6 +1060,10 @@ public class CountdownView extends View {
 
     public interface OnCountdownEndListener {
         void onEnd(CountdownView cv);
+    }
+
+    public interface OnCountdownIntervalListener {
+        void onInterval(CountdownView cv, long remainTime);
     }
 
     private int dp2px(float dpValue) {
