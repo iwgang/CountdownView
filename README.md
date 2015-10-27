@@ -1,60 +1,82 @@
 # CountdownView
-Android 倒计时控件，全部使用canvas绘制，支持多种显示风格
+Android Countdown Widget，Use canvas draw，Supports Multiple show styles
 
+### screenshot
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s1.gif)  
 
-# gradle
+### gradle
     compile 'com.github.iwgang:countdownview:1.0'
 
-# code
+### code
 ```
-CountdownView mCvCountdownViewTest1 = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
-mCvCountdownViewTest1.start(995550000); // Millisecond
+CountdownView mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
+mCvCountdownView.start(995550000); // Millisecond
+
+// or
+for (int time=0; time<1000; time++) {
+    mCvCountdownView.updateShow(time);
+}
 ```
 
-# layout
-    注：时间后缀增加空格可以控制两边间距
+### layout
 ``` xml
-<cn.iwgang.calendardemo.countdownview.CountdownView
-    android:id="@+id/cv_countdownViewTest4"
+<cn.iwgang.countdownview.CountdownView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="20dp"
     app:isHideTimeBackground="true"
+    app:isShowDay="true"
     app:isShowHour="true"
+    app:isShowMinute="true"
+    app:isShowSecond="true"
     app:isShowMillisecond="true"
     app:timeTextColor="#000000"
-    app:timeTextSize="25sp"
+    app:timeTextSize="22sp"
+    app:isTimeTextBold="true"
+    app:suffixGravity="bottom"
     app:suffixTextColor="#000000"
-    app:suffixTextSize="15sp"
-    app:suffixHour=" 时 "
-    app:suffixMinute=" 分 "
-    app:suffixSecond=" 秒 "
-    app:suffixMillisecond=" 毫秒" />
+    app:suffixTextSize="12sp"
+    app:suffixHour="时"
+    app:suffixMinute="分"
+    app:suffixSecond="秒"
+    app:suffixMillisecond="毫秒" />
 ```
 
-# customization
-    app:isHideTimeBackground [boolean default:false] "is hide background"
-    ↓↓ Need isHideTimeBackground = false 
-    app:timeBgColor [color default:#444444] "time background color"
-    app:timeBgRadius [dimension default:0dp] "time background radius"
-    app:isShowTimeBgDivisionLine [boolean default:true] "is show time background middle dividing line"
-    app:timeBgDivisionLineColor [color default:#30FFFFFF] "time background middle dividing line color"
-    
-    app:timeTextSize [dimension default:12sp] "time text size"
-    app:timeTextColor [color default:#FFFFFF] "time text color"
-    app:isShowDay [boolean default:false] "is show day"
-    app:isShowHour [boolean default:true] "is show hour"
-    app:isShowMinute [boolean default:true] "is show minute"
-    app:isShowMillisecond [boolean default:false] "is show millisecond"
-    
-    app:suffixTextSize [dimension default:12sp] "suffix text size"
-    app:suffixTextColor [color default:#FFFFFF] "suffix text color"
-    app:suffix [string default:null] "all suffix"
-    app:suffixDay [string default:null] "day suffix"
-    app:suffixHour [string default:null] "hour suffix"
-    app:suffixMinute [string default:null] "minute suffix"
-    app:suffixSecond [string default:null] "second suffix"
-    app:suffixMillisecond [string default:null] "millisecond suffix"
-    app:suffixGravity ['top' or 'center' or 'bottom' default:'center'] "suffix gravity"
+### customization
+    attr | type | default
+--- | --- | ---
+isHideTimeBackground | boolean | true
+timeBgColor  | color      | #444444
+timeBgSize   | dimension  | timeSize + 2dp * 4
+timeBgRadius | dimension  | 0
+isShowTimeBgDivisionLine | boolean  | true
+timeBgDivisionLineColor | color | #30FFFFFF
+timeBgDivisionLineSize  | dimension | 0.5dp
+timeTextSize   | dimension | 12sp | 
+timeTextColor  | color | #000000
+isTimeTextBold | boolean | false
+isShowDay  | boolean | auto show (has value show if not hide)
+isShowHour  | boolean | auto show (has value show if not hide)
+isShowMinute  | boolean | true
+isShowSecond  | boolean | true
+isShowMillisecond  | boolean | false
+suffixTextSize | dimension | 12sp
+suffixTextColor  | color | #000000
+isSuffixTextBold  | boolean | false
+suffixGravity | 'top' or 'center' or 'bottom' | 'center'
+suffix | string | ':'
+suffixDay  | string | null
+suffixHour  | string | null
+suffixMinute  | string | null
+suffixSecond  | string | null
+suffixMillisecond  | string | null
+suffixLRMargin  | dimension | left 3dp right 3dp
+suffixDayLeftMargin | dimension | 0
+suffixDayRightMargin  | dimension | 0
+suffixHourLeftMargin  | dimension | 0
+suffixHourRightMargin  | dimension | 0
+suffixMinuteLeftMargin | dimension | 0
+suffixMinuteRightMargin  | dimension | 0
+suffixSecondLeftMargin  | dimension | 0
+suffixSecondRightMargin  | dimension | 0
+suffixMillisecondLeftMargin | dimension | 0
+--- | --- | ---
