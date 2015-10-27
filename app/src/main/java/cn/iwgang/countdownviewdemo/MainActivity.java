@@ -16,28 +16,26 @@ public class MainActivity extends ActionBarActivity implements CountdownView.OnC
 
         CountdownView mCvCountdownViewTest1 = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
         mCvCountdownViewTest1.setTag("test1");
-        mCvCountdownViewTest1.setOnCountdownEndListener(this);
-        mCvCountdownViewTest1.start(6000);
+        long time1 = (long)2 * 60 * 60 * 1000;
+        mCvCountdownViewTest1.start(time1);
 
         CountdownView mCvCountdownViewTest2 = (CountdownView)findViewById(R.id.cv_countdownViewTest2);
-        mCvCountdownViewTest2.setTag("test2");
-        mCvCountdownViewTest2.setOnCountdownEndListener(this);
-        mCvCountdownViewTest2.start(10000);
+        mCvCountdownViewTest1.setTag("test2");
+        long time2 = (long)30 * 60 * 1000;
+        mCvCountdownViewTest2.start(time2);
 
         CountdownView mCvCountdownViewTest3 = (CountdownView)findViewById(R.id.cv_countdownViewTest3);
-        mCvCountdownViewTest3.start(995550000);
+        long time3 = (long)9 * 60 * 60 * 1000;
+        mCvCountdownViewTest3.start(time3);
 
         CountdownView mCvCountdownViewTest4 = (CountdownView)findViewById(R.id.cv_countdownViewTest4);
-        mCvCountdownViewTest4.start(995550000);
+        long time4 = (long)150 * 24 * 60 * 60 * 1000;
+        mCvCountdownViewTest4.start(time4);
 
         CountdownView mCvCountdownViewTest5 = (CountdownView)findViewById(R.id.cv_countdownViewTest5);
-        mCvCountdownViewTest5.start(995550000);
+        long time5 = (long)2 * 60 * 60 * 1000;
+        mCvCountdownViewTest5.start(time5);
 
-        CountdownView mCvCountdownViewTest6 = (CountdownView)findViewById(R.id.cv_countdownViewTest6);
-        mCvCountdownViewTest6.start(995550000);
-
-        CountdownView mCvCountdownViewTest7 = (CountdownView)findViewById(R.id.cv_countdownViewTest7);
-        mCvCountdownViewTest7.start(995550000);
     }
 
     @Override
@@ -48,3 +46,5 @@ public class MainActivity extends ActionBarActivity implements CountdownView.OnC
         }
     }
 }
+
+
