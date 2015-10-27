@@ -5,7 +5,9 @@
         <attr name="isHideTimeBackground" format="boolean" />
         <attr name="isShowTimeBgDivisionLine" format="boolean" />
         <attr name="timeBgDivisionLineColor" format="color" />
+        <attr name="timeBgDivisionLineSize" format="dimension" />
         <attr name="timeBgColor" format="color" />
+        <attr name="timeBgSize" format="dimension" />
         <attr name="timeBgRadius" format="dimension" />
 
         <attr name="isTimeTextBold" format="boolean" />

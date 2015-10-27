@@ -20,6 +20,7 @@ import android.view.View;
 public class CountdownView extends View {
     private static final String DEFAULT_SUFFIX = ":";
     private static final float DEFAULT_SUFFIX_LR_MARGIN = 3; // dp
+    private static final float DEFAULT_TIME_BG_DIVISION_LINE_SIZE = 0.5f; // dp
 
     private Context mContext;
     private int mDay, mHour, mMinute, mSecond, mMillisecond;
@@ -50,9 +51,9 @@ public class CountdownView extends View {
     private int mTimeBgColor;
     private float mTimeBgRadius;
     private int mTimeBgDivisionLineColor;
+    private float mTimeBgDivisionLineSize;
     private float mTimeTextBaseY;
     private float mTimeBgDivisionLineYPos;
-    private int mTimeBgDivisionLineSize;
 
     private String mSuffix, mSuffixDay, mSuffixHour, mSuffixMinute, mSuffixSecond, mSuffixMillisecond;
     private int mSuffixTextColor;
@@ -107,6 +108,8 @@ public class CountdownView extends View {
         mTimeBgRadius = ta.getDimension(R.styleable.CountdownView_timeBgRadius, 0);
         isShowTimeBgDivisionLine = ta.getBoolean(R.styleable.CountdownView_isShowTimeBgDivisionLine, true);
         mTimeBgDivisionLineColor = ta.getColor(R.styleable.CountdownView_timeBgDivisionLineColor, Color.parseColor("#30FFFFFF"));
+        mTimeBgDivisionLineSize = ta.getDimension(R.styleable.CountdownView_timeBgDivisionLineSize, dp2px(DEFAULT_TIME_BG_DIVISION_LINE_SIZE));
+        mTimeBgSize = ta.getDimension(R.styleable.CountdownView_timeBgSize, 0);
 
         isTimeTextBold = ta.getBoolean(R.styleable.CountdownView_isTimeTextBold, false);
         mTimeTextSize = ta.getDimension(R.styleable.CountdownView_timeTextSize, sp2px(12));
@@ -163,7 +166,7 @@ public class CountdownView extends View {
         mTimeTextWidth = rect.width();
         mTimeTextHeight = rect.height();
 
-        if (!isHideTimeBackground) {
+        if (!isHideTimeBackground && mTimeBgSize < mTimeTextWidth) {
             mTimeBgSize = mTimeTextWidth + (dp2px(2) * 4);
         }
     }
@@ -197,7 +200,6 @@ public class CountdownView extends View {
         // time background division line
         mTimeTextBgDivisionLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTimeTextBgDivisionLinePaint.setColor(mTimeBgDivisionLineColor);
-        mTimeBgDivisionLineSize = dp2px(0.5f);
         mTimeTextBgDivisionLinePaint.setStrokeWidth(mTimeBgDivisionLineSize);
     }
 
@@ -489,7 +491,7 @@ public class CountdownView extends View {
             mTimeTextBaseY = mSecondBgRectF.top + (mSecondBgRectF.bottom - mSecondBgRectF.top - timeFontMetrics.bottom + timeFontMetrics.top) / 2 - timeFontMetrics.top;
 
             // initialize background division line y point
-            mTimeBgDivisionLineYPos = mSecondBgRectF.centerY() + mTimeBgDivisionLineSize;
+            mTimeBgDivisionLineYPos = mSecondBgRectF.centerY() + (mTimeBgDivisionLineSize == dp2px(DEFAULT_TIME_BG_DIVISION_LINE_SIZE) ? mTimeBgDivisionLineSize : mTimeBgDivisionLineSize / 2);
         }
     }
 
@@ -1092,7 +1094,7 @@ public class CountdownView extends View {
         return mRemainTime;
     }
 
-    private void updateShow(long ms) {
+    public void updateShow(long ms) {
         this.mRemainTime = ms;
 
         mDay = (int)(ms / (1000 * 60 * 60 * 24));
