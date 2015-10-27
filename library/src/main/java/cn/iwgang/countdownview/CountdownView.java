@@ -81,6 +81,7 @@ public class CountdownView extends View {
     private int mContentAllHeight;
     private int mViewWidth;
     private int mViewHeight;
+    private int mTimeTextBottom;
 
     private float mDayTimeTextWidth;
     private float mDayTimeBgWidth;
@@ -165,6 +166,7 @@ public class CountdownView extends View {
         mTimeTextPaint.getTextBounds("00", 0, 2, rect);
         mTimeTextWidth = rect.width();
         mTimeTextHeight = rect.height();
+        mTimeTextBottom = rect.bottom;
 
         if (!isHideTimeBackground && mTimeBgSize < mTimeTextWidth) {
             mTimeBgSize = mTimeTextWidth + (dp2px(2) * 4);
@@ -488,7 +490,7 @@ public class CountdownView extends View {
 
             // time text baseline
             Paint.FontMetrics timeFontMetrics = mTimeTextPaint.getFontMetrics();
-            mTimeTextBaseY = mSecondBgRectF.top + (mSecondBgRectF.bottom - mSecondBgRectF.top - timeFontMetrics.bottom + timeFontMetrics.top) / 2 - timeFontMetrics.top;
+            mTimeTextBaseY = mSecondBgRectF.top + (mSecondBgRectF.bottom - mSecondBgRectF.top - timeFontMetrics.bottom + timeFontMetrics.top) / 2 - timeFontMetrics.top - mTimeTextBottom;
 
             // initialize background division line y point
             mTimeBgDivisionLineYPos = mSecondBgRectF.centerY() + (mTimeBgDivisionLineSize == dp2px(DEFAULT_TIME_BG_DIVISION_LINE_SIZE) ? mTimeBgDivisionLineSize : mTimeBgDivisionLineSize / 2);
@@ -520,12 +522,12 @@ public class CountdownView extends View {
     private void initTimeTextBaselineAndTimeBgTopPadding() {
         if (getPaddingTop() == getPaddingBottom()) {
             // center
-            mTimeTextBaseline = mViewHeight / 2 + mTimeTextHeight / 2;
+            mTimeTextBaseline = mViewHeight / 2 + mTimeTextHeight / 2 - mTimeTextBottom;
 
             mTopPaddingSize = (mViewHeight - mContentAllHeight) / 2;
         } else {
             // padding top
-            mTimeTextBaseline = mViewHeight - (mViewHeight - getPaddingTop()) + mTimeTextHeight;
+            mTimeTextBaseline = mViewHeight - (mViewHeight - getPaddingTop()) + mTimeTextHeight - mTimeTextBottom;
 
             mTopPaddingSize = getPaddingTop();
         }
