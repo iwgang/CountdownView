@@ -1,11 +1,11 @@
 # CountdownView
-Android Countdown Widget，Use canvas draw，Supports Multiple show styles
+Android Countdown Widget，Use canvas draw，Supports Multiple styles
 
 ### screenshot
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
 
 ### gradle
-    compile 'com.github.iwgang:countdownview:1.0'
+    compile 'com.github.iwgang:countdownview:1.1.1'
 
 ### code
 ```
@@ -79,3 +79,30 @@ suffixMinuteRightMargin  | dimension | 0
 suffixSecondLeftMargin  | dimension | 0
 suffixSecondRightMargin  | dimension | 0
 suffixMillisecondLeftMargin | dimension | 0
+
+### artifice
+1. Multiple CountdownView Specified value
+```
+    // step 1
+    mCvCountdownView.setTag(R.id.name, uid);
+    // step 2
+    @Override
+    public void onEnd(CountdownView cv) {
+        Object nameTag = cv.getTag(R.id.uid);
+        if (null != nameTag) {
+            Log.i(TAG, "name = " + nameTag.toString());
+        }
+    }
+```
+2. dynamic show time
+```
+    customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond)
+```
+3. countdown complete callback
+```
+    setOnCountdownEndListener(OnCountdownEndListener onCountdownEndListener);
+```
+4. interval callback
+```
+    setOnCountdownIntervalListener(long interval, OnCountdownIntervalListener onCountdownIntervalListener);
+```
