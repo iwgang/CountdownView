@@ -2,7 +2,7 @@
 Android Countdown Widget，Use canvas draw，Supports Multiple show styles
 
 ### screenshot
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s1.gif)  
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
 
 ### gradle
     compile 'com.github.iwgang:countdownview:1.0'
@@ -79,4 +79,3 @@ suffixMinuteRightMargin  | dimension | 0
 suffixSecondLeftMargin  | dimension | 0
 suffixSecondRightMargin  | dimension | 0
 suffixMillisecondLeftMargin | dimension | 0
---- | --- | ---
