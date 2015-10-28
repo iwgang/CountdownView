@@ -81,7 +81,7 @@ suffixSecondRightMargin  | dimension | 0
 suffixMillisecondLeftMargin | dimension | 0
 
 ### artifice
-1. Multiple CountdownView Specified value
+1. multiple countdownView specified value
 ```
     // step 1
     mCvCountdownView.setTag(R.id.name, uid);
@@ -94,7 +94,7 @@ suffixMillisecondLeftMargin | dimension | 0
         }
     }
 ```
-2. dynamic show time
+2. dynamic Show time
 ```
     customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond)
 ```
