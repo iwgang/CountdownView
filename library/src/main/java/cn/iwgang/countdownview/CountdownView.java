@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -27,7 +26,7 @@ public class CountdownView extends View {
     private long mRemainTime;
     private OnCountdownEndListener mOnCountdownEndListener;
     private OnCountdownIntervalListener mOnCountdownIntervalListener;
-    private CountDownTimer mCountDownTimer;
+    private CustomCountDownTimer mCustomCountDownTimer;
 
     private boolean isShowDay, isShowHour,isShowMinute, isShowSecond, isShowMillisecond;
     private boolean mHasSetIsShowDay, mHasSetIsShowHour;
@@ -964,9 +963,9 @@ public class CountdownView extends View {
             return ;
         }
 
-        if (null != mCountDownTimer) {
-            mCountDownTimer.cancel();
-            mCountDownTimer = null;
+        if (null != mCustomCountDownTimer) {
+            mCustomCountDownTimer.stop();
+            mCustomCountDownTimer = null;
         }
 
         long countDownInterval;
@@ -977,7 +976,13 @@ public class CountdownView extends View {
             countDownInterval = 1000;
         }
 
-        mCountDownTimer = new CountDownTimer(millisecond, countDownInterval) {
+        mCustomCountDownTimer = new CustomCountDownTimer(millisecond, countDownInterval);
+        mCustomCountDownTimer.setCustomCountDownTimerListener(new CustomCountDownTimer.CustomCountDownTimerListener() {
+            @Override
+            public void onTick(long remainMillis) {
+                updateShow(remainMillis);
+            }
+
             @Override
             public void onFinish() {
                 // countdown end
@@ -989,18 +994,32 @@ public class CountdownView extends View {
             }
 
             @Override
-            public void onTick(long millisUntilFinished) {
-                updateShow(millisUntilFinished);
+            public void onCancel() {
+
             }
-        };
-        mCountDownTimer.start();
+        });
+        mCustomCountDownTimer.start();
     }
 
     /**
      * stop countdown
      */
     public void stop() {
-        if (null != mCountDownTimer) mCountDownTimer.cancel();
+        if (null != mCustomCountDownTimer) mCustomCountDownTimer.stop();
+    }
+
+    /**
+     * pause countdown
+     */
+    public void pause() {
+        if (null != mCustomCountDownTimer) mCustomCountDownTimer.pause();
+    }
+
+    /**
+     * pause countdown
+     */
+    public void restart() {
+        if (null != mCustomCountDownTimer) mCustomCountDownTimer.restart();
     }
 
     /**
