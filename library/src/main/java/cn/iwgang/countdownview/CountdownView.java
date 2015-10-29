@@ -72,6 +72,7 @@ public class CountdownView extends View {
     private float mTempSuffixMinuteLeftMargin, mTempSuffixMinuteRightMargin;
     private float mTempSuffixSecondLeftMargin, mTempSuffixSecondRightMargin;
     private float mTempSuffixMillisecondLeftMargin;
+    private String mTempSuffixMinute, mTempSuffixSecond;
 
     private float mTimeTextBaseline;
     private float mLeftPaddingSize;
@@ -146,10 +147,24 @@ public class CountdownView extends View {
         mSuffixMillisecondLeftMargin = ta.getDimension(R.styleable.CountdownView_suffixMillisecondLeftMargin, -1);
         ta.recycle();
 
+        // temporarily saved suffix left and right margins
+        mTempSuffixDayLeftMargin = mSuffixDayLeftMargin;
+        mTempSuffixDayRightMargin = mSuffixDayRightMargin;
+        mTempSuffixHourLeftMargin = mSuffixHourLeftMargin;
+        mTempSuffixHourRightMargin = mSuffixHourRightMargin;
+        mTempSuffixMinuteLeftMargin = mSuffixMinuteLeftMargin;
+        mTempSuffixMinuteRightMargin = mSuffixMinuteRightMargin;
+        mTempSuffixSecondLeftMargin = mSuffixSecondLeftMargin;
+        mTempSuffixSecondRightMargin = mSuffixSecondRightMargin;
+        mTempSuffixMillisecondLeftMargin = mSuffixMillisecondLeftMargin;
+
+        mTempSuffixMinute = mSuffixMinute;
+        mTempSuffixSecond = mSuffixSecond;
+
         // initialize
         initPaint();
         initSuffix(true);
-        initSuffixMargin(true);
+        initSuffixMargin();
 
         // regular time data
         // pick one of two (minute and second)
@@ -301,7 +316,7 @@ public class CountdownView extends View {
             mSuffixSecondTextWidth = 0;
         }
 
-        if (isShowMillisecond && isSuffixNull && isSetSuffixMillisecond) {
+        if (isShowMillisecond && hasCustomSomeSuffix && isSetSuffixMillisecond) {
             mSuffixMillisecondTextWidth = mSuffixTextPaint.measureText(mSuffixMillisecond);
         } else {
             mSuffixMillisecondTextWidth = 0;
@@ -311,7 +326,7 @@ public class CountdownView extends View {
     /**
      * initialize suffix margin
      */
-    private void initSuffixMargin(boolean isInit) {
+    private void initSuffixMargin() {
         int defSuffixLRMargin = dp2px(DEFAULT_SUFFIX_LR_MARGIN);
         boolean isSuffixLRMarginNull = true;
 
@@ -370,12 +385,16 @@ public class CountdownView extends View {
                 }
             }
 
-            if (mSuffixMinuteRightMargin < 0) {
-                if (!isSuffixLRMarginNull) {
-                    mSuffixMinuteRightMargin = mSuffixLRMargin;
-                } else {
-                    mSuffixMinuteRightMargin = defSuffixLRMargin;
+            if (isShowSecond) {
+                if (mSuffixMinuteRightMargin < 0) {
+                    if (!isSuffixLRMarginNull) {
+                        mSuffixMinuteRightMargin = mSuffixLRMargin;
+                    } else {
+                        mSuffixMinuteRightMargin = defSuffixLRMargin;
+                    }
                 }
+            } else {
+                mSuffixMinuteRightMargin = 0;
             }
         } else {
             mSuffixMinuteLeftMargin = 0;
@@ -392,12 +411,16 @@ public class CountdownView extends View {
                     }
                 }
 
-                if (mSuffixSecondRightMargin < 0) {
-                    if (!isSuffixLRMarginNull) {
-                        mSuffixSecondRightMargin = mSuffixLRMargin;
-                    } else {
-                        mSuffixSecondRightMargin = defSuffixLRMargin;
+                if (isShowMillisecond) {
+                    if (mSuffixSecondRightMargin < 0) {
+                        if (!isSuffixLRMarginNull) {
+                            mSuffixSecondRightMargin = mSuffixLRMargin;
+                        } else {
+                            mSuffixSecondRightMargin = defSuffixLRMargin;
+                        }
                     }
+                } else {
+                    mSuffixSecondRightMargin = 0;
                 }
             } else {
                 mSuffixSecondLeftMargin = 0;
@@ -419,19 +442,6 @@ public class CountdownView extends View {
             mSuffixSecondLeftMargin = 0;
             mSuffixSecondRightMargin = 0;
             mSuffixMillisecondLeftMargin = 0;
-        }
-
-        if (isInit) {
-            // temporarily saved suffix left and right margins
-            mTempSuffixDayLeftMargin = mSuffixDayLeftMargin;
-            mTempSuffixDayRightMargin = mSuffixDayRightMargin;
-            mTempSuffixHourLeftMargin = mSuffixHourLeftMargin;
-            mTempSuffixHourRightMargin = mSuffixHourRightMargin;
-            mTempSuffixMinuteLeftMargin = mSuffixMinuteLeftMargin;
-            mTempSuffixMinuteRightMargin = mSuffixMinuteRightMargin;
-            mTempSuffixSecondLeftMargin = mSuffixSecondLeftMargin;
-            mTempSuffixSecondRightMargin = mSuffixSecondRightMargin;
-            mTempSuffixMillisecondLeftMargin = mSuffixMillisecondLeftMargin;
         }
     }
 
@@ -680,95 +690,86 @@ public class CountdownView extends View {
     }
 
     private void refTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond) {
-        // reset day margins
-        if (isShowDay) {
-            mSuffixDayLeftMargin = mTempSuffixDayLeftMargin;
-            mSuffixDayRightMargin = mTempSuffixDayRightMargin;
-        } else {
-            mSuffixDayLeftMargin = 0;
-            mSuffixDayRightMargin = 0;
-        }
-
-        // reset hour margins
-        if (isShowHour) {
-            mSuffixHourLeftMargin = mTempSuffixHourLeftMargin;
-            mSuffixHourRightMargin = mTempSuffixHourRightMargin;
-        } else {
-            mSuffixHourLeftMargin = 0;
-            mSuffixHourRightMargin = 0;
-        }
-
-        // reset minute margins
-        if (isShowMinute) {
-            mSuffixMinuteLeftMargin = mTempSuffixMinuteLeftMargin;
-
-            if (isShowSecond) {
-                mSuffixMinuteRightMargin = mTempSuffixMinuteRightMargin;
-            } else {
-                mSuffixMinuteRightMargin = 0;
-                if (!TextUtils.isEmpty(mSuffix) || TextUtils.equals(mSuffixMinute, DEFAULT_SUFFIX)) {
-                    mSuffixMinute = null;
-                }
-            }
-        } else {
-            mSuffixMinuteLeftMargin = 0;
-            mSuffixMinuteRightMargin = 0;
-        }
-
-        // reset second margins
-        if (isShowSecond) {
-            mSuffixSecondLeftMargin = mTempSuffixSecondLeftMargin;
-
-            if (isShowMillisecond) {
-                mSuffixSecondRightMargin = mTempSuffixSecondRightMargin;
-            } else {
-                mSuffixSecondRightMargin = 0;
-                if (!TextUtils.isEmpty(mSuffix) || TextUtils.equals(mSuffixSecond, DEFAULT_SUFFIX)) {
-                    mSuffixSecond = null;
-                }
-            }
-        } else {
-            mSuffixSecondLeftMargin = 0;
-            mSuffixSecondRightMargin = 0;
-        }
-
-        // reset millisecond margins
-        if (isShowMillisecond) {
-            mSuffixMillisecondLeftMargin = mTempSuffixMillisecondLeftMargin;
-        } else {
-            mSuffixMillisecondLeftMargin = 0;
-        }
-
         boolean isRef = false;
 
         if (this.isShowDay != isShowDay) {
             this.isShowDay = isShowDay;
             isRef = true;
+
+            // reset day margins
+            if (isShowDay) {
+                mSuffixDayLeftMargin = mTempSuffixDayLeftMargin;
+                mSuffixDayRightMargin = mTempSuffixDayRightMargin;
+            }
         }
 
         if (this.isShowHour != isShowHour) {
             this.isShowHour = isShowHour;
             isRef = true;
+
+            // reset hour margins
+            if (isShowHour) {
+                mSuffixHourLeftMargin = mTempSuffixHourLeftMargin;
+                mSuffixHourRightMargin = mTempSuffixHourRightMargin;
+            }
         }
 
         if (this.isShowMinute != isShowMinute) {
             this.isShowMinute = isShowMinute;
             isRef = true;
+
+            // reset minute margins
+            if (isShowMinute) {
+                mSuffixMinuteLeftMargin = mTempSuffixMinuteLeftMargin;
+                mSuffixMinuteRightMargin = mTempSuffixMinuteRightMargin;
+                mSuffixMinute = mTempSuffixMinute;
+            }
         }
+
+        boolean isModCountdownInterval = false;
 
         if (this.isShowSecond != isShowSecond) {
             this.isShowSecond = isShowSecond;
             isRef = true;
+            isModCountdownInterval = true;
+
+            // reset second margins
+            if (isShowSecond) {
+                mSuffixSecondLeftMargin = mTempSuffixSecondLeftMargin;
+                mSuffixSecondRightMargin = mTempSuffixSecondRightMargin;
+                mSuffixSecond = mTempSuffixSecond;
+            } else {
+                mSuffixMinute = mTempSuffixMinute;
+            }
+
+            mSuffixMinuteLeftMargin = mTempSuffixMinuteLeftMargin;
+            mSuffixMinuteRightMargin = mTempSuffixMinuteRightMargin;
         }
 
         if (this.isShowMillisecond != isShowMillisecond) {
             this.isShowMillisecond = isShowMillisecond;
             isRef = true;
+            isModCountdownInterval = true;
+
+            // reset millisecond margins
+            if (isShowMillisecond) {
+                mSuffixMillisecondLeftMargin = mTempSuffixMillisecondLeftMargin;
+            } else {
+                mSuffixSecond = mTempSuffixSecond;
+            }
+
+            mSuffixSecondLeftMargin = mTempSuffixSecondLeftMargin;
+            mSuffixSecondRightMargin = mTempSuffixSecondRightMargin;
+        }
+
+        // judge modify countdown interval
+        if (isModCountdownInterval) {
+            start(mRemainTime);
         }
 
         if (isRef) {
             initSuffix(false);
-            initSuffixMargin(false);
+            initSuffixMargin();
             requestLayout();
         }
     }
