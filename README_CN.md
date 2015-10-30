@@ -1,3 +1,4 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CountdownView-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2641) 
 [![@iwgang](https://img.shields.io/badge/微博-%40iwgang-blue.svg)](http://weibo.com/iwgang)
 
 #### [English](https://github.com/iwgang/CountdownView/blob/master/README.md)
