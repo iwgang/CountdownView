@@ -1,10 +1,10 @@
-[![@iwgang](https://img.shields.io/badge/weibo-%40iwgang-blue.svg)](http://weibo.com/iwgang)
+[![@iwgang](https://img.shields.io/badge/微博-%40iwgang-blue.svg)](http://weibo.com/iwgang)
 
-#### [中文](https://github.com/iwgang/CountdownView/blob/master/README_CN.md)
+#### [English](https://github.com/iwgang/CountdownView/blob/master/README.md)
 
 
 # CountdownView
-Android Countdown Widget，Use canvas draw，Supports Multiple styles
+Android 倒计时控件，使用Canvas绘制，支持多种样式
 
 ### screenshot
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
@@ -15,9 +15,9 @@ Android Countdown Widget，Use canvas draw，Supports Multiple styles
 ### code
 ```
 CountdownView mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
-mCvCountdownView.start(995550000); // Millisecond
+mCvCountdownView.start(995550000); // 毫秒
 
-// or
+// 或者自己编写倒计时逻辑，然后调用updateShow来更新UI
 for (int time=0; time<1000; time++) {
     mCvCountdownView.updateShow(time);
 }
@@ -47,7 +47,7 @@ for (int time=0; time<1000; time++) {
 ```
 
 ### customization
-    attr | type | default
+    参数 | 类型 | 默认值
 --- | --- | ---
 isHideTimeBackground | boolean | true
 timeBgColor  | color      | #444444
@@ -59,8 +59,8 @@ timeBgDivisionLineSize  | dimension | 0.5dp
 timeTextSize   | dimension | 12sp | 
 timeTextColor  | color | #000000
 isTimeTextBold | boolean | false
-isShowDay  | boolean | auto show (has value show if not hide)
-isShowHour  | boolean | auto show (has value show if not hide)
+isShowDay  | boolean | 自动显示 (天 > 1 显示, = 0 隐藏)
+isShowHour  | boolean | 自动显示 (小时 > 1 显示， = 0 隐藏)
 isShowMinute  | boolean | true
 isShowSecond  | boolean | true
 isShowMillisecond  | boolean | false
@@ -85,12 +85,12 @@ suffixSecondLeftMargin  | dimension | 0
 suffixSecondRightMargin  | dimension | 0
 suffixMillisecondLeftMargin | dimension | 0
 
-### artifice
-1. multiple countdownView specified value
+### 技巧
+1. 多个CountdownView时，给每个指定值
 ```
-    // step 1
+    // 第1步，设置tag
     mCvCountdownView.setTag(R.id.name, uid);
-    // step 2
+    // 第2步，从回调中的CountdownView取回tag
     @Override
     public void onEnd(CountdownView cv) {
         Object nameTag = cv.getTag(R.id.uid);
@@ -99,15 +99,15 @@ suffixMillisecondLeftMargin | dimension | 0
         }
     }
 ```
-2. dynamic Show time
+2. 动态显示/隐藏某些时间 (如：开始显示时、分、秒，后面到指定时间改成分、秒、毫秒)
 ```
     customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond)
 ```
-3. countdown complete callback
+3. 倒计时结束后回调
 ```
     setOnCountdownEndListener(OnCountdownEndListener onCountdownEndListener);
 ```
-4. interval callback
+4. 指定间隔时间回调
 ```
     setOnCountdownIntervalListener(long interval, OnCountdownIntervalListener onCountdownIntervalListener);
 ```
