@@ -1,5 +1,4 @@
 [![Android Gems](http://www.android-gems.com/badge/iwgang/CountdownView.svg?branch=master)](http://www.android-gems.com/lib/iwgang/CountdownView)
-
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CountdownView-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2641) 
 [![@iwgang](https://img.shields.io/badge/weibo-%40iwgang-blue.svg)](http://weibo.com/iwgang)
 
