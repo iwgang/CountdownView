@@ -103,23 +103,17 @@ public class CustomCountDownTimer {
 
             CustomCountDownTimer curCustomCountDownTimer = wrf.get();
 
-            if (null == curCustomCountDownTimer) return ;
+            if (null == curCustomCountDownTimer || null == curCustomCountDownTimer.mCustomCountDownTimerListener) return ;
 
             switch (msg.what) {
                 case HANDLER_WHAT_TICK:
-                    if (null != curCustomCountDownTimer.mCustomCountDownTimerListener) {
-                        curCustomCountDownTimer.mCustomCountDownTimerListener.onTick(curCustomCountDownTimer.mMillisInFuture);
-                    }
+                    curCustomCountDownTimer.mCustomCountDownTimerListener.onTick(curCustomCountDownTimer.mMillisInFuture);
                     break;
                 case HANDLER_WHAT_END:
-                    if (null != curCustomCountDownTimer.mCustomCountDownTimerListener) {
-                        curCustomCountDownTimer.mCustomCountDownTimerListener.onFinish();
-                    }
+                    curCustomCountDownTimer.mCustomCountDownTimerListener.onFinish();
                     break;
                 case HANDLER_WHAT_CANCEL:
-                    if (null != curCustomCountDownTimer.mCustomCountDownTimerListener) {
-                        curCustomCountDownTimer.mCustomCountDownTimerListener.onCancel();
-                    }
+                    curCustomCountDownTimer.mCustomCountDownTimerListener.onCancel();
                     break;
             }
         }
