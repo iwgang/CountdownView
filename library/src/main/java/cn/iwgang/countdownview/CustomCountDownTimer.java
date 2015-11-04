@@ -103,6 +103,8 @@ public class CustomCountDownTimer {
 
             CustomCountDownTimer curCustomCountDownTimer = wrf.get();
 
+            if (null == curCustomCountDownTimer) return ;
+
             switch (msg.what) {
                 case HANDLER_WHAT_TICK:
                     if (null != curCustomCountDownTimer.mCustomCountDownTimerListener) {
