@@ -12,7 +12,7 @@ Android Countdown Widget，Use canvas draw，Supports Multiple styles
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
 
 ### gradle
-    compile 'com.github.iwgang:countdownview:1.1.4'
+    compile 'com.github.iwgang:countdownview:1.2'
 
 ### code
 ```
