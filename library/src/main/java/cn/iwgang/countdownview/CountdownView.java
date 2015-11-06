@@ -977,11 +977,10 @@ public class CountdownView extends View {
             countDownInterval = 1000;
         }
 
-        mCustomCountDownTimer = new CustomCountDownTimer(millisecond, countDownInterval);
-        mCustomCountDownTimer.setCustomCountDownTimerListener(new CustomCountDownTimer.CustomCountDownTimerListener() {
+        mCustomCountDownTimer = new CustomCountDownTimer(millisecond, countDownInterval) {
             @Override
-            public void onTick(long remainMillis) {
-                updateShow(remainMillis);
+            public void onTick(long millisUntilFinished) {
+                updateShow(millisUntilFinished);
             }
 
             @Override
@@ -993,12 +992,7 @@ public class CountdownView extends View {
                     mOnCountdownEndListener.onEnd(CountdownView.this);
                 }
             }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
+        };
         mCustomCountDownTimer.start();
     }
 

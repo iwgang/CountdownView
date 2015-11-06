@@ -2,122 +2,122 @@ package cn.iwgang.countdownview;
 
 import android.os.Handler;
 import android.os.Message;
-
-import java.lang.ref.WeakReference;
-import java.util.Timer;
-import java.util.TimerTask;
+import android.os.SystemClock;
 
 /**
+ * 使用android.os.CountDownTimer的源码
+ * 1. 对回调onTick做了细小调整，已解决最后1秒不会倒计时到0，要等待2秒才回调onFinish
+ * 2. 添加了一些自定义方法
  * Created by iWgang on 15/10/18.
  * https://github.com/iwgang/CountdownView
  */
-public class CustomCountDownTimer {
-    private static final int HANDLER_WHAT_TICK = 10001;
-    private static final int HANDLER_WHAT_END = 10002;
-    private static final int HANDLER_WHAT_CANCEL = 10003;
+public abstract class CustomCountDownTimer {
+    private static final int MSG = 1;
+    private final long mMillisInFuture;
+    private final long mCountdownInterval;
+    private long mStopTimeInFuture;
+    private long mPauseTimeInFuture;
+    private boolean isStop = false;
+    private boolean isPause = false;
 
-    private long mMillisInFuture;
-    private long mCountDownInterval;
-    private boolean isCancel;
-    private boolean isPause = true;
-    private Timer mTimer;
-    private CustomCountDownTimerListener mCustomCountDownTimerListener;
-    private MyHandler mHandler;
-
+    /**
+     * @param millisInFuture    总倒计时时间
+     * @param countDownInterval 倒计时间隔时间
+     */
     public CustomCountDownTimer(long millisInFuture, long countDownInterval) {
-        this.mMillisInFuture = millisInFuture;
-        this.mCountDownInterval = countDownInterval;
-        mHandler = new MyHandler(this);
+        // 解决秒数有时会一开始就减去了2秒问题（如10秒总数的，刚开始就8999，然后没有不会显示9秒，直接到8秒）
+        if (countDownInterval > 1000) millisInFuture += 15;
+        mMillisInFuture = millisInFuture;
+        mCountdownInterval = countDownInterval;
     }
 
-    public void stop() {
-        if (isCancel) return ;
-
-        isCancel = true;
-        mHandler.sendEmptyMessage(HANDLER_WHAT_CANCEL);
-        if (null != mTimer) {
-            mTimer.cancel();
-            mTimer = null;
+    private synchronized CustomCountDownTimer start(long millisInFuture) {
+        isStop = false;
+        if (millisInFuture <= 0) {
+            onFinish();
+            return this;
         }
+        mStopTimeInFuture = SystemClock.elapsedRealtime() + millisInFuture;
+        mHandler.sendMessage(mHandler.obtainMessage(MSG));
+        return this;
     }
 
-    public void start() {
-        if (isPause) {
-            isPause = false;
-            mTimer = new Timer();
-            mTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (isCancel) return ;
-
-                    mMillisInFuture -= mCountDownInterval;
-                    mHandler.sendEmptyMessage(HANDLER_WHAT_TICK);
-
-                    if (mMillisInFuture <= 0) {
-                        mMillisInFuture = 0;
-                        isCancel = true;
-                        mHandler.sendEmptyMessage(HANDLER_WHAT_END);
-                        mTimer.cancel();
-                    }
-                }
-            }, 0, mCountDownInterval);
-        }
+    /**
+     * 开始倒计时
+     */
+    public synchronized final void start() {
+        start(mMillisInFuture);
     }
 
-    public void pause() {
+    /**
+     * 停止倒计时
+     */
+    public synchronized final void stop() {
+        isStop = true;
+        mHandler.removeMessages(MSG);
+    }
+
+    /**
+     * 暂时倒计时
+     * 调用{@link #restart()}方法重新开始
+     */
+    public synchronized final void pause() {
+        if (isStop) return ;
+
         isPause = true;
-        if (null != mTimer) {
-            mTimer.cancel();
-            mTimer = null;
-        }
+        mPauseTimeInFuture = mStopTimeInFuture - SystemClock.elapsedRealtime();
+        mHandler.removeMessages(MSG);
     }
 
-    public void restart() {
-        start();
+    /**
+     * 重新开始
+     */
+    public synchronized final void restart() {
+        if (isStop || !isPause) return ;
+
+        isPause = false;
+        start(mPauseTimeInFuture);
     }
 
-    public void setCustomCountDownTimerListener(CustomCountDownTimerListener customCountDownTimerListener) {
-        this.mCustomCountDownTimerListener = customCountDownTimerListener;
-    }
+    /**
+     * 倒计时间隔回调
+     * @param millisUntilFinished 剩余毫秒数
+     */
+    public abstract void onTick(long millisUntilFinished);
 
-    public interface CustomCountDownTimerListener {
-        void onTick(long remainMillis);
-        void onFinish();
-        void onCancel();
-    }
+    /**
+     * 倒计时结束回调
+     */
+    public abstract void onFinish();
 
-    private static class MyHandler extends Handler {
-        WeakReference<CustomCountDownTimer> wrf = null;
 
-        public MyHandler(CustomCountDownTimer customCountDownTimer) {
-            wrf = new WeakReference<>(customCountDownTimer);
-        }
+    private Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
 
-            if (null == wrf) {
-                return ;
-            }
+            synchronized (CustomCountDownTimer.this) {
+                if (isStop || isPause) {
+                    return;
+                }
 
-            CustomCountDownTimer curCustomCountDownTimer = wrf.get();
+                final long millisLeft = mStopTimeInFuture - SystemClock.elapsedRealtime();
+                if (millisLeft <= 0) {
+                    onFinish();
+                } else {
+                    long lastTickStart = SystemClock.elapsedRealtime();
+                    onTick(millisLeft);
 
-            if (null == curCustomCountDownTimer || null == curCustomCountDownTimer.mCustomCountDownTimerListener) return ;
+                    // take into account user's onTick taking time to execute
+                    long delay = lastTickStart + mCountdownInterval - SystemClock.elapsedRealtime();
 
-            switch (msg.what) {
-                case HANDLER_WHAT_TICK:
-                    curCustomCountDownTimer.mCustomCountDownTimerListener.onTick(curCustomCountDownTimer.mMillisInFuture);
-                    break;
-                case HANDLER_WHAT_END:
-                    curCustomCountDownTimer.mCustomCountDownTimerListener.onFinish();
-                    break;
-                case HANDLER_WHAT_CANCEL:
-                    curCustomCountDownTimer.mCustomCountDownTimerListener.onCancel();
-                    break;
+                    // special case: user's onTick took more than interval to
+                    // complete, skip to next interval
+                    while (delay < 0) delay += mCountdownInterval;
+
+                    sendMessageDelayed(obtainMessage(MSG), delay);
+                }
             }
         }
-
-    }
-
+    };
 }
