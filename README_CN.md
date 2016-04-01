@@ -10,6 +10,7 @@ Android 倒计时控件，使用Canvas绘制，支持多种样式
 
 ### screenshot
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot2.png) 
 
 ### gradle
     compile 'com.github.iwgang:countdownview:1.2'

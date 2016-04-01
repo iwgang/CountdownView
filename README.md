@@ -10,6 +10,7 @@ Android Countdown Widget，Use canvas draw，Supports Multiple styles
 
 ### screenshot
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot2.png)  
 
 ### gradle
     compile 'com.github.iwgang:countdownview:1.2'
@@ -101,7 +102,7 @@ suffixMillisecondLeftMargin | dimension | 0
         }
     }
 ```
-2. dynamic Show time
+2. dynamic show
 ```
     customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond)
 ```
