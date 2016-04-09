@@ -3,10 +3,11 @@ package cn.iwgang.countdownviewdemo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,27 +17,24 @@ import java.util.Map;
 
 import cn.iwgang.countdownview.CountdownView;
 import cn.iwgang.countdownview.CustomCountDownTimer;
-import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
 
 
 /*
-     此类模拟在List中使用倒计时, 此处使用的是RecyclerView, ListView和这个差不多, 就不再多放个示例代码了
+     此类模拟在ListView中使用倒计时
  */
-public class ListActivity extends ActionBarActivity {
-    private FamiliarRecyclerView mCvFamiliarRecyclerView;
-
+public class ListViewActivity extends ActionBarActivity {
     private Map<Long, MyCustomCountDownTimer> mCustomCountDownTimers;
     private List<ItemInfo> mDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_listview);
 
         initData();
 
-        mCvFamiliarRecyclerView = (FamiliarRecyclerView) findViewById(R.id.cv_familiarRecyclerView);
-        mCvFamiliarRecyclerView.setAdapter(new MyAdapter(this, mDataList, mCustomCountDownTimers));
+        ListView mLvList = (ListView) findViewById(R.id.lv_list);
+        mLvList.setAdapter(new MyListAdapter(this, mDataList, mCustomCountDownTimers));
     }
 
     private void initData() {
@@ -44,7 +42,7 @@ public class ListActivity extends ActionBarActivity {
         mCustomCountDownTimers = new HashMap<>();
 
         for (int i = 1; i < 20; i++) {
-            mDataList.add(new ItemInfo(1000 + i, "测试标题_" + i, i * 20 * 1000));
+            mDataList.add(new ItemInfo(1000 + i, "ListView_测试标题_" + i, i * 20 * 1000));
         }
 
         // 预处理倒计时
@@ -117,24 +115,45 @@ public class ListActivity extends ActionBarActivity {
     }
 
 
-    static class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    static class MyListAdapter extends BaseAdapter {
         private Context mContext;
         private List<ItemInfo> mDatas;
         private Map<Long, MyCustomCountDownTimer> mCustomCountDownTimers;
 
-        public MyAdapter(Context context, List<ItemInfo> datas, Map<Long, MyCustomCountDownTimer> customCountDownTimers) {
+        public MyListAdapter(Context context, List<ItemInfo> datas, Map<Long, MyCustomCountDownTimer> customCountDownTimers) {
             this.mContext = context;
             this.mDatas = datas;
             this.mCustomCountDownTimers = customCountDownTimers;
         }
 
         @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false));
+        public int getCount() {
+            return mDatas.size();
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public Object getItem(int position) {
+            return mDatas.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
+                holder = new ViewHolder();
+                holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                holder.cvCountdownView = (CountdownView) convertView.findViewById(R.id.cv_countdownView);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
             ItemInfo curItemInfo = mDatas.get(position);
             long curID = curItemInfo.getId();
 
@@ -150,23 +169,13 @@ public class ListActivity extends ActionBarActivity {
             }
 
             holder.tvTitle.setText(curItemInfo.getTitle());
+
+            return convertView;
         }
 
-        @Override
-        public int getItemCount() {
-            return mDatas.size();
-        }
-    }
-
-    static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle;
-        CountdownView cvCountdownView;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
-            cvCountdownView = (CountdownView) itemView.findViewById(R.id.cv_countdownView);
+        static class ViewHolder {
+            TextView tvTitle;
+            CountdownView cvCountdownView;
         }
     }
 
