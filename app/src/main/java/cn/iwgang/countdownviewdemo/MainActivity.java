@@ -3,12 +3,13 @@ package cn.iwgang.countdownviewdemo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import cn.iwgang.countdownview.CountdownView;
 
 
-public class MainActivity extends ActionBarActivity implements CountdownView.OnCountdownEndListener {
+public class MainActivity extends AppCompatActivity implements CountdownView.OnCountdownEndListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
