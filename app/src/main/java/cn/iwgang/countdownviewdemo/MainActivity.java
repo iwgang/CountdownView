@@ -1,10 +1,11 @@
 package cn.iwgang.countdownviewdemo;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -22,9 +23,19 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         mCvCountdownViewTest1.start(time1);
 
         CountdownView mCvCountdownViewTest2 = (CountdownView)findViewById(R.id.cv_countdownViewTest2);
-        mCvCountdownViewTest1.setTag("test2");
+        mCvCountdownViewTest2.setTag("test2");
         long time2 = (long)30 * 60 * 1000;
         mCvCountdownViewTest2.start(time2);
+
+        CountdownView mCvCountdownViewTest21 = (CountdownView)findViewById(R.id.cv_countdownViewTest21);
+        mCvCountdownViewTest21.setTag("test21");
+        long time21 = (long)24 * 60 * 60 * 1000;
+        mCvCountdownViewTest21.start(time21);
+
+        CountdownView mCvCountdownViewTest22 = (CountdownView)findViewById(R.id.cv_countdownViewTest22);
+        mCvCountdownViewTest22.setTag("test22");
+        long time22 = (long)30 * 60 * 1000;
+        mCvCountdownViewTest22.start(time22);
 
         CountdownView mCvCountdownViewTest3 = (CountdownView)findViewById(R.id.cv_countdownViewTest3);
         long time3 = (long)9 * 60 * 60 * 1000;
@@ -60,6 +71,27 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         long time6 = (long)2 * 60 * 60 * 1000;
         mCvCountdownViewTest6.start(time6);
 
+
+        findViewById(R.id.btn_toDynamicShowActivity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, DynamicShowActivity.class));
+            }
+        });
+
+        findViewById(R.id.btn_toListViewActivity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ListViewActivity.class));
+            }
+        });
+
+        findViewById(R.id.btn_toRecyclerViewActivity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
+            }
+        });
     }
 
     @Override

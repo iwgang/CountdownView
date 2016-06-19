@@ -10,19 +10,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
+        app:isHideTimeBackground="false"
         app:isShowDay="false"
         app:isShowHour="true"
+        app:isShowMillisecond="false"
         app:isShowMinute="true"
         app:isShowSecond="true"
-        app:isShowMillisecond="false"
+        app:isShowTimeBgDivisionLine="false"
         app:suffixGravity="center"
         app:suffixTextColor="#000000"
         app:suffixTextSize="20sp"
-        app:timeTextColor="#FFFFFF"
-        app:timeTextSize="20sp"
-        app:isHideTimeBackground="false"
         app:timeBgColor="#FF5000"
-        app:isShowTimeBgDivisionLine="false" />
+        app:timeTextColor="#FFFFFF"
+        app:timeTextSize="20sp" />
 
     <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest2"
@@ -30,20 +30,66 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        app:timeBgDivisionLineSize="1dp"
-        app:timeBgSize="50dp"
+        app:isHideTimeBackground="false"
         app:isShowDay="false"
         app:isShowHour="false"
+        app:isShowMillisecond="true"
         app:isShowMinute="true"
         app:isShowSecond="true"
-        app:isShowMillisecond="true"
         app:suffixGravity="center"
         app:suffixTextColor="#000000"
         app:suffixTextSize="30sp"
+        app:timeBgDivisionLineSize="1dp"
+        app:timeBgRadius="3dp"
+        app:timeBgSize="50dp"
         app:timeTextColor="#FFFFFF"
-        app:timeTextSize="30sp"
+        app:timeTextSize="30sp" />
+
+    <cn.iwgang.countdownview.CountdownView
+        android:id="@+id/cv_countdownViewTest21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         app:isHideTimeBackground="false"
-        app:timeBgRadius="3dp" />
+        app:isShowDay="false"
+        app:isShowHour="true"
+        app:isShowMillisecond="true"
+        app:isShowMinute="true"
+        app:isShowSecond="true"
+        app:isShowTimeBgDivisionLine="false"
+        app:isTimeTextBold="true"
+        app:suffixGravity="center"
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="20sp"
+        app:timeBgColor="#482f28"
+        app:timeBgRadius="22.5dp"
+        app:timeBgSize="45dp"
+        app:timeTextColor="#FFFFFF"
+        app:timeTextSize="25sp" />
+
+
+    <cn.iwgang.countdownview.CountdownView
+        android:id="@+id/cv_countdownViewTest22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        app:isShowDay="false"
+        app:isShowHour="false"
+        app:isShowMinute="true"
+        app:isShowMillisecond="false"
+        app:isShowSecond="true"
+        app:suffixGravity="bottom"
+        app:suffixMinute="m"
+        app:suffixSecond="s"
+        app:suffixMinuteLeftMargin="5dp"
+        app:suffixMinuteRightMargin="10dp"
+        app:suffixSecondLeftMargin="5dp"
+        app:suffixTextColor="#444444"
+        app:suffixTextSize="20sp"
+        app:timeTextColor="#444444"
+        app:timeTextSize="60sp" />
 
     <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest3"
@@ -53,9 +99,9 @@
         android:layout_marginTop="20dp"
         app:isShowDay="false"
         app:isShowHour="true"
+        app:isShowMillisecond="true"
         app:isShowMinute="true"
         app:isShowSecond="true"
-        app:isShowMillisecond="true"
         app:suffixGravity="center"
         app:suffixTextColor="#000000"
         app:suffixTextSize="17sp"
@@ -70,16 +116,16 @@
         android:layout_marginTop="20dp"
         app:isShowDay="true"
         app:isShowHour="true"
+        app:isShowMillisecond="true"
         app:isShowMinute="true"
         app:isShowSecond="true"
-        app:isShowMillisecond="true"
         app:isTimeTextBold="true"
         app:suffixDay="天"
+        app:suffixGravity="bottom"
         app:suffixHour="小时"
+        app:suffixMillisecond="毫秒"
         app:suffixMinute="分钟"
         app:suffixSecond="秒"
-        app:suffixMillisecond="毫秒"
-        app:suffixGravity="bottom"
         app:suffixTextColor="#000000"
         app:suffixTextSize="12sp"
         app:timeTextColor="#000000"
@@ -93,14 +139,14 @@
         android:layout_marginTop="20dp"
         app:isShowDay="true"
         app:isShowHour="true"
+        app:isShowMillisecond="false"
         app:isShowMinute="true"
         app:isShowSecond="true"
-        app:isShowMillisecond="false"
         app:suffixDay="天"
+        app:suffixGravity="top"
         app:suffixHour="小时"
         app:suffixMinute="分钟"
         app:suffixSecond="秒"
-        app:suffixGravity="top"
         app:suffixTextColor="#000000"
         app:suffixTextSize="12sp"
         app:timeTextColor="#000000"
@@ -115,14 +161,75 @@
         android:background="@drawable/sel_btn"
         app:isShowDay="false"
         app:isShowHour="true"
+        app:isShowMillisecond="false"
         app:isShowMinute="true"
         app:isShowSecond="true"
-        app:isShowMillisecond="false"
         app:suffixGravity="center"
         app:suffixTextColor="#000000"
         app:suffixTextSize="20sp"
         app:timeTextColor="#000000"
         app:timeTextSize="20sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_weight="1"
+            android:background="#999999" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Other Activity"
+            android:textColor="#000000" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_weight="1"
+            android:background="#999999" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <Button
+            android:id="@+id/btn_toDynamicShowActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="DynamicShow" />
+
+        <Button
+            android:id="@+id/btn_toListViewActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="ListView" />
+
+        <Button
+            android:id="@+id/btn_toRecyclerViewActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="RecyclerView" />
+
+    </LinearLayout>
 
 
 </LinearLayout>
