@@ -1,21 +1,27 @@
 [![Android Gems](http://www.android-gems.com/badge/iwgang/CountdownView.svg?branch=master)](http://www.android-gems.com/lib/iwgang/CountdownView)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CountdownView-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2641) 
-[![@iwgang](https://img.shields.io/badge/微博-%40iwgang-blue.svg)](http://weibo.com/iwgang)
+[![@iwgang](https://img.shields.io/badge/weibo-%40iwgang-blue.svg)](http://weibo.com/iwgang)
 
 #### [English](https://github.com/iwgang/CountdownView/blob/master/README.md)
 
 
 # CountdownView
-Android 倒计时控件，使用Canvas绘制，支持多种样式
+Android倒计时控件，使用Canvas绘制，支持多种样式
 
-### screenshot
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot2.png) 
+[下载DemoAPK](https://raw.githubusercontent.com/iwgang/CountdownView/master/Demo_2.0.apk.apk)
 
-### gradle
-    compile 'com.github.iwgang:countdownview:1.2'
+### Screenshot
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_main.gif)  
 
-### code
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config.gif) 
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config2.gif)  
+
+<img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_list.jpg" width="400px" height="650px"/>
+
+### Gradle
+    compile 'com.github.iwgang:countdownview:2.0'
+
+### Code
 ```
 CountdownView mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
 mCvCountdownView.start(995550000); // 毫秒
@@ -26,7 +32,7 @@ for (int time=0; time<1000; time++) {
 }
 ```
 
-### layout
+### Layout
 ``` xml
 <cn.iwgang.countdownview.CountdownView
     android:layout_width="wrap_content"
@@ -49,7 +55,7 @@ for (int time=0; time<1000; time++) {
     app:suffixMillisecond="毫秒" />
 ```
 
-### customization
+### Customization
     参数 | 类型 | 默认值
 --- | --- | ---
 isHideTimeBackground | boolean | true
@@ -88,8 +94,8 @@ suffixSecondLeftMargin  | dimension | 0
 suffixSecondRightMargin  | dimension | 0
 suffixMillisecondLeftMargin | dimension | 0
 
-### 技巧
-1. 多个CountdownView时，给每个指定值
+### 其它
+* **多个CountdownView时，给每个指定值**
 ```
     // 第1步，设置tag
     mCvCountdownView.setTag(R.id.name, uid);
@@ -102,15 +108,15 @@ suffixMillisecondLeftMargin | dimension | 0
         }
     }
 ```
-2. 动态显示/隐藏某些时间 (如：开始显示时、分、秒，后面到指定时间改成分、秒、毫秒)
+* **动态显示设置, 支持所有xml中的配置项来使用java代码设置**
 ```
-    customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond)
+    dynamicShow(DynamicConfig dynamicConfig)
 ```
-3. 倒计时结束后回调
+* **倒计时结束后回调**
 ```
     setOnCountdownEndListener(OnCountdownEndListener onCountdownEndListener);
 ```
-4. 指定间隔时间回调
+* **指定间隔时间回调**
 ```
     setOnCountdownIntervalListener(long interval, OnCountdownIntervalListener onCountdownIntervalListener);
 ```

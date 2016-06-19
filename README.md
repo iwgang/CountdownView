@@ -8,14 +8,20 @@
 # CountdownView
 Android Countdown Widget，Use canvas draw，Supports Multiple styles
 
-### screenshot
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot.gif)  
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/screenshot2.png)  
+[Download demo apk](https://raw.githubusercontent.com/iwgang/CountdownView/master/Demo_2.0.apk.apk)
 
-### gradle
-    compile 'com.github.iwgang:countdownview:1.2'
+### Screenshot
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_main.gif)  
 
-### code
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config.gif) 
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config2.gif)  
+
+<img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_list.jpg" width="400px" height="650px"/>
+
+### Gradle
+    compile 'com.github.iwgang:countdownview:2.0'
+
+### Code
 ```
 CountdownView mCvCountdownView = (CountdownView)findViewById(R.id.cv_countdownViewTest1);
 mCvCountdownView.start(995550000); // Millisecond
@@ -26,7 +32,7 @@ for (int time=0; time<1000; time++) {
 }
 ```
 
-### layout
+### Layout
 ``` xml
 <cn.iwgang.countdownview.CountdownView
     android:layout_width="wrap_content"
@@ -49,7 +55,7 @@ for (int time=0; time<1000; time++) {
     app:suffixMillisecond="毫秒" />
 ```
 
-### customization
+### Customization
     attr | type | default
 --- | --- | ---
 isHideTimeBackground | boolean | true
@@ -88,8 +94,8 @@ suffixSecondLeftMargin  | dimension | 0
 suffixSecondRightMargin  | dimension | 0
 suffixMillisecondLeftMargin | dimension | 0
 
-### artifice
-1. multiple countdownView specified value
+### Other
+* **Multiple countdownView specified value**
 ```
     // step 1
     mCvCountdownView.setTag(R.id.name, uid);
@@ -102,15 +108,15 @@ suffixMillisecondLeftMargin | dimension | 0
         }
     }
 ```
-2. dynamic show
+* **Dynamic show**
 ```
-    customTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond)
+    dynamicShow(DynamicConfig dynamicConfig)
 ```
-3. countdown complete callback
+* **Countdown complete callback**
 ```
     setOnCountdownEndListener(OnCountdownEndListener onCountdownEndListener);
 ```
-4. interval callback
+* **Interval callback**
 ```
     setOnCountdownIntervalListener(long interval, OnCountdownIntervalListener onCountdownIntervalListener);
 ```
