@@ -8,7 +8,7 @@
 # CountdownView
 Android倒计时控件，使用Canvas绘制，支持多种样式
 
-[下载DemoAPK](https://raw.githubusercontent.com/iwgang/CountdownView/master/Demo_2.0.apk.apk)
+[下载DemoAPK](https://raw.githubusercontent.com/iwgang/CountdownView/master/Demo_2.0.apk)
 
 ### Screenshot
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_main.gif)  

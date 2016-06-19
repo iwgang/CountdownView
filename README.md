@@ -8,7 +8,7 @@
 # CountdownView
 Android Countdown Widget，Use canvas draw，Supports Multiple styles
 
-[Download demo apk](https://raw.githubusercontent.com/iwgang/CountdownView/master/Demo_2.0.apk.apk)
+[Download demo apk](https://raw.githubusercontent.com/iwgang/CountdownView/master/Demo_2.0.apk)
 
 ### Screenshot
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_main.gif)  
