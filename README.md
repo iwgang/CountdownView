@@ -11,7 +11,7 @@ Android Countdown Widget，Use canvas draw，Supports Multiple styles
 [Download demo apk](https://raw.githubusercontent.com/iwgang/CountdownView/master/demoapk/Demo_2.1.apk)
 
 ### Screenshot
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_main.png)  
+<img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_main.png" width="400px" height="650px"/>
 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config.gif) 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config2.gif)  

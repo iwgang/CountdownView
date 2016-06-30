@@ -11,7 +11,7 @@ Android倒计时控件，使用Canvas绘制，支持多种样式
 [下载DemoAPK](https://raw.githubusercontent.com/iwgang/CountdownView/master/demoapk/Demo_2.1.apk)
 
 ### Screenshot
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_main.png)  
+<img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_main.png" width="400px" height="650px"/>
 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config.gif) 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config2.gif)  
