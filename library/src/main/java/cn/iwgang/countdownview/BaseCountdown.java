@@ -500,10 +500,10 @@ class BaseCountdown {
         float mSecondLeft;
 
         if (isShowDay) {
-            // onDraw day text
+            // draw day text
             canvas.drawText(Utils.formatNum(mDay), mLeftPaddingSize + mDayTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
             if (mSuffixDayTextWidth > 0) {
-                // onDraw day suffix
+                // draw day suffix
                 canvas.drawText(mSuffixDay, mLeftPaddingSize + mDayTimeTextWidth + mSuffixDayLeftMargin, mSuffixDayTextBaseline, mSuffixTextPaint);
             }
 
@@ -515,10 +515,10 @@ class BaseCountdown {
         }
 
         if (isShowHour) {
-            // onDraw hour text
+            // draw hour text
             canvas.drawText(Utils.formatNum(mHour), mHourLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
             if (mSuffixHourTextWidth > 0) {
-                // onDraw hour suffix
+                // draw hour suffix
                 canvas.drawText(mSuffixHour, mHourLeft + mTimeTextWidth + mSuffixHourLeftMargin, mSuffixHourTextBaseline, mSuffixTextPaint);
             }
 
@@ -530,10 +530,10 @@ class BaseCountdown {
         }
 
         if (isShowMinute) {
-            // onDraw minute text
+            // draw minute text
             canvas.drawText(Utils.formatNum(mMinute), mMinuteLeft + mTimeTextWidth / 2 , mTimeTextBaseline, mTimeTextPaint);
             if (mSuffixMinuteTextWidth > 0) {
-                // onDraw minute suffix
+                // draw minute suffix
                 canvas.drawText(mSuffixMinute, mMinuteLeft + mTimeTextWidth + mSuffixMinuteLeftMargin, mSuffixMinuteTextBaseline, mSuffixTextPaint);
             }
 
@@ -545,20 +545,20 @@ class BaseCountdown {
         }
 
         if (isShowSecond) {
-            // onDraw second text
+            // draw second text
             canvas.drawText(Utils.formatNum(mSecond), mSecondLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
             if (mSuffixSecondTextWidth > 0) {
-                // onDraw second suffix
+                // draw second suffix
                 canvas.drawText(mSuffixSecond, mSecondLeft + mTimeTextWidth + mSuffixSecondLeftMargin, mSuffixSecondTextBaseline, mSuffixTextPaint);
             }
 
             if (isShowMillisecond) {
                 // millisecond left point
                 float mMillisecondLeft = mSecondLeft + mTimeTextWidth + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
-                // onDraw millisecond text
+                // draw millisecond text
                 canvas.drawText(Utils.formatMillisecond(mMillisecond), mMillisecondLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
                 if (mSuffixMillisecondTextWidth > 0) {
-                    // onDraw millisecond suffix
+                    // draw millisecond suffix
                     canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeTextWidth + mSuffixMillisecondLeftMargin, mSuffixMillisecondTextBaseline, mSuffixTextPaint);
                 }
             }

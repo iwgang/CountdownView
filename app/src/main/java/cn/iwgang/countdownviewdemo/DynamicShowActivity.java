@@ -15,6 +15,7 @@ import cn.iwgang.countdownview.DynamicConfig;
 import cn.qqtheme.framework.picker.ColorPicker;
 
 
+@SuppressWarnings("ALL")
 public class DynamicShowActivity extends AppCompatActivity {
     private final long TIME = (long)8 * 24 * 60 * 60 * 1000;
 
@@ -28,6 +29,8 @@ public class DynamicShowActivity extends AppCompatActivity {
     private boolean isShowDay = true, isShowHour = true, isShowMinute = true, isShowSecond = true, isShowMillisecond = true;
     private float timeBgSize = 40;
     private float bgRadius = 3;
+    private float bgBorderSize;
+    private float bgBorderRadius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -386,6 +389,78 @@ public class DynamicShowActivity extends AppCompatActivity {
                 mCvCountdownViewTestHasBg.dynamicShow(dynamicConfigBuilder.build());
             }
         });
+
+        final Button btnBgBorderSizePlus = (Button) findViewById(R.id.btn_bgBorderSizePlus);
+        final Button btnBgBorderSizeSubtract = (Button) findViewById(R.id.btn_bgBorderSizeSubtract);
+        final Button btnBgBorderRadiusPlus = (Button) findViewById(R.id.btn_bgBorderRadiusPlus);
+        final Button btnBgBorderRadiusSubtract = (Button) findViewById(R.id.btn_bgBorderRadiusSubtract);
+        btnBgBorderSizePlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DynamicConfig.Builder dynamicConfigBuilder = new DynamicConfig.Builder();
+                dynamicConfigBuilder.setBackgroundInfo(new DynamicConfig.BackgroundInfo().setShowTimeBgBorder(true).setBorderSize(++bgBorderSize));
+                mCvCountdownViewTestHasBg.dynamicShow(dynamicConfigBuilder.build());
+            }
+        });
+        btnBgBorderSizeSubtract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bgBorderSize == 0) return;
+                DynamicConfig.Builder dynamicConfigBuilder = new DynamicConfig.Builder();
+                dynamicConfigBuilder.setBackgroundInfo(new DynamicConfig.BackgroundInfo().setShowTimeBgBorder(true).setBorderSize(--bgBorderSize));
+                mCvCountdownViewTestHasBg.dynamicShow(dynamicConfigBuilder.build());
+            }
+        });
+        btnBgBorderRadiusPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DynamicConfig.Builder dynamicConfigBuilder = new DynamicConfig.Builder();
+                dynamicConfigBuilder.setBackgroundInfo(new DynamicConfig.BackgroundInfo().setShowTimeBgBorder(true).setBorderRadius(++bgBorderRadius));
+                mCvCountdownViewTestHasBg.dynamicShow(dynamicConfigBuilder.build());
+            }
+        });
+        btnBgBorderRadiusSubtract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bgBorderRadius == 0) return;
+                DynamicConfig.Builder dynamicConfigBuilder = new DynamicConfig.Builder();
+                dynamicConfigBuilder.setBackgroundInfo(new DynamicConfig.BackgroundInfo().setShowTimeBgBorder(true).setBorderRadius(--bgBorderRadius));
+                mCvCountdownViewTestHasBg.dynamicShow(dynamicConfigBuilder.build());
+            }
+        });
+
+        final Button btnModBgBorderColor = (Button) findViewById(R.id.btn_modBgBorderColor);
+        btnModBgBorderColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorPicker picker = new ColorPicker(DynamicShowActivity.this);
+                picker.setOnColorPickListener(new ColorPicker.OnColorPickListener() {
+                    @Override
+                    public void onColorPicked(int pickedColor) {
+                        DynamicConfig.Builder dynamicConfigBuilder = new DynamicConfig.Builder();
+                        dynamicConfigBuilder.setBackgroundInfo(new DynamicConfig.BackgroundInfo().setShowTimeBgBorder(true).setBorderColor(pickedColor));
+                        mCvCountdownViewTestHasBg.dynamicShow(dynamicConfigBuilder.build());
+                    }
+                });
+                picker.show();
+            }
+        });
+
+        ((CheckBox)findViewById(R.id.cb_bgBorder)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                btnModBgBorderColor.setEnabled(isChecked);
+                btnBgBorderSizePlus.setEnabled(isChecked);
+                btnBgBorderSizeSubtract.setEnabled(isChecked);
+                btnBgBorderRadiusPlus.setEnabled(isChecked);
+                btnBgBorderRadiusSubtract.setEnabled(isChecked);
+
+                DynamicConfig.Builder dynamicConfigBuilder = new DynamicConfig.Builder();
+                dynamicConfigBuilder.setBackgroundInfo(new DynamicConfig.BackgroundInfo().setShowTimeBgBorder(isChecked));
+                mCvCountdownViewTestHasBg.dynamicShow(dynamicConfigBuilder.build());
+            }
+        });
+        ((CheckBox)findViewById(R.id.cb_bgBorder)).setChecked(false);
 
         final EditText etSuffixDay = (EditText) findViewById(R.id.et_suffixDay);
         final EditText etSuffixHour = (EditText) findViewById(R.id.et_suffixHour);

@@ -16,20 +16,26 @@ import android.view.View;
  */
 class BackgroundCountdown extends BaseCountdown {
     private static final float DEFAULT_TIME_BG_DIVISION_LINE_SIZE = 0.5f; // dp
+    private static final float DEFAULT_TIME_BG_BORDER_SIZE = 1f; // dp
 
+    private boolean isDrawBg;
     private boolean isShowTimeBgDivisionLine;
     private int mTimeBgDivisionLineColor;
     private float mTimeBgDivisionLineSize;
     private float mTimeBgRadius;
     private float mTimeBgSize;
     private int mTimeBgColor;
-    private Paint mTimeTextBgPaint;
-    private Paint mTimeTextBgDivisionLinePaint;
+    private Paint mTimeBgPaint, mTimeBgBorderPaint, mTimeBgDivisionLinePaint;
     private float mDefSetTimeBgSize;
     private float mDayTimeBgWidth;
     private RectF mDayBgRectF, mHourBgRectF, mMinuteBgRectF, mSecondBgRectF, mMillisecondBgRectF;
+    private RectF mDayBgBorderRectF, mHourBgBorderRectF, mMinuteBgBorderRectF, mSecondBgBorderRectF, mMillisecondBgBorderRectF;
     private float mTimeBgDivisionLineYPos;
     private float mTimeTextBaseY;
+    private boolean isShowTimeBgBorder;
+    private float mTimeBgBorderSize;
+    private float mTimeBgBorderRadius;
+    private int mTimeBgBorderColor;
 
     @Override
     public void initStyleAttr(Context context, TypedArray ta) {
@@ -42,15 +48,26 @@ class BackgroundCountdown extends BaseCountdown {
         mTimeBgDivisionLineSize = ta.getDimension(R.styleable.CountdownView_timeBgDivisionLineSize, Utils.dp2px(context, DEFAULT_TIME_BG_DIVISION_LINE_SIZE));
         mTimeBgSize = ta.getDimension(R.styleable.CountdownView_timeBgSize, 0);
         mDefSetTimeBgSize = mTimeBgSize;
+        mTimeBgBorderSize = ta.getDimension(R.styleable.CountdownView_timeBgBorderSize, Utils.dp2px(context, DEFAULT_TIME_BG_BORDER_SIZE));
+        mTimeBgBorderRadius = ta.getDimension(R.styleable.CountdownView_timeBgBorderRadius, 0);
+        mTimeBgBorderColor = ta.getColor(R.styleable.CountdownView_timeBgBorderColor, 0xFF000000);
+        isShowTimeBgBorder = ta.getBoolean(R.styleable.CountdownView_isShowTimeBgBorder, false);
+
+        isDrawBg = ta.hasValue(R.styleable.CountdownView_timeBgColor) || !isShowTimeBgBorder;
     }
 
     @Override
     protected void initPaint() {
         super.initPaint();
         // time background
-        mTimeTextBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTimeTextBgPaint.setStyle(Paint.Style.FILL);
-        mTimeTextBgPaint.setColor(mTimeBgColor);
+        mTimeBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTimeBgPaint.setStyle(Paint.Style.FILL);
+        mTimeBgPaint.setColor(mTimeBgColor);
+
+        // time background border
+        if (isShowTimeBgBorder) {
+            initTimeBgBorderPaint();
+        }
 
         // time background division line
         if (isShowTimeBgDivisionLine) {
@@ -58,10 +75,23 @@ class BackgroundCountdown extends BaseCountdown {
         }
     }
 
+    private void initTimeBgBorderPaint() {
+        if (null != mTimeBgBorderPaint) return;
+
+        mTimeBgBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTimeBgBorderPaint.setColor(mTimeBgBorderColor);
+        if (!isDrawBg) {
+            mTimeBgBorderPaint.setStrokeWidth(mTimeBgBorderSize);
+            mTimeBgBorderPaint.setStyle(Paint.Style.STROKE);
+        }
+    }
+
     private void initTimeTextBgDivisionLinePaint() {
-        mTimeTextBgDivisionLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTimeTextBgDivisionLinePaint.setColor(mTimeBgDivisionLineColor);
-        mTimeTextBgDivisionLinePaint.setStrokeWidth(mTimeBgDivisionLineSize);
+        if (null != mTimeBgDivisionLinePaint) return;
+
+        mTimeBgDivisionLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTimeBgDivisionLinePaint.setColor(mTimeBgDivisionLineColor);
+        mTimeBgDivisionLinePaint.setStrokeWidth(mTimeBgDivisionLineSize);
     }
 
     @Override
@@ -83,10 +113,15 @@ class BackgroundCountdown extends BaseCountdown {
         boolean isInitHasBackgroundTextBaseY = false;
 
         if (isShowDay) {
-            // initialize day background rectF
-            mDayBgRectF = new RectF(mLeftPaddingSize, topPaddingSize, mLeftPaddingSize + mDayTimeBgWidth, topPaddingSize + mDayTimeBgWidth);
+            // initialize day background and border rectF
+            if (isShowTimeBgBorder) {
+                mDayBgBorderRectF = new RectF(mLeftPaddingSize, topPaddingSize, mLeftPaddingSize + mDayTimeBgWidth + (mTimeBgBorderSize * 2), topPaddingSize + mDayTimeBgWidth + (mTimeBgBorderSize * 2));
+                mDayBgRectF = new RectF(mLeftPaddingSize + mTimeBgBorderSize, topPaddingSize + mTimeBgBorderSize, mLeftPaddingSize + mDayTimeBgWidth + mTimeBgBorderSize, topPaddingSize + mDayTimeBgWidth + mTimeBgBorderSize);
+            } else {
+                mDayBgRectF = new RectF(mLeftPaddingSize, topPaddingSize, mLeftPaddingSize + mDayTimeBgWidth, topPaddingSize + mDayTimeBgWidth);
+            }
             // hour left point
-            mHourLeft = mLeftPaddingSize + mDayTimeBgWidth + mSuffixDayTextWidth + mSuffixDayLeftMargin + mSuffixDayRightMargin;
+            mHourLeft = mLeftPaddingSize + mDayTimeBgWidth + mSuffixDayTextWidth + mSuffixDayLeftMargin + mSuffixDayRightMargin + (mTimeBgBorderSize * 2);
 
             if (!isShowHour && !isShowMinute && !isShowSecond) {
                 isInitHasBackgroundTextBaseY = true;
@@ -98,10 +133,15 @@ class BackgroundCountdown extends BaseCountdown {
         }
 
         if (isShowHour) {
-            // initialize hour background rectF
-            mHourBgRectF = new RectF(mHourLeft, topPaddingSize, mHourLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+            // initialize hour background border rectF
+            if (isShowTimeBgBorder) {
+                mHourBgBorderRectF = new RectF(mHourLeft, topPaddingSize, mHourLeft + mTimeBgSize + (mTimeBgBorderSize * 2), topPaddingSize + mTimeBgSize + (mTimeBgBorderSize * 2));
+                mHourBgRectF = new RectF(mHourLeft + mTimeBgBorderSize, topPaddingSize + mTimeBgBorderSize, mHourLeft + mTimeBgSize + mTimeBgBorderSize, topPaddingSize + mTimeBgSize + mTimeBgBorderSize);
+            } else {
+                mHourBgRectF = new RectF(mHourLeft, topPaddingSize, mHourLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+            }
             // minute left point
-            mMinuteLeft = mHourLeft + mTimeBgSize + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin;
+            mMinuteLeft = mHourLeft + mTimeBgSize + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin + (mTimeBgBorderSize * 2);
 
             if (!isInitHasBackgroundTextBaseY) {
                 isInitHasBackgroundTextBaseY = true;
@@ -113,10 +153,15 @@ class BackgroundCountdown extends BaseCountdown {
         }
 
         if (isShowMinute) {
-            // initialize minute background rectF
-            mMinuteBgRectF = new RectF(mMinuteLeft, topPaddingSize, mMinuteLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+            // initialize minute background border rectF
+            if (isShowTimeBgBorder) {
+                mMinuteBgBorderRectF = new RectF(mMinuteLeft, topPaddingSize, mMinuteLeft + mTimeBgSize + (mTimeBgBorderSize * 2), topPaddingSize + mTimeBgSize + (mTimeBgBorderSize * 2));
+                mMinuteBgRectF = new RectF(mMinuteLeft + mTimeBgBorderSize, topPaddingSize + mTimeBgBorderSize, mMinuteLeft + mTimeBgSize + mTimeBgBorderSize, topPaddingSize + mTimeBgSize + mTimeBgBorderSize);
+            } else {
+                mMinuteBgRectF = new RectF(mMinuteLeft, topPaddingSize, mMinuteLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+            }
             // second left point
-            mSecondLeft = mMinuteLeft + mTimeBgSize + mSuffixMinuteTextWidth + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin;
+            mSecondLeft = mMinuteLeft + mTimeBgSize + mSuffixMinuteTextWidth + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin + (mTimeBgBorderSize * 2);
 
             if (!isInitHasBackgroundTextBaseY) {
                 isInitHasBackgroundTextBaseY = true;
@@ -128,15 +173,25 @@ class BackgroundCountdown extends BaseCountdown {
         }
 
         if (isShowSecond) {
-            // initialize second background rectF
-            mSecondBgRectF = new RectF(mSecondLeft, topPaddingSize, mSecondLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+            // initialize second background border rectF
+            if (isShowTimeBgBorder) {
+                mSecondBgBorderRectF = new RectF(mSecondLeft, topPaddingSize, mSecondLeft + mTimeBgSize + (mTimeBgBorderSize * 2), topPaddingSize + mTimeBgSize + (mTimeBgBorderSize * 2));
+                mSecondBgRectF = new RectF(mSecondLeft + mTimeBgBorderSize, topPaddingSize + mTimeBgBorderSize, mSecondLeft + mTimeBgSize + mTimeBgBorderSize, topPaddingSize + mTimeBgSize + mTimeBgBorderSize);
+            } else {
+                mSecondBgRectF = new RectF(mSecondLeft, topPaddingSize, mSecondLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+            }
 
             if (isShowMillisecond) {
                 // millisecond left point
-                float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
+                float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin + (mTimeBgBorderSize * 2);
 
-                // initialize millisecond background rectF
-                mMillisecondBgRectF = new RectF(mMillisecondLeft, topPaddingSize, mMillisecondLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+                // initialize millisecond background border rectF
+                if (isShowTimeBgBorder) {
+                    mMillisecondBgBorderRectF = new RectF(mMillisecondLeft, topPaddingSize, mMillisecondLeft + mTimeBgSize + (mTimeBgBorderSize * 2), topPaddingSize + mTimeBgSize + (mTimeBgBorderSize * 2));
+                    mMillisecondBgRectF = new RectF(mMillisecondLeft + mTimeBgBorderSize, topPaddingSize + mTimeBgBorderSize, mMillisecondLeft + mTimeBgSize + mTimeBgBorderSize, topPaddingSize + mTimeBgSize + mTimeBgBorderSize);
+                } else {
+                    mMillisecondBgRectF = new RectF(mMillisecondLeft, topPaddingSize, mMillisecondLeft + mTimeBgSize, topPaddingSize + mTimeBgSize);
+                }
             }
 
             if (!isInitHasBackgroundTextBaseY) {
@@ -158,11 +213,11 @@ class BackgroundCountdown extends BaseCountdown {
             default:
             case 1:
                 // center
-                ret = topPaddingSize + mTimeBgSize - mTimeBgSize / 2  + tempRect.height() / 2;
+                ret = topPaddingSize + mTimeBgSize - mTimeBgSize / 2  + tempRect.height() / 2 + mTimeBgBorderSize;
                 break;
             case 2:
                 // bottom
-                ret = topPaddingSize + mTimeBgSize - tempRect.bottom;
+                ret = topPaddingSize + mTimeBgSize - tempRect.bottom + (mTimeBgBorderSize * 2);
                 break;
         }
 
@@ -217,7 +272,7 @@ class BackgroundCountdown extends BaseCountdown {
 
     @Override
     public int getAllContentWidth() {
-        float width = getAllContentWidthBase(mTimeBgSize);
+        float width = getAllContentWidthBase(mTimeBgSize + (mTimeBgBorderSize * 2));
 
         if (isShowDay) {
             if (isDayLargeNinetyNine) {
@@ -230,6 +285,8 @@ class BackgroundCountdown extends BaseCountdown {
                 mDayTimeBgWidth = mTimeBgSize;
                 width += mTimeBgSize;
             }
+
+            width += (mTimeBgBorderSize * 2);
         }
 
         return (int)Math.ceil(width);
@@ -237,7 +294,7 @@ class BackgroundCountdown extends BaseCountdown {
 
     @Override
     public int getAllContentHeight() {
-        return (int) mTimeBgSize;
+        return (int) (mTimeBgSize + (mTimeBgBorderSize * 2));
     }
 
     @Override
@@ -255,96 +312,126 @@ class BackgroundCountdown extends BaseCountdown {
         float mSecondLeft;
 
         if (isShowDay) {
-            // onDraw day background
-            canvas.drawRoundRect(mDayBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
-            if (isShowTimeBgDivisionLine) {
-                // onDraw day background division line
-                canvas.drawLine(mLeftPaddingSize, mTimeBgDivisionLineYPos, mLeftPaddingSize + mDayTimeBgWidth, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
+            // draw day background border
+            if (isShowTimeBgBorder) {
+                canvas.drawRoundRect(mDayBgBorderRectF, mTimeBgBorderRadius, mTimeBgBorderRadius, mTimeBgBorderPaint);
             }
-            // onDraw day text
+            if (isDrawBg) {
+                // draw day background
+                canvas.drawRoundRect(mDayBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeBgPaint);
+                if (isShowTimeBgDivisionLine) {
+                    // draw day background division line
+                    canvas.drawLine(mLeftPaddingSize + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mLeftPaddingSize + mDayTimeBgWidth + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgDivisionLinePaint);
+                }
+            }
+            // draw day text
             canvas.drawText(Utils.formatNum(mDay), mDayBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
             if (mSuffixDayTextWidth > 0) {
-                // onDraw day suffix
-                canvas.drawText(mSuffixDay, mLeftPaddingSize + mDayTimeBgWidth + mSuffixDayLeftMargin, mSuffixDayTextBaseline, mSuffixTextPaint);
+                // draw day suffix
+                canvas.drawText(mSuffixDay, mLeftPaddingSize + mDayTimeBgWidth + mSuffixDayLeftMargin + (mTimeBgBorderSize * 2), mSuffixDayTextBaseline, mSuffixTextPaint);
             }
 
             // hour left point
-            mHourLeft = mLeftPaddingSize + mDayTimeBgWidth + mSuffixDayTextWidth + mSuffixDayLeftMargin + mSuffixDayRightMargin;
+            mHourLeft = mLeftPaddingSize + mDayTimeBgWidth + mSuffixDayTextWidth + mSuffixDayLeftMargin + mSuffixDayRightMargin + (mTimeBgBorderSize * 2);
         } else {
             // hour left point
             mHourLeft = mLeftPaddingSize;
         }
 
         if (isShowHour) {
-            // onDraw hour background
-            canvas.drawRoundRect(mHourBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
-            if (isShowTimeBgDivisionLine) {
-                // onDraw hour background division line
-                canvas.drawLine(mHourLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mHourLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
+            // draw hour background border
+            if (isShowTimeBgBorder) {
+                canvas.drawRoundRect(mHourBgBorderRectF, mTimeBgBorderRadius, mTimeBgBorderRadius, mTimeBgBorderPaint);
             }
-            // onDraw hour text
+            if (isDrawBg) {
+                // draw hour background
+                canvas.drawRoundRect(mHourBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeBgPaint);
+                if (isShowTimeBgDivisionLine) {
+                    // draw hour background division line
+                    canvas.drawLine(mHourLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgSize + mHourLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgDivisionLinePaint);
+                }
+            }
+            // draw hour text
             canvas.drawText(Utils.formatNum(mHour), mHourBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
             if (mSuffixHourTextWidth > 0) {
-                // onDraw hour suffix
-                canvas.drawText(mSuffixHour, mHourLeft + mTimeBgSize + mSuffixHourLeftMargin, mSuffixHourTextBaseline, mSuffixTextPaint);
+                // draw hour suffix
+                canvas.drawText(mSuffixHour, mHourLeft + mTimeBgSize + mSuffixHourLeftMargin + (mTimeBgBorderSize * 2), mSuffixHourTextBaseline, mSuffixTextPaint);
             }
 
             // minute left point
-            mMinuteLeft = mHourLeft + mTimeBgSize + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin;
+            mMinuteLeft = mHourLeft + mTimeBgSize + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin + (mTimeBgBorderSize * 2);
         } else {
             // minute left point
             mMinuteLeft = mHourLeft;
         }
 
         if (isShowMinute) {
-            // onDraw minute background
-            canvas.drawRoundRect(mMinuteBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
-            if (isShowTimeBgDivisionLine) {
-                // onDraw minute background division line
-                canvas.drawLine(mMinuteLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mMinuteLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
+            // draw minute background border
+            if (isShowTimeBgBorder) {
+                canvas.drawRoundRect(mMinuteBgBorderRectF, mTimeBgBorderRadius, mTimeBgBorderRadius, mTimeBgBorderPaint);
             }
-            // onDraw minute text
+            if (isDrawBg) {
+                // draw minute background
+                canvas.drawRoundRect(mMinuteBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeBgPaint);
+                if (isShowTimeBgDivisionLine) {
+                    // draw minute background division line
+                    canvas.drawLine(mMinuteLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgSize + mMinuteLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgDivisionLinePaint);
+                }
+            }
+            // draw minute text
             canvas.drawText(Utils.formatNum(mMinute), mMinuteBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
             if (mSuffixMinuteTextWidth > 0) {
-                // onDraw minute suffix
-                canvas.drawText(mSuffixMinute, mMinuteLeft + mTimeBgSize + mSuffixMinuteLeftMargin, mSuffixMinuteTextBaseline, mSuffixTextPaint);
+                // draw minute suffix
+                canvas.drawText(mSuffixMinute, mMinuteLeft + mTimeBgSize + mSuffixMinuteLeftMargin + (mTimeBgBorderSize * 2), mSuffixMinuteTextBaseline, mSuffixTextPaint);
             }
 
             // second left point
-            mSecondLeft = mMinuteLeft + mTimeBgSize + mSuffixMinuteTextWidth + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin;
+            mSecondLeft = mMinuteLeft + mTimeBgSize + mSuffixMinuteTextWidth + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin + (mTimeBgBorderSize * 2);
         } else {
             // second left point
             mSecondLeft = mMinuteLeft;
         }
 
         if (isShowSecond) {
-            // onDraw second background
-            canvas.drawRoundRect(mSecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
-            if (isShowTimeBgDivisionLine) {
-                // onDraw second background division line
-                canvas.drawLine(mSecondLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mSecondLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
+            // draw second background border
+            if (isShowTimeBgBorder) {
+                canvas.drawRoundRect(mSecondBgBorderRectF, mTimeBgBorderRadius, mTimeBgBorderRadius, mTimeBgBorderPaint);
             }
-            // onDraw second text
+            if (isDrawBg) {
+                // draw second background
+                canvas.drawRoundRect(mSecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeBgPaint);
+                if (isShowTimeBgDivisionLine) {
+                    // draw second background division line
+                    canvas.drawLine(mSecondLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgSize + mSecondLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgDivisionLinePaint);
+                }
+            }
+            // draw second text
             canvas.drawText(Utils.formatNum(mSecond), mSecondBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
             if (mSuffixSecondTextWidth > 0) {
-                // onDraw second suffix
-                canvas.drawText(mSuffixSecond, mSecondLeft + mTimeBgSize + mSuffixSecondLeftMargin, mSuffixSecondTextBaseline, mSuffixTextPaint);
+                // draw second suffix
+                canvas.drawText(mSuffixSecond, mSecondLeft + mTimeBgSize + mSuffixSecondLeftMargin + (mTimeBgBorderSize * 2), mSuffixSecondTextBaseline, mSuffixTextPaint);
             }
 
             if (isShowMillisecond) {
-                // millisecond left point
-                float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin;
-                // onDraw millisecond background
-                canvas.drawRoundRect(mMillisecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeTextBgPaint);
-                if (isShowTimeBgDivisionLine) {
-                    // onDraw millisecond background division line
-                    canvas.drawLine(mMillisecondLeft, mTimeBgDivisionLineYPos, mTimeBgSize + mMillisecondLeft, mTimeBgDivisionLineYPos, mTimeTextBgDivisionLinePaint);
+                // draw millisecond background border
+                if (isShowTimeBgBorder) {
+                    canvas.drawRoundRect(mMillisecondBgBorderRectF, mTimeBgBorderRadius, mTimeBgBorderRadius, mTimeBgBorderPaint);
                 }
-                // onDraw millisecond text
+                // millisecond left point
+                float mMillisecondLeft = mSecondLeft + mTimeBgSize + mSuffixSecondTextWidth + mSuffixSecondLeftMargin + mSuffixSecondRightMargin + (mTimeBgBorderSize * 2);
+                if (isDrawBg) {
+                    // draw millisecond background
+                    canvas.drawRoundRect(mMillisecondBgRectF, mTimeBgRadius, mTimeBgRadius, mTimeBgPaint);
+                    if (isShowTimeBgDivisionLine) {
+                        // draw millisecond background division line
+                        canvas.drawLine(mMillisecondLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgSize + mMillisecondLeft + mTimeBgBorderSize, mTimeBgDivisionLineYPos, mTimeBgDivisionLinePaint);
+                    }
+                }
+                // draw millisecond text
                 canvas.drawText(Utils.formatMillisecond(mMillisecond), mMillisecondBgRectF.centerX(), mTimeTextBaseY, mTimeTextPaint);
                 if (mSuffixMillisecondTextWidth > 0) {
-                    // onDraw millisecond suffix
-                    canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeBgSize + mSuffixMillisecondLeftMargin, mSuffixMillisecondTextBaseline, mSuffixTextPaint);
+                    // draw millisecond suffix
+                    canvas.drawText(mSuffixMillisecond, mMillisecondLeft + mTimeBgSize + mSuffixMillisecondLeftMargin + (mTimeBgBorderSize * 2), mSuffixMillisecondTextBaseline, mSuffixTextPaint);
                 }
             }
         }
@@ -355,9 +442,20 @@ class BackgroundCountdown extends BaseCountdown {
     }
 
 
-    public void setTimeBgColor(int textColor) {
-        mTimeBgColor = textColor;
-        mTimeTextBgPaint.setColor(mTimeBgColor);
+    public void setTimeBgColor(int color) {
+        mTimeBgColor = color;
+        mTimeBgPaint.setColor(mTimeBgColor);
+        if (color == Color.TRANSPARENT && isShowTimeBgBorder) {
+            isDrawBg = false;
+            mTimeBgBorderPaint.setStrokeWidth(mTimeBgBorderSize);
+            mTimeBgBorderPaint.setStyle(Paint.Style.STROKE);
+        } else {
+            isDrawBg = true;
+            if (isShowTimeBgBorder) {
+                mTimeBgBorderPaint.setStrokeWidth(0);
+                mTimeBgBorderPaint.setStyle(Paint.Style.FILL);
+            }
+        }
     }
 
     public void setTimeBgRadius(float radius) {
@@ -369,22 +467,51 @@ class BackgroundCountdown extends BaseCountdown {
         if (isShowTimeBgDivisionLine) {
             initTimeTextBgDivisionLinePaint();
         } else {
-            mTimeTextBgDivisionLinePaint = null;
+            mTimeBgDivisionLinePaint = null;
         }
     }
 
-    public void setTimeBgDivisionLineColor(int textColor) {
-        if (null != mTimeTextBgDivisionLinePaint) {
-            mTimeBgDivisionLineColor = textColor;
-            mTimeTextBgDivisionLinePaint.setColor(mTimeBgDivisionLineColor);
+    public void setTimeBgDivisionLineColor(int color) {
+        mTimeBgDivisionLineColor = color;
+        if (null != mTimeBgDivisionLinePaint) {
+            mTimeBgDivisionLinePaint.setColor(mTimeBgDivisionLineColor);
         }
     }
 
     public void setTimeBgDivisionLineSize(float size) {
-        if (null != mTimeTextBgDivisionLinePaint) {
-            mTimeBgDivisionLineSize = size;
-            mTimeTextBgDivisionLinePaint.setStrokeWidth(mTimeBgDivisionLineSize);
+        mTimeBgDivisionLineSize = Utils.dp2px(mContext, size);
+        if (null != mTimeBgDivisionLinePaint) {
+            mTimeBgDivisionLinePaint.setStrokeWidth(mTimeBgDivisionLineSize);
         }
+    }
+
+    public void setIsShowTimeBgBorder(boolean isShow) {
+        isShowTimeBgBorder = isShow;
+        if (isShowTimeBgBorder) {
+            initTimeBgBorderPaint();
+        } else {
+            mTimeBgBorderPaint = null;
+            mTimeBgBorderSize = 0;
+        }
+    }
+
+    public void setTimeBgBorderColor(int color) {
+        mTimeBgBorderColor = color;
+        if (null != mTimeBgBorderPaint) {
+            mTimeBgBorderPaint.setColor(mTimeBgBorderColor);
+        }
+    }
+
+    public void setTimeBgBorderSize(float size) {
+        mTimeBgBorderSize = Utils.dp2px(mContext, size);
+        if (null != mTimeBgBorderPaint && !isDrawBg) {
+            mTimeBgBorderPaint.setStrokeWidth(mTimeBgBorderSize);
+            mTimeBgBorderPaint.setStyle(Paint.Style.STROKE);
+        }
+    }
+
+    public void setTimeBgBorderRadius(float size) {
+        mTimeBgBorderRadius = Utils.dp2px(mContext, size);
     }
 
 }

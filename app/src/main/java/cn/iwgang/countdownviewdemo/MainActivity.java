@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         long time2 = (long)30 * 60 * 1000;
         mCvCountdownViewTest2.start(time2);
 
+        CountdownView cvCountdownViewTest211 = (CountdownView)findViewById(R.id.cv_countdownViewTest211);
+        cvCountdownViewTest211.setTag("test21");
+        long time211 = (long)30 * 60 * 1000;
+        cvCountdownViewTest211.start(time211);
+
         CountdownView mCvCountdownViewTest21 = (CountdownView)findViewById(R.id.cv_countdownViewTest21);
         mCvCountdownViewTest21.setTag("test21");
         long time21 = (long)24 * 60 * 60 * 1000;

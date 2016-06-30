@@ -455,6 +455,29 @@ public class CountdownView extends View {
                 }
                 isInvalidate = true;
             }
+
+            Boolean isShowTimeBgBorder = backgroundInfo.isShowTimeBgBorder();
+            if (null != isShowTimeBgBorder) {
+                backgroundCountdown.setIsShowTimeBgBorder(isShowTimeBgBorder);
+
+                if (isShowTimeBgBorder) {
+                    Integer borderColor = backgroundInfo.getBorderColor();
+                    if (null != borderColor) {
+                        backgroundCountdown.setTimeBgBorderColor(borderColor);
+                    }
+
+                    Float borderSize = backgroundInfo.getBorderSize();
+                    if (null != borderSize) {
+                        backgroundCountdown.setTimeBgBorderSize(borderSize);
+                    }
+
+                    Float borderRadius = backgroundInfo.getBorderRadius();
+                    if (null != borderRadius) {
+                        backgroundCountdown.setTimeBgBorderRadius(borderRadius);
+                    }
+                }
+                isReLayout = true;
+            }
         }
 
         if (isReLayout) {

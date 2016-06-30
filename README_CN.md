@@ -8,10 +8,10 @@
 # CountdownView
 Android倒计时控件，使用Canvas绘制，支持多种样式
 
-[下载DemoAPK](https://raw.githubusercontent.com/iwgang/CountdownView/master/Demo_2.0.apk)
+[下载DemoAPK](https://raw.githubusercontent.com/iwgang/CountdownView/master/demoapk/Demo_2.1.apk)
 
 ### Screenshot
-![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_main.gif)  
+![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_main.png)  
 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config.gif) 
 ![](https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/g_config2.gif)  
@@ -19,7 +19,7 @@ Android倒计时控件，使用Canvas绘制，支持多种样式
 <img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_list.jpg" width="400px" height="650px"/>
 
 ### Gradle
-    compile 'com.github.iwgang:countdownview:2.0'
+    compile 'com.github.iwgang:countdownview:2.1'
 
 ### Code
 ```
@@ -93,6 +93,10 @@ suffixMinuteRightMargin  | dimension | 0
 suffixSecondLeftMargin  | dimension | 0
 suffixSecondRightMargin  | dimension | 0
 suffixMillisecondLeftMargin | dimension | 0
+isShowTimeBgBorder | boolean | false
+timeBgBorderColor  | color | #000000
+timeBgBorderSize  | dimension | 1dp
+timeBgBorderRadius  | dimension | 0
 
 ### 其它
 * **多个CountdownView时，给每个指定值**
