@@ -115,10 +115,10 @@ class BackgroundCountdown extends BaseCountdown {
         if (isShowDay) {
             // initialize day background and border rectF
             if (isShowTimeBgBorder) {
-                mDayBgBorderRectF = new RectF(mLeftPaddingSize, topPaddingSize, mLeftPaddingSize + mDayTimeBgWidth + (mTimeBgBorderSize * 2), topPaddingSize + mDayTimeBgWidth + (mTimeBgBorderSize * 2));
-                mDayBgRectF = new RectF(mLeftPaddingSize + mTimeBgBorderSize, topPaddingSize + mTimeBgBorderSize, mLeftPaddingSize + mDayTimeBgWidth + mTimeBgBorderSize, topPaddingSize + mDayTimeBgWidth + mTimeBgBorderSize);
+                mDayBgBorderRectF = new RectF(mLeftPaddingSize, topPaddingSize, mLeftPaddingSize + mDayTimeBgWidth + (mTimeBgBorderSize * 2), topPaddingSize + mTimeBgSize + (mTimeBgBorderSize * 2));
+                mDayBgRectF = new RectF(mLeftPaddingSize + mTimeBgBorderSize, topPaddingSize + mTimeBgBorderSize, mLeftPaddingSize + mDayTimeBgWidth + mTimeBgBorderSize, topPaddingSize + mTimeBgSize + mTimeBgBorderSize);
             } else {
-                mDayBgRectF = new RectF(mLeftPaddingSize, topPaddingSize, mLeftPaddingSize + mDayTimeBgWidth, topPaddingSize + mDayTimeBgWidth);
+                mDayBgRectF = new RectF(mLeftPaddingSize, topPaddingSize, mLeftPaddingSize + mDayTimeBgWidth, topPaddingSize + mTimeBgSize);
             }
             // hour left point
             mHourLeft = mLeftPaddingSize + mDayTimeBgWidth + mSuffixDayTextWidth + mSuffixDayLeftMargin + mSuffixDayRightMargin + (mTimeBgBorderSize * 2);
