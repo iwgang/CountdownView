@@ -163,6 +163,30 @@
             app:timeTextSize="22sp" />
 
         <cn.iwgang.countdownview.CountdownView
+            android:id="@+id/cv_convertDaysToHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            app:isShowDay="false"
+            app:convertDaysToHours="true"
+            app:isShowHour="true"
+            app:isShowMillisecond="true"
+            app:isShowMinute="true"
+            app:isShowSecond="true"
+            app:isTimeTextBold="true"
+            app:suffixDay="天"
+            app:suffixGravity="bottom"
+            app:suffixHour="小时"
+            app:suffixMillisecond="毫秒"
+            app:suffixMinute="分钟"
+            app:suffixSecond="秒"
+            app:suffixTextColor="#000000"
+            app:suffixTextSize="12sp"
+            app:timeTextColor="#000000"
+            app:timeTextSize="22sp"/>
+
+        <cn.iwgang.countdownview.CountdownView
             android:id="@+id/cv_countdownViewTest5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
