@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements CountdownView.OnC
         long time4 = (long)150 * 24 * 60 * 60 * 1000;
         mCvCountdownViewTest4.start(time4);
 
+        CountdownView cv_convertDaysToHours = (CountdownView) findViewById(R.id.cv_convertDaysToHours);
+        // long timeConvertDaysToHours = (long) 150 * 24 * 60 * 60 * 1000;
+        cv_convertDaysToHours.start(time4);
+
         final CountdownView mCvCountdownViewTest5 = (CountdownView)findViewById(R.id.cv_countdownViewTest5);
         new AsyncTask<Void, Long, Void>() {
             @Override

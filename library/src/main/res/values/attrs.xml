@@ -19,6 +19,8 @@
         <attr name="isShowSecond" format="boolean" />
         <attr name="isShowMillisecond" format="boolean" />
 
+        <attr name="convertDaysToHours" format="boolean" />
+
         <attr name="isSuffixTextBold" format="boolean" />
         <attr name="suffixTextSize" format="dimension" />
         <attr name="suffixTextColor" format="color" />

@@ -257,8 +257,16 @@ public class CountdownView extends View {
     public void updateShow(long ms) {
         this.mRemainTime = ms;
 
-        int day = (int)(ms / (1000 * 60 * 60 * 24));
-        int hour = (int)((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        int day = 0;
+        int hour = 0;
+
+        if (!mCountdown.convertDaysToHours) {
+            day = (int) (ms / (1000 * 60 * 60 * 24));
+            hour = (int) ((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        } else {
+            hour = (int) (ms / (1000 * 60 * 60));
+        }
+
         int minute = (int)((ms % (1000 * 60 * 60)) / (1000 * 60));
         int second = (int)((ms % (1000 * 60)) / 1000);
         int millisecond = (int)(ms % 1000);

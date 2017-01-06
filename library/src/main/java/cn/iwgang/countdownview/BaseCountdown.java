@@ -19,13 +19,15 @@ class BaseCountdown {
 
     public int mDay, mHour, mMinute, mSecond, mMillisecond;
     public boolean isShowDay, isShowHour, isShowMinute, isShowSecond, isShowMillisecond;
+
+    public boolean convertDaysToHours;
     public boolean mHasSetIsShowDay, mHasSetIsShowHour;
 
     protected Context mContext;
     protected String mSuffix, mSuffixDay, mSuffixHour, mSuffixMinute, mSuffixSecond, mSuffixMillisecond;
     protected float mSuffixDayTextWidth, mSuffixHourTextWidth, mSuffixMinuteTextWidth, mSuffixSecondTextWidth, mSuffixMillisecondTextWidth;
     protected boolean isDayLargeNinetyNine;
-    protected Paint mTimeTextPaint, mSuffixTextPaint;
+    protected Paint mTimeTextPaint, mSuffixTextPaint, mDynamicWidthPaint;
     protected float mLeftPaddingSize;
     protected float mSuffixDayLeftMargin, mSuffixDayRightMargin;
     protected float mSuffixSecondLeftMargin, mSuffixSecondRightMargin;
@@ -45,7 +47,7 @@ class BaseCountdown {
     private int mSuffixTextColor;
     private float mSuffixTextSize;
     private boolean isSuffixTextBold;
-    private float mDayTimeTextWidth;
+    private float mDayTimeTextWidth, mHourTimeTextWidth;
     private float mTimeTextBaseline;
 
     private float mTempSuffixDayLeftMargin, mTempSuffixDayRightMargin;
@@ -65,6 +67,8 @@ class BaseCountdown {
         isShowMinute = ta.getBoolean(R.styleable.CountdownView_isShowMinute, true);
         isShowSecond = ta.getBoolean(R.styleable.CountdownView_isShowSecond, true);
         isShowMillisecond = ta.getBoolean(R.styleable.CountdownView_isShowMillisecond, false);
+
+        convertDaysToHours = ta.getBoolean(R.styleable.CountdownView_convertDaysToHours, false);
 
         isSuffixTextBold = ta.getBoolean(R.styleable.CountdownView_isSuffixTextBold, false);
         mSuffixTextSize = ta.getDimension(R.styleable.CountdownView_suffixTextSize, Utils.sp2px(mContext, 12));
@@ -164,6 +168,10 @@ class BaseCountdown {
         if (isSuffixTextBold) {
             mSuffixTextPaint.setFakeBoldText(true);
         }
+
+        mDynamicWidthPaint = new Paint(); // = mSuffixTextPaint;
+        mDynamicWidthPaint.setTextSize(mTimeTextSize);
+        mDynamicWidthPaint.setFakeBoldText(isTimeTextBold);
     }
 
     private void initSuffix() {
@@ -443,10 +451,6 @@ class BaseCountdown {
         width += (mSuffixDayLeftMargin + mSuffixDayRightMargin + mSuffixHourLeftMargin + mSuffixHourRightMargin
                 + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin + mSuffixSecondLeftMargin + mSuffixSecondRightMargin + mSuffixMillisecondLeftMargin);
 
-        if (isShowHour) {
-            width += timeWidth;
-        }
-
         if (isShowMinute) {
             width += timeWidth;
         }
@@ -461,27 +465,38 @@ class BaseCountdown {
         return width;
     }
 
+    private float getDayAndHourContentWidth() {
+        float width = 0;
+
+        Rect tempRect = new Rect();
+
+        if (isShowDay) {
+            String tempDay = Utils.formatNum(mDay);
+            mDynamicWidthPaint.getTextBounds(tempDay, 0, tempDay.length(), tempRect);
+            mDayTimeTextWidth = tempRect.width();
+
+            width += mDayTimeTextWidth;
+        }
+
+        if (isShowHour) {
+            String tempHour = Utils.formatNum(mHour);
+            mDynamicWidthPaint.getTextBounds(tempHour, 0, tempHour.length(), tempRect);
+            mHourTimeTextWidth = tempRect.width();
+
+            width += mHourTimeTextWidth;
+        }
+
+        return width;
+    }
+
     /**
      * get all view width
      * @return all view width
      */
     public int getAllContentWidth() {
-        float width = getAllContentWidthBase(mTimeTextWidth);
+        float width = getDayAndHourContentWidth() + getAllContentWidthBase(mTimeTextWidth);
 
-        if (isShowDay) {
-            if (isDayLargeNinetyNine) {
-                Rect rect = new Rect();
-                String tempDay = String.valueOf(mDay);
-                mTimeTextPaint.getTextBounds(tempDay, 0, tempDay.length(), rect);
-                mDayTimeTextWidth = rect.width();
-                width += mDayTimeTextWidth;
-            } else {
-                mDayTimeTextWidth = mTimeTextWidth;
-                width += mTimeTextWidth;
-            }
-        }
-
-        return (int)Math.ceil(width);
+        return (int) Math.ceil(width);
     }
 
     public int getAllContentHeight() {
@@ -516,14 +531,14 @@ class BaseCountdown {
 
         if (isShowHour) {
             // draw hour text
-            canvas.drawText(Utils.formatNum(mHour), mHourLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
+            canvas.drawText(Utils.formatNum(mHour), mHourLeft + mHourTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
             if (mSuffixHourTextWidth > 0) {
                 // draw hour suffix
-                canvas.drawText(mSuffixHour, mHourLeft + mTimeTextWidth + mSuffixHourLeftMargin, mSuffixHourTextBaseline, mSuffixTextPaint);
+                canvas.drawText(mSuffixHour, mHourLeft + mHourTimeTextWidth + mSuffixHourLeftMargin, mSuffixHourTextBaseline, mSuffixTextPaint);
             }
 
             // minute left point
-            mMinuteLeft = mHourLeft + mTimeTextWidth + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin;
+            mMinuteLeft = mHourLeft + mHourTimeTextWidth + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin;
         } else {
             // minute left point
             mMinuteLeft = mHourLeft;

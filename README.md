@@ -73,6 +73,7 @@ isShowHour  | boolean | auto show (has value show if not hide)
 isShowMinute  | boolean | true
 isShowSecond  | boolean | true
 isShowMillisecond  | boolean | false
+convertDaysToHours | boolean | false
 suffixTextSize | dimension | 12sp
 suffixTextColor  | color | #000000
 isSuffixTextBold  | boolean | false
