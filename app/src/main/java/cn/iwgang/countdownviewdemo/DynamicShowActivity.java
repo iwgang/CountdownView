@@ -22,7 +22,9 @@ public class DynamicShowActivity extends AppCompatActivity {
 
     private CountdownView mCvCountdownViewTest, mCvCountdownViewTestHasBg;
     private View mLlBackgroundConfigContainer;
+    private View mLlConvertDaysToHoursContainer;
 
+    private boolean isConvertDaysToHours = false;
     private boolean hasBackgroundCountdownView = false;
     private float timeTextSize = 22;
     private float suffixTextSize = 12;
@@ -40,6 +42,7 @@ public class DynamicShowActivity extends AppCompatActivity {
         mCvCountdownViewTest = (CountdownView) findViewById(R.id.cv_countdownViewTest);
         mCvCountdownViewTestHasBg = (CountdownView) findViewById(R.id.cv_countdownViewTestHasBg);
         mLlBackgroundConfigContainer = findViewById(R.id.ll_backgroundConfigContainer);
+        mLlConvertDaysToHoursContainer = findViewById(R.id.ll_convertDaysToHoursContainer);
 
         mCvCountdownViewTest.start(TIME);
 
@@ -491,10 +494,26 @@ public class DynamicShowActivity extends AppCompatActivity {
                 if (isChecked) {
                     mCvCountdownViewTest.stop();
                     mCvCountdownViewTestHasBg.start(TIME);
+                    mLlConvertDaysToHoursContainer.setVisibility(View.GONE);
                 } else {
                     mCvCountdownViewTestHasBg.stop();
                     mCvCountdownViewTest.start(TIME);
+                    mLlConvertDaysToHoursContainer.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        final Button btnConvertDaysToHours = (Button) findViewById(R.id.btn_convertDaysToHours);
+        findViewById(R.id.btn_convertDaysToHours).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isConvertDaysToHours = !isConvertDaysToHours;
+                btnConvertDaysToHours.setText(isConvertDaysToHours ? "转换" : "不转换");
+
+                DynamicConfig.Builder dynamicConfigBuilder = new DynamicConfig.Builder();
+                dynamicConfigBuilder.setConvertDaysToHours(isConvertDaysToHours);
+                dynamicConfigBuilder.setShowDay(!isConvertDaysToHours);
+                mCvCountdownViewTest.dynamicShow(dynamicConfigBuilder.build());
             }
         });
 

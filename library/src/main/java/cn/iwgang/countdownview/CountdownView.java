@@ -47,7 +47,6 @@ public class CountdownView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
         int contentAllWidth = mCountdown.getAllContentWidth();
         int contentAllHeight = mCountdown.getAllContentHeight();
         int viewWidth = measureSize(1, contentAllWidth, widthMeasureSpec);
@@ -257,21 +256,7 @@ public class CountdownView extends View {
     public void updateShow(long ms) {
         this.mRemainTime = ms;
 
-        int day = 0;
-        int hour = 0;
-
-        if (!mCountdown.convertDaysToHours) {
-            day = (int) (ms / (1000 * 60 * 60 * 24));
-            hour = (int) ((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        } else {
-            hour = (int) (ms / (1000 * 60 * 60));
-        }
-
-        int minute = (int)((ms % (1000 * 60 * 60)) / (1000 * 60));
-        int second = (int)((ms % (1000 * 60)) / 1000);
-        int millisecond = (int)(ms % 1000);
-
-        mCountdown.setTimes(day, hour, minute, second, millisecond);
+        reSetTime(ms);
 
         // interval callback
         if (mInterval > 0 && null != mOnCountdownIntervalListener) {
@@ -288,6 +273,24 @@ public class CountdownView extends View {
         } else {
             invalidate();
         }
+    }
+
+    private void reSetTime(long ms) {
+        int day = 0;
+        int hour;
+
+        if (!mCountdown.isConvertDaysToHours) {
+            day = (int) (ms / (1000 * 60 * 60 * 24));
+            hour = (int) ((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        } else {
+            hour = (int) (ms / (1000 * 60 * 60));
+        }
+
+        int minute = (int)((ms % (1000 * 60 * 60)) / (1000 * 60));
+        int second = (int)((ms % (1000 * 60)) / 1000);
+        int millisecond = (int)(ms % 1000);
+
+        mCountdown.setTimes(day, hour, minute, second, millisecond);
     }
 
     public interface OnCountdownEndListener {
@@ -486,6 +489,12 @@ public class CountdownView extends View {
                 }
                 isReLayout = true;
             }
+        }
+
+        Boolean tempIsConvertDaysToHours = dynamicConfig.isConvertDaysToHours();
+        if (null != tempIsConvertDaysToHours && mCountdown.setConvertDaysToHours(tempIsConvertDaysToHours)) {
+            reSetTime(getRemainTime());
+            isReLayout = true;
         }
 
         if (isReLayout) {

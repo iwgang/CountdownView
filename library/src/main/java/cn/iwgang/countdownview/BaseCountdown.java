@@ -20,14 +20,14 @@ class BaseCountdown {
     public int mDay, mHour, mMinute, mSecond, mMillisecond;
     public boolean isShowDay, isShowHour, isShowMinute, isShowSecond, isShowMillisecond;
 
-    public boolean convertDaysToHours;
+    public boolean isConvertDaysToHours;
     public boolean mHasSetIsShowDay, mHasSetIsShowHour;
 
     protected Context mContext;
     protected String mSuffix, mSuffixDay, mSuffixHour, mSuffixMinute, mSuffixSecond, mSuffixMillisecond;
     protected float mSuffixDayTextWidth, mSuffixHourTextWidth, mSuffixMinuteTextWidth, mSuffixSecondTextWidth, mSuffixMillisecondTextWidth;
     protected boolean isDayLargeNinetyNine;
-    protected Paint mTimeTextPaint, mSuffixTextPaint, mDynamicWidthPaint;
+    protected Paint mTimeTextPaint, mSuffixTextPaint, mMeasureHourWidthPaint;
     protected float mLeftPaddingSize;
     protected float mSuffixDayLeftMargin, mSuffixDayRightMargin;
     protected float mSuffixSecondLeftMargin, mSuffixSecondRightMargin;
@@ -67,9 +67,9 @@ class BaseCountdown {
         isShowMinute = ta.getBoolean(R.styleable.CountdownView_isShowMinute, true);
         isShowSecond = ta.getBoolean(R.styleable.CountdownView_isShowSecond, true);
         isShowMillisecond = ta.getBoolean(R.styleable.CountdownView_isShowMillisecond, false);
-
-        convertDaysToHours = ta.getBoolean(R.styleable.CountdownView_convertDaysToHours, false);
-
+        if (ta.getBoolean(R.styleable.CountdownView_isHideTimeBackground, true)) {
+            isConvertDaysToHours = ta.getBoolean(R.styleable.CountdownView_isConvertDaysToHours, false);
+        }
         isSuffixTextBold = ta.getBoolean(R.styleable.CountdownView_isSuffixTextBold, false);
         mSuffixTextSize = ta.getDimension(R.styleable.CountdownView_suffixTextSize, Utils.sp2px(mContext, 12));
         mSuffixTextColor = ta.getColor(R.styleable.CountdownView_suffixTextColor, 0xFF000000);
@@ -169,9 +169,9 @@ class BaseCountdown {
             mSuffixTextPaint.setFakeBoldText(true);
         }
 
-        mDynamicWidthPaint = new Paint(); // = mSuffixTextPaint;
-        mDynamicWidthPaint.setTextSize(mTimeTextSize);
-        mDynamicWidthPaint.setFakeBoldText(isTimeTextBold);
+        mMeasureHourWidthPaint = new Paint();
+        mMeasureHourWidthPaint.setTextSize(mTimeTextSize);
+        mMeasureHourWidthPaint.setFakeBoldText(true);
     }
 
     private void initSuffix() {
@@ -451,6 +451,12 @@ class BaseCountdown {
         width += (mSuffixDayLeftMargin + mSuffixDayRightMargin + mSuffixHourLeftMargin + mSuffixHourRightMargin
                 + mSuffixMinuteLeftMargin + mSuffixMinuteRightMargin + mSuffixSecondLeftMargin + mSuffixSecondRightMargin + mSuffixMillisecondLeftMargin);
 
+        if (isConvertDaysToHours) {
+            width += getDayAndHourContentWidth();
+        } else if (isShowHour) {
+            width += timeWidth;
+        }
+
         if (isShowMinute) {
             width += timeWidth;
         }
@@ -472,7 +478,7 @@ class BaseCountdown {
 
         if (isShowDay) {
             String tempDay = Utils.formatNum(mDay);
-            mDynamicWidthPaint.getTextBounds(tempDay, 0, tempDay.length(), tempRect);
+            mTimeTextPaint.getTextBounds(tempDay, 0, tempDay.length(), tempRect);
             mDayTimeTextWidth = tempRect.width();
 
             width += mDayTimeTextWidth;
@@ -480,7 +486,7 @@ class BaseCountdown {
 
         if (isShowHour) {
             String tempHour = Utils.formatNum(mHour);
-            mDynamicWidthPaint.getTextBounds(tempHour, 0, tempHour.length(), tempRect);
+            mMeasureHourWidthPaint.getTextBounds(tempHour, 0, tempHour.length(), tempRect);
             mHourTimeTextWidth = tempRect.width();
 
             width += mHourTimeTextWidth;
@@ -494,7 +500,20 @@ class BaseCountdown {
      * @return all view width
      */
     public int getAllContentWidth() {
-        float width = getDayAndHourContentWidth() + getAllContentWidthBase(mTimeTextWidth);
+        float width = getAllContentWidthBase(mTimeTextWidth);
+
+        if (!isConvertDaysToHours && isShowDay) {
+            if (isDayLargeNinetyNine) {
+                Rect rect = new Rect();
+                String tempDay = String.valueOf(mDay);
+                mTimeTextPaint.getTextBounds(tempDay, 0, tempDay.length(), rect);
+                mDayTimeTextWidth = rect.width();
+                width += mDayTimeTextWidth;
+            } else {
+                mDayTimeTextWidth = mTimeTextWidth;
+                width += mTimeTextWidth;
+            }
+        }
 
         return (int) Math.ceil(width);
     }
@@ -531,14 +550,15 @@ class BaseCountdown {
 
         if (isShowHour) {
             // draw hour text
-            canvas.drawText(Utils.formatNum(mHour), mHourLeft + mHourTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
+            float curTimeTextWidth = isConvertDaysToHours ? mHourTimeTextWidth : mTimeTextWidth;
+            canvas.drawText(Utils.formatNum(mHour), mHourLeft + curTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
             if (mSuffixHourTextWidth > 0) {
                 // draw hour suffix
-                canvas.drawText(mSuffixHour, mHourLeft + mHourTimeTextWidth + mSuffixHourLeftMargin, mSuffixHourTextBaseline, mSuffixTextPaint);
+                canvas.drawText(mSuffixHour, mHourLeft + curTimeTextWidth + mSuffixHourLeftMargin, mSuffixHourTextBaseline, mSuffixTextPaint);
             }
 
             // minute left point
-            mMinuteLeft = mHourLeft + mHourTimeTextWidth + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin;
+            mMinuteLeft = mHourLeft + curTimeTextWidth + mSuffixHourTextWidth + mSuffixHourLeftMargin + mSuffixHourRightMargin;
         } else {
             // minute left point
             mMinuteLeft = mHourLeft;
@@ -758,6 +778,12 @@ class BaseCountdown {
     public void setSuffix(String suffix) {
         mSuffix = suffix;
         setSuffix(mSuffix, mSuffix, mSuffix, mSuffix, mSuffix);
+    }
+
+    public boolean setConvertDaysToHours(boolean isConvertDaysToHours) {
+        if (this.isConvertDaysToHours == isConvertDaysToHours) return false;
+        this.isConvertDaysToHours = isConvertDaysToHours;
+        return true;
     }
 
     public boolean setSuffix(String suffixDay, String suffixHour, String suffixMinute, String suffixSecond, String suffixMillisecond) {

@@ -104,6 +104,10 @@ public class DynamicConfig {
         return mBuilder.suffixMillisecondLeftMargin;
     }
 
+    public Boolean isConvertDaysToHours() {
+        return mBuilder.isConvertDaysToHours;
+    }
+
     public Boolean isShowDay() {
         return mBuilder.isShowDay;
     }
@@ -142,6 +146,7 @@ public class DynamicConfig {
         private Boolean isShowMinute;
         private Boolean isShowSecond;
         private Boolean isShowMillisecond;
+        private boolean isConvertDaysToHours;
         private BackgroundInfo backgroundInfo;
         private String suffix, suffixDay, suffixHour, suffixMinute, suffixSecond, suffixMillisecond;
         private Float suffixLRMargin;
@@ -319,6 +324,15 @@ public class DynamicConfig {
          */
         public Builder setSuffixGravity(int suffixGravity) {
             this.suffixGravity = suffixGravity;
+            return this;
+        }
+
+        /**
+         * Set convert days to hours
+         * @param isConvertDaysToHours true convert, false no convert
+         */
+        public Builder setConvertDaysToHours(Boolean isConvertDaysToHours) {
+            this.isConvertDaysToHours = isConvertDaysToHours;
             return this;
         }
 

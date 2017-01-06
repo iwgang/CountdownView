@@ -19,7 +19,7 @@ Android countdown view，use canvas draw，supports multiple styles
 <img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_list.jpg" width="400px" height="650px"/>
 
 ### Gradle
-    compile 'com.github.iwgang:countdownview:2.1.2'
+    compile 'com.github.iwgang:countdownview:2.1.3'
 
 ### Code
 ```
@@ -73,7 +73,7 @@ isShowHour  | boolean | auto show (has value show if not hide)
 isShowMinute  | boolean | true
 isShowSecond  | boolean | true
 isShowMillisecond  | boolean | false
-convertDaysToHours | boolean | false
+isConvertDaysToHours | boolean | false
 suffixTextSize | dimension | 12sp
 suffixTextColor  | color | #000000
 isSuffixTextBold  | boolean | false

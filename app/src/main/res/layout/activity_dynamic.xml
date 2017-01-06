@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTestHasBg"
@@ -29,7 +29,7 @@
         app:timeBgRadius="3dp"
         app:timeBgSize="40dp"
         app:timeTextColor="#FFFFFF"
-        app:timeTextSize="22sp" />
+        app:timeTextSize="22sp"/>
 
     <cn.iwgang.countdownview.CountdownView
         android:id="@+id/cv_countdownViewTest"
@@ -52,7 +52,7 @@
         app:suffixTextColor="#000000"
         app:suffixTextSize="12sp"
         app:timeTextColor="#000000"
-        app:timeTextSize="22sp" />
+        app:timeTextSize="22sp"/>
 
 
     <ScrollView
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:checked="false"
-                android:text="带背景的CountdownView" />
+                android:text="带背景的CountdownView"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="组合一" />
+                    android:text="组合一"/>
 
                 <Button
                     android:id="@+id/btn_theme2"
@@ -94,7 +94,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="组合二" />
+                    android:text="组合二"/>
 
                 <Button
                     android:id="@+id/btn_theme3"
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="还原" />
+                    android:text="还原"/>
 
             </LinearLayout>
 
@@ -116,20 +116,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="时间字体："
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <Button
                     android:id="@+id/btn_timeTextSizePlus"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
-                    android:text="+" />
+                    android:text="+"/>
 
                 <Button
                     android:id="@+id/btn_timeTextSizeSubtract"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:text="-" />
+                    android:text="-"/>
 
 
                 <Button
@@ -139,7 +139,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="时间颜色" />
+                    android:text="时间颜色"/>
 
 
             </LinearLayout>
@@ -154,19 +154,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="Suffix字体："
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <Button
                     android:id="@+id/btn_suffixTextSizePlus"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:text="+" />
+                    android:text="+"/>
 
                 <Button
                     android:id="@+id/btn_suffixTextSizeSubtract"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:text="-" />
+                    android:text="-"/>
 
 
                 <Button
@@ -176,7 +176,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Suffix颜色" />
+                    android:text="Suffix颜色"/>
 
             </LinearLayout>
 
@@ -190,7 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SuffixGravity: "
-                    android:textSize="14.5sp" />
+                    android:textSize="14.5sp"/>
 
                 <Button
                     android:id="@+id/btn_suffixGravityTop"
@@ -198,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Top" />
+                    android:text="Top"/>
 
                 <Button
                     android:id="@+id/btn_suffixGravityCenter"
@@ -206,7 +206,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Center" />
+                    android:text="Center"/>
 
                 <Button
                     android:id="@+id/btn_suffixGravityBottom"
@@ -214,7 +214,30 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Bottom" />
+                    android:text="Bottom"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_convertDaysToHoursContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="天转换为小时: "
+                    android:textSize="14.5sp"/>
+
+                <Button
+                    android:id="@+id/btn_convertDaysToHours"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="转换"/>
 
             </LinearLayout>
 
@@ -229,20 +252,20 @@
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_weight="1"
-                    android:background="#999999" />
+                    android:background="#999999"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="Time Show Configure"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"/>
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_weight="1"
-                    android:background="#999999" />
+                    android:background="#999999"/>
 
             </LinearLayout>
 
@@ -258,21 +281,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="天" />
+                    android:text="天"/>
 
                 <CheckBox
                     android:id="@+id/cb_hour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="时" />
+                    android:text="时"/>
 
                 <CheckBox
                     android:id="@+id/cb_minute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="分" />
+                    android:text="分"/>
 
 
                 <CheckBox
@@ -280,14 +303,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="秒" />
+                    android:text="秒"/>
 
                 <CheckBox
                     android:id="@+id/cb_millisecond"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="毫秒" />
+                    android:text="毫秒"/>
 
                 <Button
                     android:id="@+id/btn_refTimeShow"
@@ -295,7 +318,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginLeft="10dp"
-                    android:text="刷新" />
+                    android:text="刷新"/>
             </LinearLayout>
 
             <LinearLayout
@@ -309,20 +332,20 @@
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_weight="1"
-                    android:background="#999999" />
+                    android:background="#999999"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="Suffix"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"/>
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_weight="1"
-                    android:background="#999999" />
+                    android:background="#999999"/>
 
             </LinearLayout>
 
@@ -336,42 +359,42 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="天" />
+                    android:hint="天"/>
 
                 <EditText
                     android:id="@+id/et_suffixHour"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="小时" />
+                    android:hint="小时"/>
 
                 <EditText
                     android:id="@+id/et_suffixMinute"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="分钟" />
+                    android:hint="分钟"/>
 
                 <EditText
                     android:id="@+id/et_suffixSecond"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="秒钟" />
+                    android:hint="秒钟"/>
 
                 <EditText
                     android:id="@+id/et_suffixMillisecond"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="毫秒" />
+                    android:hint="毫秒"/>
 
                 <Button
                     android:id="@+id/btm_refSuffix"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="刷新" />
+                    android:text="刷新"/>
 
             </LinearLayout>
 
@@ -393,20 +416,20 @@
                         android:layout_width="0dp"
                         android:layout_height="0.5dp"
                         android:layout_weight="1"
-                        android:background="#999999" />
+                        android:background="#999999"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="Background"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"/>
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0.5dp"
                         android:layout_weight="1"
-                        android:background="#999999" />
+                        android:background="#999999"/>
 
                 </LinearLayout>
 
@@ -419,19 +442,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="大小：" />
+                        android:text="大小："/>
 
                     <Button
                         android:id="@+id/btn_bgSizePlus"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:text="+" />
+                        android:text="+"/>
 
                     <Button
                         android:id="@+id/btn_bgSizeSubtract"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:text="-" />
+                        android:text="-"/>
 
 
                     <TextView
@@ -439,19 +462,19 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="圆角：" />
+                        android:text="圆角："/>
 
                     <Button
                         android:id="@+id/btn_bgRadiusPlus"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:text="+" />
+                        android:text="+"/>
 
                     <Button
                         android:id="@+id/btn_bgRadiusSubtract"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:text="-" />
+                        android:text="-"/>
 
                     <Button
                         android:id="@+id/btn_modBgColor"
@@ -460,7 +483,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="2"
                         android:gravity="center"
-                        android:text="背景颜色" />
+                        android:text="背景颜色"/>
 
                 </LinearLayout>
 
@@ -476,7 +499,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:text="divider" />
+                        android:text="divider"/>
 
                     <Button
                         android:id="@+id/btn_modBgDivisionLineColor"
@@ -485,7 +508,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Divider颜色" />
+                        android:text="Divider颜色"/>
 
                     <CheckBox
                         android:id="@+id/cb_bgBorder"
@@ -493,7 +516,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:checked="true"
-                        android:text="边框" />
+                        android:text="边框"/>
 
                     <Button
                         android:id="@+id/btn_modBgBorderColor"
@@ -502,7 +525,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="边框颜色" />
+                        android:text="边框颜色"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -520,19 +543,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="边框大小：" />
+                            android:text="边框大小："/>
 
                         <Button
                             android:id="@+id/btn_bgBorderSizePlus"
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
-                            android:text="+" />
+                            android:text="+"/>
 
                         <Button
                             android:id="@+id/btn_bgBorderSizeSubtract"
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
-                            android:text="-" />
+                            android:text="-"/>
 
                     </LinearLayout>
 
@@ -547,19 +570,19 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
-                            android:text="边框圆角：" />
+                            android:text="边框圆角："/>
 
                         <Button
                             android:id="@+id/btn_bgBorderRadiusPlus"
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
-                            android:text="+" />
+                            android:text="+"/>
 
                         <Button
                             android:id="@+id/btn_bgBorderRadiusSubtract"
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
-                            android:text="-" />
+                            android:text="-"/>
                     </LinearLayout>
                 </LinearLayout>
 

@@ -19,7 +19,7 @@ Android倒计时控件，使用Canvas绘制，支持多种样式
 <img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_list.jpg" width="400px" height="650px"/>
 
 ### Gradle
-    compile 'com.github.iwgang:countdownview:2.1.2'
+    compile 'com.github.iwgang:countdownview:2.1.3'
 
 ### Code
 ```
@@ -73,6 +73,7 @@ isShowHour  | boolean | 自动显示 (小时 > 1 显示， = 0 隐藏)
 isShowMinute  | boolean | true
 isShowSecond  | boolean | true
 isShowMillisecond  | boolean | false
+isConvertDaysToHours | boolean | false
 suffixTextSize | dimension | 12sp
 suffixTextColor  | color | #000000
 isSuffixTextBold  | boolean | false
