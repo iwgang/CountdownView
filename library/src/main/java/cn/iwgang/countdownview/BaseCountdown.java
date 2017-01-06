@@ -19,6 +19,8 @@ class BaseCountdown {
 
     public int mDay, mHour, mMinute, mSecond, mMillisecond;
     public boolean isShowDay, isShowHour, isShowMinute, isShowSecond, isShowMillisecond;
+
+    public boolean convertDaysToHours;
     public boolean mHasSetIsShowDay, mHasSetIsShowHour;
 
     protected Context mContext;
@@ -65,6 +67,8 @@ class BaseCountdown {
         isShowMinute = ta.getBoolean(R.styleable.CountdownView_isShowMinute, true);
         isShowSecond = ta.getBoolean(R.styleable.CountdownView_isShowSecond, true);
         isShowMillisecond = ta.getBoolean(R.styleable.CountdownView_isShowMillisecond, false);
+
+        convertDaysToHours = ta.getBoolean(R.styleable.CountdownView_convertDaysToHours, false);
 
         isSuffixTextBold = ta.getBoolean(R.styleable.CountdownView_isSuffixTextBold, false);
         mSuffixTextSize = ta.getDimension(R.styleable.CountdownView_suffixTextSize, Utils.sp2px(mContext, 12));
