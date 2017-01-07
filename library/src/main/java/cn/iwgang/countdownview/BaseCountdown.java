@@ -171,7 +171,9 @@ class BaseCountdown {
 
         mMeasureHourWidthPaint = new Paint();
         mMeasureHourWidthPaint.setTextSize(mTimeTextSize);
-        mMeasureHourWidthPaint.setFakeBoldText(true);
+        if (isTimeTextBold) {
+            mMeasureHourWidthPaint.setFakeBoldText(true);
+        }
     }
 
     private void initSuffix() {
