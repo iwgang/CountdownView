@@ -2,9 +2,7 @@ package cn.iwgang.countdownviewdemo;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +12,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import cn.iwgang.countdownview.CountdownView;
 
 
-/*
-     此类模拟在ListView中使用倒计时
+/**
+     此类模拟在ListView中使用倒计时,
+     复用 本地的计时器 —— System.currentTimeMillis(), 不必自行计时
  */
 public class ListViewActivity extends AppCompatActivity {
     private List<ItemInfo> mDataList;
@@ -52,68 +49,13 @@ public class ListViewActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (null != mMyAdapter) {
-            mMyAdapter.startRefreshTime();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (null != mMyAdapter) {
-            mMyAdapter.cancelRefreshTime();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (null != mMyAdapter) {
-            mMyAdapter.cancelRefreshTime();
-        }
-    }
-
     static class MyListAdapter extends BaseAdapter {
         private Context mContext;
         private List<ItemInfo> mDatas;
-        private final SparseArray<MyViewHolder> mCountdownVHList;
-        private Handler mHandler = new Handler();
-        private Timer mTimer;
-        private boolean isCancel = true;
 
         public MyListAdapter(Context context, List<ItemInfo> datas) {
             this.mContext = context;
             this.mDatas = datas;
-            mCountdownVHList = new SparseArray<>();
-            startRefreshTime();
-        }
-
-        public void startRefreshTime() {
-            if (!isCancel) return;
-
-            if (null != mTimer) {
-                mTimer.cancel();
-            }
-
-            isCancel = false;
-            mTimer = new Timer();
-            mTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    mHandler.post(mRefreshTimeRunnable);
-                }
-            }, 0, 10);
-        }
-
-        public void cancelRefreshTime() {
-            isCancel = true;
-            if (null != mTimer) {
-                mTimer.cancel();
-            }
-            mHandler.removeCallbacks(mRefreshTimeRunnable);
         }
 
         @Override
@@ -132,8 +74,8 @@ public class ListViewActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            MyViewHolder holder;
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final MyViewHolder holder;
             if (convertView == null) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
                 holder = new MyViewHolder();
@@ -146,40 +88,36 @@ public class ListViewActivity extends AppCompatActivity {
             ItemInfo curItemInfo = mDatas.get(position);
             holder.bindData(curItemInfo);
 
-            // 处理倒计时
-            if (curItemInfo.getCountdown() > 0) {
-                synchronized (mCountdownVHList) {
-                    mCountdownVHList.put(curItemInfo.getId(), holder);
-                }
-            }
+            dealWithLifeCycle(holder, position);
 
             return convertView;
         }
 
-        private Runnable mRefreshTimeRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (mCountdownVHList.size() == 0) return;
+        /**
+         * 以下两个接口代替 activity.onStart() 和 activity.onStop(), 控制 timer 的开关
+         */
+        private void dealWithLifeCycle(final MyViewHolder holder, final int position) {
+            holder.getCvCountdownView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
 
-                synchronized (mCountdownVHList) {
-                    long currentTime = System.currentTimeMillis();
-                    int key;
-                    for (int i = 0; i < mCountdownVHList.size(); i++) {
-                        key = mCountdownVHList.keyAt(i);
-                        MyViewHolder curMyViewHolder = mCountdownVHList.get(key);
-                        if (currentTime >= curMyViewHolder.getBean().getEndTime()) {
-                            // 倒计时结束
-                            curMyViewHolder.getBean().setCountdown(0);
-                            mCountdownVHList.remove(key);
-                            notifyDataSetChanged();
-                        } else {
-                            curMyViewHolder.refreshTime(currentTime);
-                        }
+                @Override
+                public void onViewAttachedToWindow(View countdownView) {
+                    int pos = position;
+//                    Log.d("MyViewHolder", String.format("mCvCountdownView %s is attachedToWindow", pos));
 
-                    }
+                    ItemInfo itemInfo = mDatas.get(pos);
+
+                    holder.refreshTime(itemInfo.getEndTime() - System.currentTimeMillis());
                 }
-            }
-        };
+
+                @Override
+                public void onViewDetachedFromWindow(View countdownView) {
+//                    int pos = position;
+//                    Log.d("MyViewHolder", String.format("mCvCountdownView %s is detachedFromWindow", pos));
+
+                    holder.getCvCountdownView().stop();
+                }
+            });
+        }
 
         static class MyViewHolder {
             private TextView mTvTitle;
@@ -193,24 +131,25 @@ public class ListViewActivity extends AppCompatActivity {
 
             public void bindData(ItemInfo itemInfo) {
                 mItemInfo = itemInfo;
-
-                if (itemInfo.getCountdown() > 0) {
-                    refreshTime(System.currentTimeMillis());
-                } else {
-                    mCvCountdownView.allShowZero();
-                }
-
                 mTvTitle.setText(itemInfo.getTitle());
+                refreshTime(mItemInfo.getEndTime() - System.currentTimeMillis());
             }
 
-            public void refreshTime(long curTimeMillis) {
-                if (null == mItemInfo || mItemInfo.getCountdown() <= 0) return;
-
-                mCvCountdownView.updateShow(mItemInfo.getEndTime() - curTimeMillis);
+            public void refreshTime(long leftTime) {
+                if (leftTime > 0) {
+                    mCvCountdownView.start(leftTime);
+                } else {
+                    mCvCountdownView.stop();
+                    mCvCountdownView.allShowZero();
+                }
             }
 
             public ItemInfo getBean() {
                 return mItemInfo;
+            }
+
+            public CountdownView getCvCountdownView() {
+                return mCvCountdownView;
             }
         }
     }
