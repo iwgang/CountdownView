@@ -55,49 +55,49 @@ for (int time=0; time<1000; time++) {
     app:suffixMillisecond="毫秒" />
 ```
 
-### Customization
-    参数 | 类型 | 默认值
---- | --- | ---
-isHideTimeBackground | boolean | true
-timeBgColor  | color      | #444444
-timeBgSize   | dimension  | timeSize + 2dp * 4
-timeBgRadius | dimension  | 0
-isShowTimeBgDivisionLine | boolean  | true
-timeBgDivisionLineColor | color | #30FFFFFF
-timeBgDivisionLineSize  | dimension | 0.5dp
-timeTextSize   | dimension | 12sp | 
-timeTextColor  | color | #000000
-isTimeTextBold | boolean | false
-isShowDay  | boolean | 自动显示 (天 > 1 显示, = 0 隐藏)
-isShowHour  | boolean | 自动显示 (小时 > 1 显示， = 0 隐藏)
-isShowMinute  | boolean | true
-isShowSecond  | boolean | true
-isShowMillisecond  | boolean | false
-isConvertDaysToHours | boolean | false
-suffixTextSize | dimension | 12sp
-suffixTextColor  | color | #000000
-isSuffixTextBold  | boolean | false
-suffixGravity | 'top' or 'center' or 'bottom' | 'center'
-suffix | string | ':'
-suffixDay  | string | null
-suffixHour  | string | null
-suffixMinute  | string | null
-suffixSecond  | string | null
-suffixMillisecond  | string | null
-suffixLRMargin  | dimension | left 3dp right 3dp
-suffixDayLeftMargin | dimension | 0
-suffixDayRightMargin  | dimension | 0
-suffixHourLeftMargin  | dimension | 0
-suffixHourRightMargin  | dimension | 0
-suffixMinuteLeftMargin | dimension | 0
-suffixMinuteRightMargin  | dimension | 0
-suffixSecondLeftMargin  | dimension | 0
-suffixSecondRightMargin  | dimension | 0
-suffixMillisecondLeftMargin | dimension | 0
-isShowTimeBgBorder | boolean | false
-timeBgBorderColor  | color | #000000
-timeBgBorderSize  | dimension | 1dp
-timeBgBorderRadius  | dimension | 0
+### 定制
+|    参数    |   类型   |  默认值 |
+| --------   | :-----:  | :----:  |
+|isHideTimeBackground | boolean | true|
+|timeBgColor  | color      | #444444|
+|timeBgSize   | dimension  | timeSize + 2dp * 4|
+|timeBgRadius | dimension  | 0|
+|isShowTimeBgDivisionLine | boolean  | true|
+|timeBgDivisionLineColor | color | #30FFFFFF|
+|timeBgDivisionLineSize  | dimension | 0.5dp|
+|timeTextSize   | dimension | 12sp | 
+|timeTextColor  | color | #000000|
+|isTimeTextBold | boolean | false|
+|isShowDay  | boolean | 自动显示 (天 > 1 显示, = 0 隐藏)|
+|isShowHour  | boolean | 自动显示 (小时 > 1 显示， = 0 隐藏)|
+|isShowMinute  | boolean | true|
+|isShowSecond  | boolean | true|
+|isShowMillisecond  | boolean | false|
+|isConvertDaysToHours | boolean | false|
+|suffixTextSize | dimension | 12sp|
+|suffixTextColor  | color | #000000|
+|isSuffixTextBold  | boolean | false|
+|suffixGravity | 'top' or 'center' or 'bottom' | 'center'|
+|suffix | string | ':'|
+|suffixDay  | string | null|
+|suffixHour  | string | null|
+|suffixMinute  | string | null|
+|suffixSecond  | string | null|
+|suffixMillisecond  | string | null|
+|suffixLRMargin  | dimension | left 3dp right 3dp|
+|suffixDayLeftMargin | dimension | 0|
+|suffixDayRightMargin  | dimension | 0|
+|suffixHourLeftMargin  | dimension | 0|
+|suffixHourRightMargin  | dimension | 0|
+|suffixMinuteLeftMargin | dimension | 0|
+|suffixMinuteRightMargin  | dimension | 0|
+|suffixSecondLeftMargin  | dimension | 0|
+|suffixSecondRightMargin  | dimension | 0|
+|suffixMillisecondLeftMargin | dimension | 0|
+|isShowTimeBgBorder | boolean | false|
+|timeBgBorderColor  | color | #000000|
+|timeBgBorderSize  | dimension | 1dp|
+|timeBgBorderRadius  | dimension | 0|
 
 ### 其它
 * **多个CountdownView时，给每个指定值**
