@@ -17,6 +17,7 @@ public class CountdownView extends View {
     private CustomCountDownTimer mCustomCountDownTimer;
     private OnCountdownEndListener mOnCountdownEndListener;
     private OnCountdownIntervalListener mOnCountdownIntervalListener;
+    private OnAttachedToWindowListener mOnAttachedToWindowListener;
 
     private boolean isHideTimeBackground;
     private long mPreviousIntervalCallbackTime;
@@ -95,6 +96,13 @@ public class CountdownView extends View {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         stop();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        long timeRemaining = mOnAttachedToWindowListener.onAttached();
+        start(timeRemaining);
     }
 
     private void reLayout() {
@@ -193,6 +201,10 @@ public class CountdownView extends View {
     public void allShowZero() {
         mCountdown.setTimes(0, 0, 0, 0, 0);
         invalidate();
+    }
+
+    public void setOnAttachedToWindowListener(OnAttachedToWindowListener onAttachedToWindowListener) {
+        mOnAttachedToWindowListener = onAttachedToWindowListener;
     }
 
     /**
@@ -299,6 +311,10 @@ public class CountdownView extends View {
 
     public interface OnCountdownIntervalListener {
         void onInterval(CountdownView cv, long remainTime);
+    }
+
+    public interface OnAttachedToWindowListener {
+        long onAttached();
     }
 
     /**
