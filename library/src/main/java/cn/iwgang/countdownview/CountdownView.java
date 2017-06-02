@@ -117,7 +117,10 @@ public class CountdownView extends View {
      * @param millisecond millisecond
      */
     public void start(long millisecond) {
-        if (millisecond <= 0) return;
+        if (millisecond <= 0) {
+            allShowZero();
+            return;
+        }
 
         mPreviousIntervalCallbackTime = 0;
 
