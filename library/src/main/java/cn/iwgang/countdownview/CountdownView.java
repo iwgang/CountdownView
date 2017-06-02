@@ -17,6 +17,7 @@ public class CountdownView extends View {
     private CustomCountDownTimer mCustomCountDownTimer;
     private OnCountdownEndListener mOnCountdownEndListener;
     private OnCountdownIntervalListener mOnCountdownIntervalListener;
+    private OnAttachedToWindowListener mOnAttachedToWindowListener;
 
     private boolean isHideTimeBackground;
     private long mPreviousIntervalCallbackTime;
@@ -97,6 +98,15 @@ public class CountdownView extends View {
         stop();
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        if (!isInEditMode()) {
+            super.onAttachedToWindow();
+            long timeRemaining = mOnAttachedToWindowListener.onAttached();
+            start(timeRemaining);
+        }
+    }
+
     private void reLayout() {
         mCountdown.reLayout();
         requestLayout();
@@ -107,7 +117,10 @@ public class CountdownView extends View {
      * @param millisecond millisecond
      */
     public void start(long millisecond) {
-        if (millisecond <= 0) return;
+        if (millisecond <= 0) {
+            allShowZero();
+            return;
+        }
 
         mPreviousIntervalCallbackTime = 0;
 
@@ -193,6 +206,10 @@ public class CountdownView extends View {
     public void allShowZero() {
         mCountdown.setTimes(0, 0, 0, 0, 0);
         invalidate();
+    }
+
+    public void setOnAttachedToWindowListener(OnAttachedToWindowListener onAttachedToWindowListener) {
+        mOnAttachedToWindowListener = onAttachedToWindowListener;
     }
 
     /**
@@ -299,6 +316,10 @@ public class CountdownView extends View {
 
     public interface OnCountdownIntervalListener {
         void onInterval(CountdownView cv, long remainTime);
+    }
+
+    public interface OnAttachedToWindowListener {
+        long onAttached();
     }
 
     /**

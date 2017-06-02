@@ -1,8 +1,5 @@
-[![Android Gems](http://www.android-gems.com/badge/iwgang/CountdownView.svg?branch=master)](http://www.android-gems.com/lib/iwgang/CountdownView)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CountdownView-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2641) 
-[![@iwgang](https://img.shields.io/badge/weibo-%40iwgang-blue.svg)](http://weibo.com/iwgang)
-
-#### [中文](https://github.com/iwgang/CountdownView/blob/master/README_CN.md)
+Get my version of the latest release via jitpack here:
+[![](https://jitpack.io/v/ahaverty/CountdownView.svg)](https://jitpack.io/#ahaverty/CountdownView)
 
 
 # CountdownView
