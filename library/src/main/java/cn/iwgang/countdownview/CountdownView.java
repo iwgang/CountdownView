@@ -100,9 +100,11 @@ public class CountdownView extends View {
 
     @Override
     protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        long timeRemaining = mOnAttachedToWindowListener.onAttached();
-        start(timeRemaining);
+        if (!isInEditMode()) {
+            super.onAttachedToWindow();
+            long timeRemaining = mOnAttachedToWindowListener.onAttached();
+            start(timeRemaining);
+        }
     }
 
     private void reLayout() {
