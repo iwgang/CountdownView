@@ -110,7 +110,7 @@ class BaseCountdown {
 
         // regular time data
         // pick one of two (minute and second)
-        if (!isShowMinute && !isShowSecond) isShowSecond = true;
+//        if (!isShowMinute && !isShowSecond) isShowSecond = true;
         if (!isShowSecond) isShowMillisecond = false;
 
         initTimeTextBaseInfo();

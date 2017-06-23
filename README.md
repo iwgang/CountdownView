@@ -19,7 +19,7 @@ Android countdown view，use canvas draw，supports multiple styles
 <img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_list.jpg" width="400px" height="650px"/>
 
 ### Gradle
-    compile 'com.github.iwgang:countdownview:2.1.3'
+    compile 'com.github.iwgang:countdownview:2.1.5'
 
 ### Code
 ```
