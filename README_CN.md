@@ -19,7 +19,7 @@ Android倒计时控件，使用Canvas绘制，支持多种样式
 <img src="https://raw.githubusercontent.com/iwgang/CountdownView/master/screenshot/s_list.jpg" width="400px" height="650px"/>
 
 ### Gradle
-    compile 'com.github.iwgang:countdownview:2.1.5'
+    compile 'com.github.iwgang:countdownview:2.1.6'
 
 ### Code
 ```
