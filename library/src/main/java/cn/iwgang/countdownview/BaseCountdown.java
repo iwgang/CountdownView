@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -112,7 +113,7 @@ class BaseCountdown {
         // pick one of two (minute and second)
 //        if (!isShowMinute && !isShowSecond) isShowSecond = true;
         if (!isShowSecond) isShowMillisecond = false;
-
+        Log.e("BaseCountDown", "initialize");
         initTimeTextBaseInfo();
     }
 
@@ -367,7 +368,7 @@ class BaseCountdown {
                 mSuffixSecondRightMargin = 0;
             }
 
-            if (isShowMillisecond  && mSuffixMillisecondTextWidth > 0) {
+            if (isShowMillisecond && mSuffixMillisecondTextWidth > 0) {
                 if (mSuffixMillisecondLeftMargin < 0) {
                     if (!isSuffixLRMarginNull) {
                         mSuffixMillisecondLeftMargin = mSuffixLRMargin;
@@ -389,9 +390,23 @@ class BaseCountdown {
         // initialize time text width and height
         Rect rect = new Rect();
         mTimeTextPaint.getTextBounds("00", 0, 2, rect);
-        mTimeTextWidth = rect.width();
+        // NOTICE: rect.width() will clip text
+        mTimeTextWidth = getTextWidth(mTimeTextPaint, "00");
         mTimeTextHeight = rect.height();
         mTimeTextBottom = rect.bottom;
+    }
+
+    private int getTextWidth(Paint paint, String str) {
+        int iRet = 0;
+        if (str != null && str.length() > 0) {
+            int len = str.length();
+            float[] widths = new float[len];
+            paint.getTextWidths(str, widths);
+            for (int j = 0; j < len; j++) {
+                iRet += (int) Math.ceil(widths[j]);
+            }
+        }
+        return iRet;
     }
 
     private void initTimeTextBaseline(int viewHeight, int viewPaddingTop, int viewPaddingBottom) {
@@ -499,6 +514,7 @@ class BaseCountdown {
 
     /**
      * get all view width
+     *
      * @return all view width
      */
     public int getAllContentWidth() {
@@ -526,7 +542,7 @@ class BaseCountdown {
 
     public void onMeasure(View v, int viewWidth, int viewHeight, int allContentWidth, int allContentHeight) {
         initTimeTextBaseline(viewHeight, v.getPaddingTop(), v.getPaddingBottom());
-        mLeftPaddingSize = v.getPaddingLeft() == v.getPaddingRight() ?  (viewWidth - allContentWidth) / 2 : v.getPaddingLeft();
+        mLeftPaddingSize = v.getPaddingLeft() == v.getPaddingRight() ? (viewWidth - allContentWidth) / 2 : v.getPaddingLeft();
     }
 
     public void onDraw(Canvas canvas) {
@@ -568,7 +584,7 @@ class BaseCountdown {
 
         if (isShowMinute) {
             // draw minute text
-            canvas.drawText(Utils.formatNum(mMinute), mMinuteLeft + mTimeTextWidth / 2 , mTimeTextBaseline, mTimeTextPaint);
+            canvas.drawText(Utils.formatNum(mMinute), mMinuteLeft + mTimeTextWidth / 2, mTimeTextBaseline, mTimeTextPaint);
             if (mSuffixMinuteTextWidth > 0) {
                 // draw minute suffix
                 canvas.drawText(mSuffixMinute, mMinuteLeft + mTimeTextWidth + mSuffixMinuteLeftMargin, mSuffixMinuteTextBaseline, mSuffixTextPaint);
@@ -602,7 +618,7 @@ class BaseCountdown {
         }
     }
 
-    public boolean refTimeShow(boolean isShowDay, boolean isShowHour, boolean  isShowMinute, boolean isShowSecond, boolean isShowMillisecond) {
+    public boolean refTimeShow(boolean isShowDay, boolean isShowHour, boolean isShowMinute, boolean isShowSecond, boolean isShowMillisecond) {
         if (!isShowSecond) isShowMillisecond = false;
 
         boolean isModCountdownInterval = false;
@@ -824,17 +840,17 @@ class BaseCountdown {
     public void setSuffixLRMargin(float suffixLRMargin) {
         mSuffixLRMargin = Utils.dp2px(mContext, suffixLRMargin);
         setSuffixMargin(mSuffixDayLeftMargin, mSuffixDayLeftMargin,
-                        mSuffixDayLeftMargin, mSuffixDayLeftMargin,
-                        mSuffixDayLeftMargin, mSuffixDayLeftMargin,
-                        mSuffixDayLeftMargin, mSuffixDayLeftMargin,
-                        mSuffixDayLeftMargin);
+                mSuffixDayLeftMargin, mSuffixDayLeftMargin,
+                mSuffixDayLeftMargin, mSuffixDayLeftMargin,
+                mSuffixDayLeftMargin, mSuffixDayLeftMargin,
+                mSuffixDayLeftMargin);
     }
 
     public boolean setSuffixMargin(Float suffixDayMarginL, Float suffixDayMarginR,
-                                Float suffixHourMarginL, Float suffixHourMarginR,
-                                Float suffixMinuteMarginL, Float suffixMinuteMarginR,
-                                Float suffixSecondMarginL, Float suffixSecondMarginR,
-                                Float suffixMillisecondMarginL) {
+                                   Float suffixHourMarginL, Float suffixHourMarginR,
+                                   Float suffixMinuteMarginL, Float suffixMinuteMarginR,
+                                   Float suffixSecondMarginL, Float suffixSecondMarginR,
+                                   Float suffixMillisecondMarginL) {
         boolean isRef = false;
 
         if (null != suffixDayMarginL) {
