@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -113,7 +112,6 @@ class BaseCountdown {
         // pick one of two (minute and second)
 //        if (!isShowMinute && !isShowSecond) isShowSecond = true;
         if (!isShowSecond) isShowMillisecond = false;
-        Log.e("BaseCountDown", "initialize");
         initTimeTextBaseInfo();
     }
 
