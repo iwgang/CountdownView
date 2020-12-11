@@ -268,7 +268,8 @@ public class CountdownView extends View {
             }
         }
 
-        if (mCountdown.handlerAutoShowTime() || mCountdown.handlerDayLargeNinetyNine()) {
+        if (mCountdown.handlerAutoShowTime() || mCountdown.handlerDayLargeNinetyNine()
+                || mCountdown.handlerHourLargeNinetyNine()) {
             reLayout();
         } else {
             invalidate();
