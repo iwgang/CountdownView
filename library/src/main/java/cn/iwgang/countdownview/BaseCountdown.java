@@ -27,6 +27,7 @@ class BaseCountdown {
     protected String mSuffix, mSuffixDay, mSuffixHour, mSuffixMinute, mSuffixSecond, mSuffixMillisecond;
     protected float mSuffixDayTextWidth, mSuffixHourTextWidth, mSuffixMinuteTextWidth, mSuffixSecondTextWidth, mSuffixMillisecondTextWidth;
     protected boolean isDayLargeNinetyNine;
+    protected boolean isHourLargeNinetyNine;
     protected Paint mTimeTextPaint, mSuffixTextPaint, mMeasureHourWidthPaint;
     protected float mLeftPaddingSize;
     protected float mSuffixDayLeftMargin, mSuffixDayRightMargin;
@@ -724,6 +725,21 @@ class BaseCountdown {
                 isReLayout = true;
             } else if (isDayLargeNinetyNine && mDay <= 99) {
                 isDayLargeNinetyNine = false;
+                isReLayout = true;
+            }
+        }
+        return isReLayout;
+    }
+
+    public boolean handlerHourLargeNinetyNine() {
+        boolean isReLayout = false;
+        if (isShowHour && isConvertDaysToHours) {
+            // handler large ninety nine
+            if (!isHourLargeNinetyNine && mHour > 99) {
+                isHourLargeNinetyNine = true;
+                isReLayout = true;
+            } else if (isHourLargeNinetyNine && mHour <= 99) {
+                isHourLargeNinetyNine = false;
                 isReLayout = true;
             }
         }
