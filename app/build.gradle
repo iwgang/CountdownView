@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 31
+    buildToolsVersion '31'
 
     defaultConfig {
         applicationId "cn.iwgang.countdownviewdemo"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
     }
